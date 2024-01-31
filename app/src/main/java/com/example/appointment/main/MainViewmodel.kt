@@ -381,13 +381,6 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         }
     }
 
-
-
-
-
-
-
-
     fun fnSearchFriend(){
         if(searchFriendEmail.value != ""){
             val docRef = firestore.collection("Profile").document(searchFriendEmail.value!!)
@@ -1575,7 +1568,6 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
             3 -> fnWalkingTimeSet()
         }
     }
-
 
     fun fnScheduleTimeSplit(date:String){
         val YYYYMMDD = date.substring(0,8)
