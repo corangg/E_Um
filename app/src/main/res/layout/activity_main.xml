@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.main.MainViewmodel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.MainActivity"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <!--<androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            app:titleTextColor="@color/themecolor"
+            app:menu="@menu/menu"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line_toolbar"
+            android:background="@color/themecolor" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/fragment_main"
+                android:background="#eeeeee"
+                android:layout_above="@+id/line_bottom"></FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/line_bottom"
+                android:background="@color/themecolor"
+                android:layout_above="@+id/navigation"
+                android:layout_alignParentEnd="true" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/navigation"
+                app:itemIconTint="@color/navigation_ic_color"
+                app:itemTextColor="@color/navigation_ic_color"
+                app:menu="@menu/navigation_menu"
+                app:onNavigationItemSelectedListener="@{(item)->viewmodel.fnBottomNavigationItemSelected(item)}"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>
+
+    <!--app:labelVisibilityMode="labeled"
+                    app:onNavigationItemSelected="@{(item) -> viewmodel.bottomNavigationItemSelected(item)}"-->

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_tab_profile"
+        android:enabled="true"
+        android:title="프로필" />
+
+    <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_tab_freinds"
+        android:enabled="true"
+        android:title="친구"/>
+
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/ic_tab_chat"
+        android:enabled="true"
+        android:title="채팅"/>
+
+    <item
+        android:id="@+id/navigation_schedule"
+        android:icon="@drawable/ic_tab_schedule"
+        android:enabled="true"
+        android:title="일정"/>
+
+    <!--<item
+        android:id="@+id/navigation_menu"
+        android:icon="@drawable/ic_tab_menu"
+        android:enabled="true"
+        android:title="더보기"/>-->
+
+</menu>

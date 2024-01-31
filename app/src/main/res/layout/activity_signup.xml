@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.login.Signup_Viewmodel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            app:titleTextColor="@color/themecolor"
+            app:title="@string/signup" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/line_toolbar"
+            android:background="@color/themecolor" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".login.SignupActivity"
+                    android:orientation="vertical">
+                    <!-- <WebView
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/web_address"/>-->
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:textColorHint="@color/themecolor"
+                            android:layout_marginHorizontal="30dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/edit_email"
+                                android:hint="@string/email"
+                                android:textColor="@color/themecolor"
+                                android:inputType="textEmailAddress"
+                                android:text="@={viewmodel.signUpEmail}"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- <androidx.appcompat.widget.AppCompatButton
+                             android:layout_width="wrap_content"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1"
+                             android:layout_marginLeft="20dp"
+                             android:layout_marginRight="30dp"
+                             android:background="@drawable/button_1"
+                             android:text="@string/doublecheck"
+                             android:textColor="@color/themecolor"
+                             android:onClick="@{()->viewmodel.idcheck()}"/>-->
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpPassword}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_password_check"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/passwordcheck"
+                            android:inputType="textPassword"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpPasswordCheck}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="40dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/name"
+                            android:inputType="text"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpName}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/nickname"
+                            android:inputType="text"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpNickName}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="40dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/phone"
+                            android:inputType="number"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpPhoneNumber}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="40dp">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            android:textColorHint="@color/themecolor"
+                            android:layout_weight="1">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/edit_zipcode"
+                                android:hint="우편번호"
+                                android:inputType="number"
+                                android:editable="false"
+                                android:focusable="false"
+                                android:textColor="@color/themecolor"
+                                android:text="@={viewmodel.signUpZoneCode}"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/btn_search_address"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="30dp"
+                            android:text="찾기"
+                            android:background="@drawable/btn_theme"
+                            android:textColor="@color/themecolor"
+                            android:textStyle="bold"
+                            android:onClick="@{()->viewmodel.searchAddress()}"/>
+
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/address"
+                            android:inputType="text"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpAddress}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:textColorHint="@color/themecolor">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_detail_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/address_detail"
+                            android:inputType="text"
+                            android:textColor="@color/themecolor"
+                            android:text="@={viewmodel.signUpDetailAddress}"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_signup"
+                        android:layout_marginHorizontal="30dp"
+                        android:background="@drawable/btn_theme"
+                        android:layout_marginTop="60dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="@string/signup"
+                        android:textColor="@color/themecolor"
+                        android:textStyle="bold"
+                        android:onClick="@{()->viewmodel.signUp()}"/>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+    </LinearLayout>
+
+
+</layout>

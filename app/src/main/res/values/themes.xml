@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+
+    <!--<style name="Theme.Appointment" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge" >
+-->
+
+    <style name="Theme.Appointment" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!--<item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="toolbarStyle">@style/CustomToolBar</item>-->
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryVariant">@color/themecolor</item>
+        <item name="colorOnPrimary">@color/themecolor</item>
+
+        <item name="colorSecondary">@color/themecolor</item>
+        <item name="colorSecondaryVariant">#0000ff</item>
+        <item name="colorOnSecondary">#ffffff</item>
+
+        <item name="android:statusBarColor">#000000</item>
+
+        <item name="backgroundColor">#ffffff</item>
+        <!--<item name="android:spinnerItemStyle">@style/Widget.AppCompat.TextView.SpinnerItem</item>-->
+    </style>
+
+    <!--<style name="CustomToolBar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="titleTextColor">@color/black</item>
+    </style>-->
+
+</resources>

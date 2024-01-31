@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.main.MainViewmodel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/address_title"
+                    android:text="제목"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:textStyle="bold"
+                    android:textSize="24dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/btn_title"
+                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="대표 주소"
+                    android:textSize="10dp"
+                    android:background="@drawable/btn_round"
+                    android:textColor="@color/themecolor"
+                    android:textStyle="bold"
+                    android:focusable="false"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/address"
+                android:paddingVertical="10dp"
+                android:paddingLeft="20dp"
+                android:textSize="14dp"
+                android:text="(11411) 경기 포천시 일동면 수입리" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:id="@+id/btn_title_address"
+                android:layout_marginRight="10dp"
+                android:text="대표"
+                android:textSize="10dp"
+                android:background="@drawable/btn_round"
+                android:textColor="@color/themecolor"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:id="@+id/btn_del_address"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="삭제"
+                android:textSize="10dp"
+                android:background="@drawable/btn_round"
+                android:textColor="@color/themecolor"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+
+
+            <!--android:onClick="@{()->viewmode.testdelete()}"-->
+
+
+
+    </LinearLayout>
+</layout>

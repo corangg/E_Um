@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:id="@+id/item_schedule_alarm"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_alarm_text"
+        android:textSize="18dp"
+        android:text="OO님이 약속을 잡고 싶어 합니다."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_schedule_time"
+        android:layout_marginTop="10dp"
+        android:textSize="16dp"
+        android:text="0000년 00월 00일 00시 00분"/>
+
+</LinearLayout>

@@ -1,0 +1,137 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.appointment'
+    compileSdk 34//원래 33이었음
+
+    defaultConfig {
+        applicationId "com.example.appointment"
+        minSdk 34//원래 33이었음
+        targetSdk 34//원래 33이었음
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures{
+        viewBinding true
+        dataBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.3.2'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    //implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    /*implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation platform('androidx.compose:compose-bom:2022.10.00')*/
+    /*implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'*/
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    /*implementation platform('com.google.firebase:firebase-bom:32.2.3')
+    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.9.1'*/
+
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.9.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.3.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.4.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.3.0'
+    apply plugin: 'com.google.gms.google-services'
+    implementation("com.google.firebase:firebase-inappmessaging-display")
+    implementation("com.google.firebase:firebase-analytics")
+
+
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+
+
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'androidx.activity:activity-ktx:1.6.1'
+    /*androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'*/
+//최신버전은 1.8.1이지만 api버전때문에 1.6.1로 다운그레이드
+
+    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'//?이거 잘쓰다 왜 오류남? 맵 확인하고 해결해봐야할듯
+
+    //implementation 'com.kakao.sdk:postcode:3.0.0'//카카오 우편번호
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+
+
+
+
+    //카카오맵 할때 만든거
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
+
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+
+    implementation 'com.squareup.moshi:moshi:1.12.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+
+
+    //
+
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    //네이버
+
+    implementation 'com.naver.maps:map-sdk:3.16.2'
+
+    //
+    /*implementation 'com.kakao.maps.open:android:2.6.3'
+    implementation 'com.kakao.sdk:v2-map:2.6.3'*/
+
+}

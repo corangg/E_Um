@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Appointment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--log-in-->
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="passwordcheck">비밀번호 확인</string>
+    <string name="login">로그인</string>
+    <string name="signup">회원가입</string>
+    <string name="googlelogin">Google 로그인</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="doublecheck">중복확인</string>
+    <string name="nickname">닉네임</string>
+    <string name="name">이름</string>
+    <string name="phone">휴대폰</string>
+    <string name="address">주소</string>
+    <string name="address_detail">상세 주소</string>
+
+
+    <string name="tab_profile">프로필</string>
+    <string name="tab_friends">친구</string>
+    <string name="tab_chat">채팅</string>
+    <string name="tab_schedule">일정</string>
+    <string name="tab_menu">더보기</string>
+
+    <!--<string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="passwordcheck">Password Check</string>
+    <string name="login">Log in</string>
+    <string name="signup">Sign up</string>
+    <string name="googlelogin">Google Login</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="doublecheck">중복확인</string>
+    <string name="nickname">Nick Name</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone Number</string>-->
+
+
+</resources>

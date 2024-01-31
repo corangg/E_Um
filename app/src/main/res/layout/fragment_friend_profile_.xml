@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.main.MainViewmodel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_profile"
+
+
+        android:orientation="vertical"
+        tools:context=".main.fragment.friend.FriendProfile_Fragment">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            app:cardCornerRadius="20dp"
+            android:paddingTop="100dp"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_basic_profile"
+                android:id="@+id/img_Profile" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/text_nickname"
+            android:text="@={viewmodel.selectFriendProfile.nickname}"
+            android:layout_marginTop="30dp"
+            android:textStyle="bold"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:id="@+id/text_statusmessage"
+            android:text="@={viewmodel.selectFriendProfile.statusmessage}"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="60dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_theme"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="24dp"
+                android:layout_marginLeft="20dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->viewmodel.fnChatStart(viewmodel.selectFriendProfile.email)}">
+
+                <ImageView
+                    android:id="@+id/ic_chat"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_tab_chat"
+                    android:tint="@color/themecolor"
+                    tools:ignore="UseAppTint" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ic_chat"
+                    android:text="채팅"
+                    android:textColor="@color/themecolor" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_theme"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="24dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->viewmodel.fnStartFragmentScheduleSet()}"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_tab_schedule"
+                    android:tint="@color/themecolor"
+                    tools:ignore="UseAppTint"
+                    android:id="@+id/ic_schedule" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ic_schedule"
+                    android:text="일정"
+                    android:textColor="@color/themecolor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_theme"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="24dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="@{()->viewmodel.fnFriendDelete()}">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    android:tint="@color/themecolor"
+                    tools:ignore="UseAppTint"
+                    android:id="@+id/ic_friend_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ic_friend_delete"
+                    android:text="삭제"
+                    android:textColor="@color/themecolor" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

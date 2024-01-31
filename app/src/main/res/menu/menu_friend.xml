@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_friend_add"
+        android:icon="@drawable/ic_freinds_add"
+        android:title="추가"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_friend_alarm"
+        android:icon="@drawable/ic_actionbar_alarm"
+        android:title="알람"
+        app:showAsAction="always"/>
+</menu>

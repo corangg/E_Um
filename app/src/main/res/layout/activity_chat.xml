@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.main.MainViewmodel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.fragment.chat.ChatActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/toolbarlatout">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                app:title="닉네임"
+                app:titleTextColor="@color/themecolor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/line_toolbar"
+                android:background="@color/themecolor" />
+
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycle_view"
+            android:layout_above="@id/layout_edit"
+            android:layout_below="@+id/toolbarlatout"
+            >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recycle_message" />
+
+
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:id="@+id/layout_edit"
+            android:layout_alignParentBottom="true">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_weight="4"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="47dp"
+                    android:id="@+id/edit_chat"
+                    android:hint=""
+                    android:textColor="@color/themecolor"
+                    android:inputType="text"
+                    android:textSize="16dp"
+                    android:text="@={viewmodel.sendMessage}"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:gravity="center_vertical"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="18"
+                android:id="@+id/btn_message_send"
+                android:onClick="@{()->viewmodel.fnMessageSend()}"
+                android:background="@drawable/btn_theme">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_send"
+                    android:tint="@color/themecolor"
+                    tools:ignore="UseAppTint"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>
