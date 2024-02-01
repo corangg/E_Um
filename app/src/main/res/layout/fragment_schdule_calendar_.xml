@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.main.MainViewmodel" />
+            type="com.example.appointment.ViewModel.MainViewmodel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:paddingVertical="30dp"
         android:paddingHorizontal="20dp"
         android:background="@drawable/background_profile"
-        tools:context=".main.fragment.schedule.ScheduleCalendar_Fragment">
+        tools:context=".UI.Fragment.schedule.ScheduleCalendar_Fragment">
 
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView

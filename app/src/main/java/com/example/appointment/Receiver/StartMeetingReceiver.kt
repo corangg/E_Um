@@ -3,8 +3,7 @@ package com.example.appointment.Receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.appointment.service.CheckStartService
-import com.example.appointment.service.MeetingStartService
+import com.example.appointment.Service.MeetingStartService
 
 class StartMeetingReceiver : BroadcastReceiver() {
 

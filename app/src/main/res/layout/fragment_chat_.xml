@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.main.MainViewmodel" />
+            type="com.example.appointment.ViewModel.MainViewmodel" />
 
     </data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".main.fragment.chat.Chat_Fragment">
+        tools:context=".UI.Fragment.chat.Chat_Fragment">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"

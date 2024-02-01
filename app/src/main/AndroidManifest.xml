@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <service
-            android:name=".service.MeetingStartService"
+            android:name=".Service.MeetingStartService"
             android:enabled="true"
             android:exported="true"></service>
 
@@ -39,7 +39,7 @@
         </receiver>
 
         <service
-            android:name=".service.CheckStartService"
+            android:name=".Service.CheckStartService"
             android:enabled="true"
             android:exported="true" />
 
@@ -58,40 +58,40 @@
             android:exported="true" />
 
         <activity
-            android:name=".main.fragment.schedule.ScheduleAlarmActivity"
+            android:name=".UI.Activity.Schedule.ScheduleAlarmActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.schedule.ScheduleMapActivity"
+            android:name=".UI.Activity.Schedule.ScheduleMapActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.chat.ChatActivity"
+            android:name=".UI.Activity.Chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.friend.FriendAlarmActivity"
+            android:name=".UI.Activity.Friend.FriendAlarmActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.friend.FriendAddActivity"
+            android:name=".UI.Activity.Friend.FriendAddActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.profile.NickNameActivity"
+            android:name=".UI.Activity.Profile.NickNameActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.profile.PasswordEditActivity"
+            android:name=".UI.Activity.Profile.PasswordEditActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.profile.AddAdressActivity"
+            android:name=".UI.Activity.Profile.AddAdressActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.profile.AddressEditActivity"
+            android:name=".UI.Activity.Profile.AddressEditActivity"
             android:exported="false" />
         <activity
-            android:name=".main.fragment.profile.AdressSearchActivity"
+            android:name=".UI.Activity.Profile.AdressSearchActivity"
             android:exported="true" />
         <activity
-            android:name=".login.SignupActivity"
+            android:name=".UI.Activity.LogIn.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".UI.Activity.LogIn.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -100,7 +100,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.MainActivity"
+            android:name=".UI.Activity.MainActivity"
             android:exported="false" />
 
         <provider
@@ -113,18 +113,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service
-            android:name=".MyFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <!--
-<meta-data//카카오
-            android:name="com.kakao.sdk.AppKey"
-            android:value="74b4017531a73d9c0811c50c188a9a0b" />
-        -->
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="tsyu4npcze" />

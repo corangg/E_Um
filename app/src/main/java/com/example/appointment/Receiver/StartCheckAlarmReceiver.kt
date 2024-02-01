@@ -11,7 +11,6 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
@@ -19,8 +18,7 @@ import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.example.appointment.R
-import com.example.appointment.Receiver.AlarmReceiver.Companion.vibrator
-import com.example.appointment.main.MainActivity
+import com.example.appointment.UI.Activity.MainActivity
 
 class StartCheckAlarmReceiver : BroadcastReceiver() {
 

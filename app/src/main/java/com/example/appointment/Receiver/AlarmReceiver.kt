@@ -18,7 +18,7 @@ import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.example.appointment.R
-import com.example.appointment.main.MainActivity
+import com.example.appointment.UI.Activity.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
     companion object{
@@ -70,7 +70,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun notification(context: Context,nickname: String){
         val manager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         val builder: NotificationCompat.Builder
-        val intent = Intent(context,MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
         intent.putExtra("path","openNotification")
         val pendingIntent = PendingIntent.getActivity(context,2094,intent,PendingIntent.FLAG_IMMUTABLE)
 

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.main.MainViewmodel" />
+            type="com.example.appointment.ViewModel.MainViewmodel" />
 
     </data>
 
@@ -17,7 +17,7 @@
 
 
         android:orientation="vertical"
-        tools:context=".main.fragment.friend.FriendProfile_Fragment">
+        tools:context=".UI.Fragment.friend.FriendProfile_Fragment">
 
         <androidx.cardview.widget.CardView
             android:layout_width="160dp"

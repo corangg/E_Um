@@ -5,7 +5,7 @@
         <data>
                 <variable
                     name="viewmodel"
-                    type="com.example.appointment.login.Signup_Viewmodel" />
+                    type="com.example.appointment.ViewModel.SignUp.Signup_Viewmodel" />
 
         </data>
 
