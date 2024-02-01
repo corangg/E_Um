@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.ViewModel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.MainViewmodel" />
 
     </data>
 

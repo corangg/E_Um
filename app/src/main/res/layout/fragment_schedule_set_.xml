@@ -6,7 +6,7 @@
    <data>
       <variable
           name="viewmodel"
-          type="com.example.appointment.ViewModel.MainViewmodel" />
+          type="com.example.appointment.viewmodel.MainViewmodel" />
 
    </data>
 
@@ -18,7 +18,7 @@
        android:paddingHorizontal="24dp"
        android:paddingVertical="50dp"
        android:id="@+id/schedule_set"
-       tools:context=".UI.Fragment.schedule.ScheduleSet_Fragment">
+       tools:context=".ui.fragment.schedule.ScheduleSet_Fragment">
 
       <LinearLayout
           android:layout_width="match_parent"

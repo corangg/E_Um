@@ -56,22 +56,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    //implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    /*implementation 'androidx.activity:activity-compose:1.5.1'
-    implementation platform('androidx.compose:compose-bom:2022.10.00')*/
-    /*implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material3:material3'*/
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    /*implementation platform('com.google.firebase:firebase-bom:32.2.3')
-    implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'
-    implementation 'com.google.android.gms:play-services-auth:20.7.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.9.1'*/
 
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
     implementation 'com.google.firebase:firebase-auth-ktx:22.3.0'
@@ -87,31 +76,14 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
 
-
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
 
 
     implementation 'androidx.fragment:fragment-ktx:1.6.2'
     implementation 'androidx.activity:activity-ktx:1.6.1'
-    /*androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'*/
-//최신버전은 1.8.1이지만 api버전때문에 1.6.1로 다운그레이드
 
-    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
-    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'//?이거 잘쓰다 왜 오류남? 맵 확인하고 해결해봐야할듯
-
-    //implementation 'com.kakao.sdk:postcode:3.0.0'//카카오 우편번호
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
-
-
-
-
-    //카카오맵 할때 만든거
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
 
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -130,8 +102,5 @@ dependencies {
 
     implementation 'com.naver.maps:map-sdk:3.16.2'
 
-    //
-    /*implementation 'com.kakao.maps.open:android:2.6.3'
-    implementation 'com.kakao.sdk:v2-map:2.6.3'*/
 
 }

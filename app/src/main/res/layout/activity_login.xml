@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.ViewModel.LogIn.Login_Viewmodel" />
+            type="com.example.appointment.viewmodel.logIn.Login_Viewmodel" />
 
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".UI.Activity.LogIn.LoginActivity"
+        tools:context=".ui.activity.login.LoginActivity"
         android:background="@color/white">
 
         <ImageView

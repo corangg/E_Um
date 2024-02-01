@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.ViewModel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.MainViewmodel" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".UI.Activity.Schedule.ScheduleMapActivity">
+        tools:context=".ui.activity.schedule.ScheduleMapActivity">
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

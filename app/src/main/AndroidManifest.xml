@@ -21,16 +21,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <service
-            android:name=".Service.MeetingStartService"
+            android:name=".service.MeetingStartService"
             android:enabled="true"
             android:exported="true"></service>
 
         <receiver
-            android:name=".Receiver.StartMeetingReceiver"
+            android:name=".receiver.StartMeetingReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".Receiver.StartCheckAlarmReceiver"
+            android:name=".receiver.StartCheckAlarmReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -39,59 +39,59 @@
         </receiver>
 
         <service
-            android:name=".Service.CheckStartService"
+            android:name=".service.CheckStartService"
             android:enabled="true"
             android:exported="true" />
 
 
         <receiver
-            android:name=".Receiver.StartCheckReceiver"
+            android:name=".receiver.StartCheckReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".Receiver.AlarmCancelReceiver"
+            android:name=".receiver.AlarmCancelReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".Receiver.AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name=".UI.Activity.Schedule.ScheduleAlarmActivity"
+            android:name=".ui.activity.schedule.ScheduleAlarmActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Schedule.ScheduleMapActivity"
+            android:name=".ui.activity.schedule.ScheduleMapActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Chat.ChatActivity"
+            android:name=".ui.activity.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Friend.FriendAlarmActivity"
+            android:name=".ui.activity.friend.FriendAlarmActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Friend.FriendAddActivity"
+            android:name=".ui.activity.friend.FriendAddActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Profile.NickNameActivity"
+            android:name=".ui.activity.profile.NickNameActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Profile.PasswordEditActivity"
+            android:name=".ui.activity.profile.PasswordEditActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Profile.AddAdressActivity"
+            android:name=".ui.activity.profile.AddAdressActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Profile.AddressEditActivity"
+            android:name=".ui.activity.profile.AddressEditActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.Profile.AdressSearchActivity"
+            android:name=".ui.activity.profile.AdressSearchActivity"
             android:exported="true" />
         <activity
-            android:name=".UI.Activity.LogIn.SignupActivity"
+            android:name=".ui.activity.login.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Activity.LogIn.LoginActivity"
+            android:name=".ui.activity.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -100,7 +100,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.Activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="false" />
 
         <provider

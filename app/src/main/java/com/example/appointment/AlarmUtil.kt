@@ -4,12 +4,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.icu.util.Calendar
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.example.appointment.Receiver.AlarmReceiver
-import com.example.appointment.Receiver.StartCheckReceiver
-import com.example.appointment.Receiver.StartMeetingReceiver
+import com.example.appointment.receiver.AlarmReceiver
+import com.example.appointment.receiver.StartCheckReceiver
+import com.example.appointment.receiver.StartMeetingReceiver
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.StartCheckAlarmData
 

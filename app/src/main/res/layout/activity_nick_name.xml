@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodle"
-            type="com.example.appointment.ViewModel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.MainViewmodel" />
 
     </data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".UI.Activity.Profile.NickNameActivity">
+        tools:context=".ui.activity.profile.NickNameActivity">
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

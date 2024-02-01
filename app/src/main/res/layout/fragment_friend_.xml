@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.ViewModel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.MainViewmodel" />
     </data>
 
     <LinearLayout
@@ -44,7 +44,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".UI.Fragment.friend.Friend_Fragment">
+            tools:context=".ui.fragment.friend.Friend_Fragment">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
