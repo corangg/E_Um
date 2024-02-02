@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -21,24 +22,22 @@ import com.example.appointment.ui.activity.schedule.ScheduleMapActivity
 import com.example.appointment.databinding.FragmentScheduleSetBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.ui.fragment.BaseFragment
 
 
-class ScheduleSet_Fragment : Fragment() {
+class ScheduleSet_Fragment : BaseFragment<FragmentScheduleSetBinding>() {
     val mainViewmodel: MainViewmodel by activityViewModels()
-    lateinit var binding: FragmentScheduleSetBinding
 
     companion object{
         const val MAP_REQUEST_CODE =2921
     }
 
+    override fun layoutResId(): Int {
+        return R.layout.fragment_schedule_set_
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentScheduleSetBinding.inflate(inflater,container,false)
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
         binding.scheduleSet.setOnClickListener {}
 
         setMaxNumber(binding.editHH,12)
@@ -56,11 +55,6 @@ class ScheduleSet_Fragment : Fragment() {
                 requireActivity().onBackPressed()
             }
         }
-
-
-        setObserve()
-
-        return binding.root
     }
 
     private fun isHandlingBackPressed(): Boolean {
@@ -102,7 +96,7 @@ class ScheduleSet_Fragment : Fragment() {
         }
     }
 
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.scheduleAmPmSet.observe(viewLifecycleOwner){
             if(it){
                 binding.btnAm.setBackgroundResource(R.drawable.btn_theme)

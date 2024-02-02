@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -13,28 +15,23 @@ import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentFriendProfileBinding
+import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.schedule.ScheduleCalendar_Fragment
 
-class FriendProfile_Fragment : Fragment() {
+class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
     private val mainViewmodel: MainViewmodel by activityViewModels()
-    private lateinit var binding: FragmentFriendProfileBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding= FragmentFriendProfileBinding.inflate(inflater, container, false)
-        binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
-
-        mainViewmodel.fnFriendProfileSet()
-
-        setObserve()
-        return binding.root
+    override fun layoutResId(): Int {
+        return R.layout.fragment_friend_profile_
     }
 
-    private fun setObserve(){
+    override fun initializeUI() {
+        binding.viewmodel = mainViewmodel
+        mainViewmodel.fnFriendProfileSet()
+    }
+
+    override fun setObserve(){
         mainViewmodel.friendImgURL.observe(viewLifecycleOwner, Observer {
             it?.let{
                 if(mainViewmodel.friendImgURL.value != ""){

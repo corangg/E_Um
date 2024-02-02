@@ -17,31 +17,25 @@ import com.example.appointment.R
 import com.example.appointment.databinding.FragmentScheduleEditBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.ui.fragment.BaseFragment
 
-class ScheduleEdit_Fragment : Fragment() {
+class ScheduleEdit_Fragment : BaseFragment<FragmentScheduleEditBinding>() {
     private val mainViewmodel: MainViewmodel by activityViewModels()
-    lateinit var binding : FragmentScheduleEditBinding
 
+    override fun layoutResId(): Int {
+        return R.layout.fragment_schedule_edit_
+    }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentScheduleEditBinding.inflate(inflater,container,false)
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
         binding.scheduleSet.setOnClickListener {}
 
 
 
         setMaxNumber(binding.editAlarmHH,23)
         setMaxNumber(binding.editAlarmMM,59)
-
-        setObserve()
-
-        return binding.root
     }
+
     private fun setMaxNumber(editText: EditText, maxValue: Int) {
         val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
             try {
@@ -57,7 +51,7 @@ class ScheduleEdit_Fragment : Fragment() {
         }
         editText.filters = arrayOf(inputFilter)
     }
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.scheduleAmPmSet.observe(viewLifecycleOwner){
             if(it){
                 binding.btnAm.setBackgroundResource(R.drawable.btn_theme)

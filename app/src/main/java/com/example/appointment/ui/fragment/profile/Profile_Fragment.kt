@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.appointment.R
@@ -24,10 +26,11 @@ import com.example.appointment.ui.activity.profile.NickNameActivity
 import com.example.appointment.ui.activity.profile.PasswordEditActivity
 import com.example.appointment.databinding.FragmentProfileBinding
 import com.example.appointment.ui.activity.login.LoginActivity
+import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
 
 
-class Profile_Fragment : Fragment() {
+class Profile_Fragment : BaseFragment<FragmentProfileBinding>() {
 
     companion object{
         const val NICKNAME_REQUEST_CODE =2911
@@ -35,11 +38,7 @@ class Profile_Fragment : Fragment() {
     }
 
     private val mainViewmodel: MainViewmodel by activityViewModels()
-
-    private lateinit var mActivity: AppCompatActivity//뭐지?
-
-    lateinit var binding: FragmentProfileBinding
-
+    private lateinit var mActivity: AppCompatActivity
     private var photoUri : Uri? = null
     private var photoResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == AppCompatActivity.RESULT_OK){
@@ -53,15 +52,12 @@ class Profile_Fragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentProfileBinding.inflate(inflater,container,false)
-        binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner =this
+    override fun layoutResId(): Int {
+        return R.layout.fragment_profile_
+    }
 
-        setObserve()
+    override fun initializeUI() {
+        binding.viewmodel = mainViewmodel
         mainViewmodel.fnGetPrivacyData()
         mainViewmodel.fnGetProfileData()
 
@@ -71,7 +67,6 @@ class Profile_Fragment : Fragment() {
         binding.imgProfile.isEnabled=false//xml에서 false로 선언했는데 왜 자꾸 true가 되는지 모르겠음 일단 create할때 false로 바꿔둠 추후 해결해야함
         binding.layoutNickname.isEnabled=false
 
-        return binding.root
     }
 
     override fun onAttach(context: Context) {
@@ -130,7 +125,7 @@ class Profile_Fragment : Fragment() {
     }
 
 
-    fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.addressEditActivityStart.observe(viewLifecycleOwner){
             if(it){
                 val intent: Intent = Intent(requireActivity(), AddressEditActivity::class.java)
@@ -162,7 +157,7 @@ class Profile_Fragment : Fragment() {
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 intent.type = "image/*"
                 photoResult.launch(intent)
-                //mainViewmodel.profileUpdateEnd()
+
             }
         }
 

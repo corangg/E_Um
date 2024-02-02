@@ -10,6 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,27 +22,25 @@ import com.example.appointment.ui.activity.friend.FriendAddActivity
 import com.example.appointment.ui.activity.friend.FriendAlarmActivity
 import com.example.appointment.databinding.FragmentFriendBinding
 import com.example.appointment.ui.adapter.OnItemClickListener
+import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
 
 
-class Friend_Fragment : Fragment(), OnItemClickListener{
+class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListener{
     private val mainViewmodel: MainViewmodel by activityViewModels()
-    private lateinit var binding: FragmentFriendBinding
     private lateinit var adapter: FriendListAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFriendBinding.inflate(inflater,container,false)
+    override fun layoutResId(): Int {
+        return R.layout.fragment_friend_
+    }
+
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
 
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
@@ -50,9 +50,6 @@ class Friend_Fragment : Fragment(), OnItemClickListener{
         }
 
         mainViewmodel.fnFriendAlarmReceive()
-
-        setObserve()
-        return binding.root
     }
 
     override fun onResume() {
@@ -89,7 +86,7 @@ class Friend_Fragment : Fragment(), OnItemClickListener{
         transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
     }
 
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.friendAlarmReceiveStatus.observe(viewLifecycleOwner){
             if(it){
                 binding.friendAlarmIcOn.visibility = View.VISIBLE

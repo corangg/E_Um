@@ -17,34 +17,23 @@ import com.example.appointment.R
 import com.example.appointment.databinding.FragmentScheduleAcceptBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.ui.fragment.BaseFragment
 
-class ScheduleAccept_Fragment : Fragment() {
+class ScheduleAccept_Fragment : BaseFragment<FragmentScheduleAcceptBinding>() {
     private val mainViewmodel: MainViewmodel by activityViewModels()
-    lateinit var binding : FragmentScheduleAcceptBinding
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun layoutResId(): Int {
+        return R.layout.fragment_schedule_accept_
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentScheduleAcceptBinding.inflate(inflater,container,false)
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
         binding.scheduleSet.setOnClickListener {}
 
         setMaxNumber(binding.editAlarmHH,23)
         setMaxNumber(binding.editAlarmMM,59)
 
         mainViewmodel.fnStartingPointSet()//뭐 부족한듯
-
-        setObserve()
-
-        return binding.root
-
     }
 
     private fun setMaxNumber(editText: EditText, maxValue: Int) {
@@ -62,7 +51,7 @@ class ScheduleAccept_Fragment : Fragment() {
         }
         editText.filters = arrayOf(inputFilter)
     }
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.scheduleAmPmSet.observe(viewLifecycleOwner){
             if(it){
                 binding.btnAm.setBackgroundResource(R.drawable.btn_theme)

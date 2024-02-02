@@ -11,34 +11,28 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appointment.R
 import com.example.appointment.ui.adapter.ChatListAdapter
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentChatBinding
 import com.example.appointment.ui.adapter.OnItemClickListener
+import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
 
 
-class Chat_Fragment : Fragment(), OnItemClickListener {
-    private lateinit var binding:FragmentChatBinding
+class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
     private val mainViewmodel: MainViewmodel by activityViewModels()
     private lateinit var adapter: ChatListAdapter
+    override fun layoutResId(): Int {
+        return R.layout.fragment_chat_
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentChatBinding.inflate(inflater,container,false)
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
-
-
-
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-
-        setObserve()
-        return binding.root
     }
+
 
     override fun onResume() {
         mainViewmodel.fnChatRoomList()
@@ -51,7 +45,7 @@ class Chat_Fragment : Fragment(), OnItemClickListener {
         mainViewmodel.fnChatStart(mainViewmodel.chatRoomProfileArray.value!![position].email)
     }
 
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.chatRoomProfileArray.observe(viewLifecycleOwner, Observer {
             binding.recycleChat.layoutManager = LinearLayoutManager(context)
             adapter = ChatListAdapter(mainViewmodel.chatRoomProfileArray.value, mainViewmodel.chatProfileArray.value,this)

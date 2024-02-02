@@ -21,11 +21,11 @@ import com.example.appointment.databinding.FragmentScheduleBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.ui.adapter.OnItemLongClickListener
+import com.example.appointment.ui.fragment.BaseFragment
 
 
-class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
+class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
     private val mainViewmodel: MainViewmodel by activityViewModels()
-    private lateinit var binding: FragmentScheduleBinding
     private lateinit var adapter: ScheduleListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,28 +33,22 @@ class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, O
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentScheduleBinding.inflate(inflater,container,false)
-        binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
+    override fun layoutResId(): Int {
+        return R.layout.fragment_schedule_
+    }
 
+    override fun initializeUI() {
+        binding.viewmodel = mainViewmodel
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
         mainViewmodel.fnStartingPointSet()
-
-        setObserve()
-        return binding.root
     }
 
     override fun onResume() {
         mainViewmodel.fnScheduleListData()
         super.onResume()
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_schedule, menu)
@@ -92,7 +86,7 @@ class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, O
         mainViewmodel.selectPosition.value = position
     }
 
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
             binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
             adapter = ScheduleListAdapter(it,this,this)
