@@ -3,35 +3,49 @@ package com.example.appointment.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appointment.databinding.ItemAlarmBinding
+import com.example.appointment.databinding.ItemFriendrequestalarmBinding
 import com.example.appointment.model.FriendRequestAlarmData
 
 
-class FriendRequestAlarmViewHolder(val binding: ItemAlarmBinding): RecyclerView.ViewHolder(binding.root)
+class FriendRequestAlarmViewHolder(binding: ItemFriendrequestalarmBinding): BaseViewHolder<ItemFriendrequestalarmBinding>(binding){
+    fun bindFriendRequestAlarmItem(
+        alarmList: FriendRequestAlarmData,
+        position: Int,
+        onItemClickListener: FriendRequestAlarmAdapter.OnItemClickListener
+    ){
+        binding.textRequest.text = alarmList.nickname + "님에게 친구 요청이 들어왔습니다."
 
-class FriendRequestAlarmAdapter(val alarmList: MutableList<FriendRequestAlarmData>, val onItemClickListener: OnItemClickListener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        binding.btnAccept.setOnClickListener {
+            onItemClickListener.onItemClickAccept(alarmList.email, alarmList.nickname)
+        }
+        binding.btnRefuse.setOnClickListener {
+            onItemClickListener.onItemClickRefuse(alarmList.email, alarmList.nickname)
+        }
+    }
+}
+
+class FriendRequestAlarmAdapter(
+    private val alarmList: MutableList<FriendRequestAlarmData>,
+    private val onItemClickListener: OnItemClickListener)
+    : BaseAdapter<FriendRequestAlarmData,FriendRequestAlarmViewHolder>(){
     interface OnItemClickListener {
         fun onItemClickAccept(email: String,nickName:String)
         fun onItemClickRefuse(email: String,nickName:String)
     }
 
-    override fun getItemCount(): Int {
-        return alarmList?.size?:0
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendRequestAlarmViewHolder{
+        val binding = ItemFriendrequestalarmBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return FriendRequestAlarmViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
-            = FriendRequestAlarmViewHolder(ItemAlarmBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    override fun onBindViewHolder(
+        holder: FriendRequestAlarmViewHolder,
+        item: FriendRequestAlarmData,
+        position: Int
+    ) {
+        val friendRequestAlarmData = itemList[position]
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding = (holder as FriendRequestAlarmViewHolder).binding
-
-        binding.textRequest.text = alarmList!![position].nickname + "님에게 친구 요청이 들어왔습니다."
-
-        binding.btnAccept.setOnClickListener {
-            onItemClickListener.onItemClickAccept(alarmList[position].email, alarmList[position].nickname)
-        }
-        binding.btnRefuse.setOnClickListener {
-            onItemClickListener.onItemClickRefuse(alarmList[position].email, alarmList[position].nickname)
-        }
+        holder.bindFriendRequestAlarmItem(friendRequestAlarmData,position,onItemClickListener)
     }
+
 }

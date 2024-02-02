@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.appointment.viewmodel.MainViewmodel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="**님으로 부터 친구 요청이 들어왔습니다."
+            android:id="@+id/text_request"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_round"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btn_refuse"
+                android:text="거절"
+                android:textColor="@color/themecolor" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_round"
+                android:layout_toLeftOf="@+id/btn_refuse"
+                android:layout_marginRight="20dp"
+                android:id="@+id/btn_accept"
+                android:text="수락"
+                android:textColor="@color/themecolor" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

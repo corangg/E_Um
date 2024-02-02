@@ -31,6 +31,7 @@ class FriendAlarmActivity : AppCompatActivity() , FriendRequestAlarmAdapter.OnIt
             binding.recycleAlarm.layoutManager = LinearLayoutManager(this)
             adapter = FriendRequestAlarmAdapter(it,this)
             binding.recycleAlarm.adapter=adapter
+            adapter.setList(it)
             binding.recycleAlarm.addItemDecoration(
                 DividerItemDecoration(this,LinearLayoutManager.VERTICAL)
             )

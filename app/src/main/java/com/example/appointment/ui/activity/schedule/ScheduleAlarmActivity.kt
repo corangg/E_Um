@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleAlarmListAdapter
 import com.example.appointment.databinding.ActivityScheduleAlarmBinding
+import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.schedule.ScheduleAccept_Fragment
 
-class ScheduleAlarmActivity : AppCompatActivity(), ScheduleAlarmListAdapter.OnItemClickListener {
+class ScheduleAlarmActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var binding : ActivityScheduleAlarmBinding
     private lateinit var adapter : ScheduleAlarmListAdapter
     private val mainViewmodel: MainViewmodel by viewModels()
@@ -57,6 +58,7 @@ class ScheduleAlarmActivity : AppCompatActivity(), ScheduleAlarmListAdapter.OnIt
             binding.recycleScheduleAlarm.layoutManager = LinearLayoutManager(this)
             adapter = ScheduleAlarmListAdapter(it,this)
             binding.recycleScheduleAlarm.adapter=adapter
+            adapter.setList(it)
             binding.recycleScheduleAlarm.addItemDecoration(
                 DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
             )

@@ -6,39 +6,50 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appointment.databinding.ItemScheduleAlarmBinding
 import com.example.appointment.model.ScheduleSet
 
-class ScheduleAlarmListViewHolder(val binding: ItemScheduleAlarmBinding): RecyclerView.ViewHolder(binding.root)
+class ScheduleAlarmListViewHolder(binding: ItemScheduleAlarmBinding): BaseViewHolder<ItemScheduleAlarmBinding>(binding){
+    fun bindScheduleAlarmList(
+        scheduleDataList : ScheduleSet,
+        position: Int,
+        onItemClickListener: OnItemClickListener
+    ){
+        binding.scheduleset = scheduleDataList
 
-class ScheduleAlarmListAdapter(val scheduleDataList : MutableList<ScheduleSet>,val onItemClickListener: OnItemClickListener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-
-    override fun getItemCount(): Int {
-        return scheduleDataList.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ScheduleAlarmListViewHolder(ItemScheduleAlarmBinding.inflate(LayoutInflater.from(parent.context),parent,false))
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding:ItemScheduleAlarmBinding = (holder as ScheduleAlarmListViewHolder).binding
-
-        val YYYY = scheduleDataList[position].time.substring(0,4)
-        val MM = scheduleDataList[position].time.substring(4,6)
-        val DD = scheduleDataList[position].time.substring(6,8)
-        val hh = scheduleDataList[position].time.substring(8,10)
-        val mm = scheduleDataList[position].time.substring(10,12)
+        val YYYY = scheduleDataList.time.substring(0,4)
+        val MM = scheduleDataList.time.substring(4,6)
+        val DD = scheduleDataList.time.substring(6,8)
+        val hh = scheduleDataList.time.substring(8,10)
+        val mm = scheduleDataList.time.substring(10,12)
         val date = YYYY+"년"+MM+"월"+DD+"일"+hh+"시"+ mm +"분"
 
-        binding.textAlarmText.text = scheduleDataList[position].nickname + "님이 약속을 잡고 싶어합니다."
         binding.textScheduleTime.text = date
 
         binding.itemScheduleAlarm.setOnClickListener {
             onItemClickListener.onItemClick(position)
         }
+
     }
+}
+
+class ScheduleAlarmListAdapter(
+    private val scheduleDataList : MutableList<ScheduleSet>,
+    private val onItemClickListener: OnItemClickListener)
+    : BaseAdapter<ScheduleSet,ScheduleAlarmListViewHolder>(){
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleAlarmListViewHolder {
+        val binding = ItemScheduleAlarmBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ScheduleAlarmListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(
+        holder: ScheduleAlarmListViewHolder,
+        item: ScheduleSet,
+        position: Int
+    ) {
+        val scheduleAlarmData = itemList[position]
+
+        holder.bindScheduleAlarmList(scheduleAlarmData,position,onItemClickListener)
+    }
+
 }
 
 

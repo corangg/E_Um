@@ -3,39 +3,25 @@ package com.example.appointment.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemChatListBinding
 import com.example.appointment.model.ChatRoomData
 
-class ChatListViewHolder(val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root)
+class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatListBinding>(binding){
 
-class ChatListAdapter(val chatRoomData:MutableList<ChatRoomData>?, val chatRoomProfile:MutableList<String?>?, val onItemClickListener: OnItemClickListener):
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
+    fun bindChatListItem(
+        chatRoomData: ChatRoomData,
+        chatRoomProfile: String?,
+        position: Int,
+        onItemClickListener: OnItemClickListener){
+        binding.chatroom = chatRoomData
 
-    override fun getItemCount(): Int {
-        return chatRoomData?.size?:0
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ChatListViewHolder(ItemChatListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding: ItemChatListBinding =(holder as ChatListViewHolder).binding
-        binding.textNickname.text = chatRoomData!![position].nickname
-        binding.textLastMessage.text = chatRoomData!![position].lastMessage
-        binding.textNotCheckMessageCount.text = chatRoomData!![position].notCheckChat.toString()
-
-        if(chatRoomData!![position].notCheckChat == 0){
+        if(chatRoomData.notCheckChat == 0){
             binding.notCheckMessageCount.visibility = View.GONE
         }
 
-        if(chatRoomProfile!![position] != ""){
-            Glide.with(holder.itemView).load(chatRoomProfile!![position]).into(binding.imgProfile)
+        if(chatRoomProfile != ""){
+            Glide.with(binding.root).load(chatRoomProfile).into(binding.imgProfile)
         }
 
         binding.profile.setOnClickListener {
@@ -43,3 +29,21 @@ class ChatListAdapter(val chatRoomData:MutableList<ChatRoomData>?, val chatRoomP
         }
     }
 }
+class ChatListAdapter(
+    private val chatRoomData:MutableList<ChatRoomData>?,
+    private val chatRoomProfile:MutableList<String?>?,
+    private val onItemClickListener: OnItemClickListener)
+    : BaseAdapter<ChatRoomData,ChatListViewHolder>(){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {
+        val binding = ItemChatListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ChatListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ChatListViewHolder, item: ChatRoomData, position: Int) {
+        val chatRoomData = itemList[position]
+        val chatRoomProfile = chatRoomProfile?.get(position)
+
+        holder.bindChatListItem(chatRoomData, chatRoomProfile,position, onItemClickListener)
+    }
+}
+

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,9 +20,10 @@ import com.example.appointment.ui.activity.schedule.ScheduleAlarmActivity
 import com.example.appointment.databinding.FragmentScheduleBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.ScheduleSet
+import com.example.appointment.ui.adapter.OnItemLongClickListener
 
 
-class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, ScheduleListAdapter.OnItemLongClickListener{
+class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
     private val mainViewmodel: MainViewmodel by activityViewModels()
     private lateinit var binding: FragmentScheduleBinding
     private lateinit var adapter: ScheduleListAdapter
@@ -90,18 +92,16 @@ class Schedule_Fragment : Fragment(), ScheduleListAdapter.OnItemClickListener, S
         mainViewmodel.selectPosition.value = position
     }
 
-    private fun fnRecyclerSet(list:MutableList<ScheduleSet>){
-        binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
-        adapter = ScheduleListAdapter(list,this,this)
-        binding.recycleSchedule.adapter=adapter
-        binding.recycleSchedule.addItemDecoration(
-            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        )
-    }
-
     private fun setObserve(){
         mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
-            fnRecyclerSet(it)
+            binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
+            adapter = ScheduleListAdapter(it,this,this)
+            binding.recycleSchedule.adapter=adapter
+
+            binding.recycleSchedule.addItemDecoration(
+                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+            )
+            adapter.setList(it)
         }
 
         mainViewmodel.scheduleAlarmDataList.observe(viewLifecycleOwner){

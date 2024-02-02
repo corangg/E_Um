@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.ui.adapter.ChatListAdapter
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentChatBinding
+import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 
 
-class Chat_Fragment : Fragment(), ChatListAdapter.OnItemClickListener {
+class Chat_Fragment : Fragment(), OnItemClickListener {
     private lateinit var binding:FragmentChatBinding
     private val mainViewmodel: MainViewmodel by activityViewModels()
     private lateinit var adapter: ChatListAdapter
@@ -55,6 +56,7 @@ class Chat_Fragment : Fragment(), ChatListAdapter.OnItemClickListener {
             binding.recycleChat.layoutManager = LinearLayoutManager(context)
             adapter = ChatListAdapter(mainViewmodel.chatRoomProfileArray.value, mainViewmodel.chatProfileArray.value,this)
             binding.recycleChat.adapter=adapter
+            adapter.setList(it!!)
             binding.recycleChat.addItemDecoration(
                 DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
             )

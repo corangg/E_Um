@@ -20,6 +20,7 @@ import com.example.appointment.ui.adapter.MapSearchResultsAdapter
 
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityScheduleMapBinding
+import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 import com.naver.maps.geometry.LatLng
 
@@ -34,7 +35,7 @@ import com.naver.maps.map.MapView
 import com.naver.maps.map.overlay.Marker
 
 
-class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, MapSearchResultsAdapter.OnItemClickListener{
+class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, OnItemClickListener{
     lateinit var binding: ActivityScheduleMapBinding
     lateinit var adapter : MapSearchResultsAdapter
     lateinit var locationSource: FusedLocationSource
@@ -204,6 +205,7 @@ class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, MapSearchRes
                 binding.recycleView.layoutManager = LinearLayoutManager(this)
                 adapter = MapSearchResultsAdapter(mainViewmodel.searchKewordList.value!!,this)
                 binding.recycleView.adapter = adapter
+                adapter.setList(mainViewmodel.searchKewordList.value!!)
                 binding.recycleView.addItemDecoration(
                     DividerItemDecoration(this,LinearLayoutManager.VERTICAL)
                 )

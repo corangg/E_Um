@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:id="@+id/item_search">
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:backgroundTint="@color/themecolor"
-        android:background="@drawable/ic_location"
-        android:layout_margin="20dp"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="placeitem"
+            type="com.example.appointment.model.PlaceItem" />
+    </data>
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="30"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/item_search">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:backgroundTint="@color/themecolor"
+            android:background="@drawable/ic_location"
+            android:layout_margin="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이름"
-            android:id="@+id/name"
-            android:textSize="16dp"
+            android:layout_weight="30"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{placeitem.title, default = 이름}"
+                android:id="@+id/name"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{placeitem.address, default = 주소}"
+                android:textSize="12dp"
+                android:id="@+id/roadAddress"
+                android:layout_marginTop="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="10dp"
-            android:textStyle="bold"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="주소"
-            android:textSize="12dp"
-            android:id="@+id/roadAddress"
-            android:layout_marginTop="5dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="20dp">
-        <!--<TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:id="@+id/category"
-            android:text="종류"/>-->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textSize="12dp"
-            android:id="@+id/distanc"
-            android:text="거리m"/>
+            android:layout_marginHorizontal="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="12dp"
+                android:id="@+id/distanc"
+                android:text="거리m" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
-</LinearLayout>
+</layout>

@@ -19,10 +19,11 @@ import com.example.appointment.R
 import com.example.appointment.ui.activity.friend.FriendAddActivity
 import com.example.appointment.ui.activity.friend.FriendAlarmActivity
 import com.example.appointment.databinding.FragmentFriendBinding
+import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 
 
-class Friend_Fragment : Fragment(), FriendListAdapter.OnItemClickListener{
+class Friend_Fragment : Fragment(), OnItemClickListener{
     private val mainViewmodel: MainViewmodel by activityViewModels()
     private lateinit var binding: FragmentFriendBinding
     private lateinit var adapter: FriendListAdapter
@@ -50,8 +51,6 @@ class Friend_Fragment : Fragment(), FriendListAdapter.OnItemClickListener{
 
         mainViewmodel.fnFriendAlarmReceive()
 
-
-        fnRecyclerSet()//왜 시작하자마자 만들어야하지?
         setObserve()
         return binding.root
     }
@@ -90,15 +89,6 @@ class Friend_Fragment : Fragment(), FriendListAdapter.OnItemClickListener{
         transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
     }
 
-    private fun fnRecyclerSet(){
-        binding.recycleFriends.layoutManager = LinearLayoutManager(context)
-        adapter = FriendListAdapter(mainViewmodel.friendsProfileList.value,this)
-        binding.recycleFriends.adapter=adapter
-        binding.recycleFriends.addItemDecoration(
-            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        )
-    }
-
     private fun setObserve(){
         mainViewmodel.friendAlarmReceiveStatus.observe(viewLifecycleOwner){
             if(it){
@@ -109,15 +99,15 @@ class Friend_Fragment : Fragment(), FriendListAdapter.OnItemClickListener{
             }
         }
 
-        /*mainViewmodel.friendsProfileList.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                adapter = FriendAdapter(it,this)
-                binding.recycleFriends.adapter=adapter
-            }
-        })*/
-
         mainViewmodel.friendsProfileList.observe(viewLifecycleOwner){
-            fnRecyclerSet()
+            binding.recycleFriends.layoutManager = LinearLayoutManager(context)
+            adapter = FriendListAdapter(it,this)
+            binding.recycleFriends.adapter=adapter
+
+            binding.recycleFriends.addItemDecoration(
+                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+            )
+            adapter.setList(it!!)
         }
 
     }

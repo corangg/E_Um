@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appointment.R
 import com.example.appointment.databinding.ItemAddressBinding
 
+/*class AddressListViewHolder(binding: ItemAddressBinding): BaseViewHolder<ItemAddressBinding>(binding){
+
+}*/
+
 class AddressListViewHolder(val binding: ItemAddressBinding): RecyclerView.ViewHolder(binding.root)
 
 class AddressListAdapter(val addressTitledatas: MutableList<String>?, val addressdatas: MutableList<String>?, val mainaddress: MutableList<Boolean>?, val onItemClickListener: OnItemClickListener):

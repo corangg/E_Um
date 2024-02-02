@@ -7,29 +7,40 @@ import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemFriendListBinding
 import com.example.appointment.model.ProfileDataModel
 
-class FriendListViewHolder(val binding: ItemFriendListBinding): RecyclerView.ViewHolder(binding.root)
+class FriendListViewHolder(binding: ItemFriendListBinding): BaseViewHolder<ItemFriendListBinding>(binding){
+    fun bindFfiendListItem(
+        friendProfile : ProfileDataModel,
+        position: Int,
+        onItemClickListener: OnItemClickListener
+    ){
+        binding.profiledata = friendProfile
 
-class FriendListAdapter(val friendProfile:MutableList<ProfileDataModel>?, val onItemClickListener: OnItemClickListener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-    override fun getItemCount(): Int  = friendProfile?.size?:0
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
-            = FriendListViewHolder(ItemFriendListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding = (holder as FriendListViewHolder).binding
-
-        binding.textNickname.text = friendProfile!![position].nickname
-        binding.textStatusmessage.text = friendProfile!![position].statusmessage
-
-        if(friendProfile!![position].imgURL != ""){
-            Glide.with(holder.itemView).load(friendProfile!![position].imgURL).into(binding.imgProfile)
+        if(friendProfile.imgURL != ""){
+            Glide.with(binding.root).load(friendProfile.imgURL).into(binding.imgProfile)
         }
-
         binding.profile.setOnClickListener {
             onItemClickListener.onItemClick(position)
         }
+    }
+}
+
+class FriendListAdapter(
+    private val friendProfile:MutableList<ProfileDataModel>?,
+    private val onItemClickListener: OnItemClickListener)
+    : BaseAdapter<ProfileDataModel,FriendListViewHolder>(){
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendListViewHolder{
+        val binding = ItemFriendListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return FriendListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(
+        holder: FriendListViewHolder,
+        item: ProfileDataModel,
+        position: Int
+    ) {
+        val friendData = itemList[position]
+
+        holder.bindFfiendListItem(friendData,position,onItemClickListener)
     }
 }

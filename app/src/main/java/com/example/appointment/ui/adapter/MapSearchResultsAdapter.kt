@@ -6,31 +6,37 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appointment.databinding.ItemMapAddressBinding
 import com.example.appointment.model.PlaceItem
 
-class MapSearchResultsViewHolder(val binding: ItemMapAddressBinding): RecyclerView.ViewHolder(binding.root)
-
-class MapSearchResultsAdapter(val mapinfoList:MutableList<PlaceItem>, val onItemClickListener: OnItemClickListener):
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-
-    override fun getItemCount(): Int {
-        return mapinfoList.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MapSearchResultsViewHolder(ItemMapAddressBinding.inflate(LayoutInflater.from(parent.context),parent,false))
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding: ItemMapAddressBinding =(holder as MapSearchResultsViewHolder).binding
-
-        val searchName : String = mapinfoList[position].title.replace("<b>","").replace("</b>","")
-        binding.name.text = searchName
-        binding.roadAddress.text = mapinfoList[position].roadAddress
+class MapSearchResultsViewHolder(binding: ItemMapAddressBinding): BaseViewHolder<ItemMapAddressBinding>(binding){
+    fun bindMapSearchResults(
+        mapinfoList: PlaceItem,
+        position: Int,
+        onItemClickListener: OnItemClickListener
+    ){
+        binding.placeitem = mapinfoList
 
         binding.itemSearch.setOnClickListener {
             onItemClickListener.onItemClick(position)
         }
+    }
+}
+
+class MapSearchResultsAdapter(
+    private val mapinfoList:MutableList<PlaceItem>,
+    private val onItemClickListener: OnItemClickListener)
+    : BaseAdapter<PlaceItem,MapSearchResultsViewHolder>(){
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapSearchResultsViewHolder {
+        val binding = ItemMapAddressBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return MapSearchResultsViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(
+        holder: MapSearchResultsViewHolder,
+        item: PlaceItem,
+        position: Int
+    ) {
+        val mapInfoData = itemList[position]
+
+        holder.bindMapSearchResults(mapInfoData,position,onItemClickListener)
     }
 }

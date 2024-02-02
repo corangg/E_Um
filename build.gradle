@@ -1,6 +1,8 @@
 buildscript {
     dependencies {
         classpath 'com.google.gms:google-services:4.3.14'
+        //hilt
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.41'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -9,4 +11,7 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.8.20' apply false//버전 이상하다해서 1.8.20에서 다운그레이드
 
     id 'com.google.gms.google-services' version '4.3.15' apply false
+
+
+
 }

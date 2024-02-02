@@ -116,7 +116,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/recycle_friends"/>
+                        android:id="@+id/recycle_friends"
+                        tools:listitem="@layout/item_friend_list"/>
 
                 </LinearLayout>
 
@@ -125,8 +126,7 @@
                     android:layout_height="match_parent"
                     android:id="@+id/fragment_friend_profile"
                     android:layout_marginVertical="80dp"
-                    android:layout_marginHorizontal="30dp"
-                    >
+                    android:layout_marginHorizontal="30dp">
 
                 </FrameLayout>
                 <FrameLayout
