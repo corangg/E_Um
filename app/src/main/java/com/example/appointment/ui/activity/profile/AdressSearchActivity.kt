@@ -10,19 +10,32 @@ import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityAdressBinding
+import com.example.appointment.ui.activity.BaseActivity
 
-class AdressSearchActivity : AppCompatActivity() {
+class AdressSearchActivity : BaseActivity<ActivityAdressBinding>() {
     companion object{
         const val ADDRESS_REQUEST_CODE =2928
     }
 
+    inner class KaKaoJavaScriptInterface {
+
+        @JavascriptInterface
+        fun processDATA(address: String?) {
+            Intent().apply {
+                putExtra("address", address)
+                setResult(RESULT_OK, this)
+            }
+            finish()
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
 
-    lateinit var binding: ActivityAdressBinding
+    override fun layoutResId(): Int {
+        return R.layout.activity_adress
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_adress)
+    override fun initializeUI() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -40,15 +53,9 @@ class AdressSearchActivity : AppCompatActivity() {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
-    inner class KaKaoJavaScriptInterface {
+    override fun setObserve() {}
 
-        @JavascriptInterface
-        fun processDATA(address: String?) {
-            Intent().apply {
-                putExtra("address", address)
-                setResult(RESULT_OK, this)
-            }
-            finish()
-        }
-    }
+
+
+
 }

@@ -20,6 +20,7 @@ import com.example.appointment.ui.adapter.MapSearchResultsAdapter
 
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityScheduleMapBinding
+import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 import com.naver.maps.geometry.LatLng
@@ -35,8 +36,7 @@ import com.naver.maps.map.MapView
 import com.naver.maps.map.overlay.Marker
 
 
-class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, OnItemClickListener{
-    lateinit var binding: ActivityScheduleMapBinding
+class ScheduleMapActivity : BaseActivity<ActivityScheduleMapBinding>(),OnMapReadyCallback, OnItemClickListener{
     lateinit var adapter : MapSearchResultsAdapter
     lateinit var locationSource: FusedLocationSource
     lateinit var mapView: MapView
@@ -48,11 +48,18 @@ class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, OnItemClickL
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 
+    override fun layoutResId(): Int {
+        return R.layout.activity_schedule_map
+    }
+
+    override fun initializeUI() {
+
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_schedule_map)
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner=this
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -60,8 +67,6 @@ class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, OnItemClickL
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
-
-        setObserve()
     }
 
     override fun onResume() {
@@ -198,7 +203,7 @@ class ScheduleMapActivity : AppCompatActivity(),OnMapReadyCallback, OnItemClickL
         }
     }
 
-    fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.showKeywordList.observe(this){//왜 이거 이럼?보이는거에 따라? 리스트변경에 따르는게 더 좋지 않을까?
             if(it){
                 binding.recycleSearch.visibility = View.VISIBLE

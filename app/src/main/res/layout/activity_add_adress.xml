@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
+        <!--<variable
             name="mainviewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.MainViewmodel" />-->
         <variable
-            name="singviewmodel"
+            name="viewmodel"
             type="com.example.appointment.viewmodel.signup.Signup_Viewmodel" />
 
     </data>
@@ -62,7 +62,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:textColor="@color/themecolor"
-                    android:text="@={singviewmodel.signUpZoneCode}" />
+                    android:text="@={viewmodel.signUpZoneCode}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
@@ -75,7 +75,7 @@
                 android:background="@drawable/btn_theme"
                 android:textColor="@color/themecolor"
                 android:textStyle="bold"
-                android:onClick="@{()->singviewmodel.searchAddress()}" />
+                android:onClick="@{()->viewmodel.searchAddress()}" />
 
 
         </LinearLayout>
@@ -96,7 +96,7 @@
                 android:editable="false"
                 android:focusable="false"
                 android:textColor="@color/themecolor"
-                android:text="@={singviewmodel.signUpAddress}" />
+                android:text="@={viewmodel.signUpAddress}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -113,7 +113,7 @@
                 android:hint="@string/address_detail"
                 android:inputType="text"
                 android:textColor="@color/themecolor"
-                android:text="@={singviewmodel.signUpDetailAddress}" />
+                android:text="@={viewmodel.signUpDetailAddress}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -137,7 +137,7 @@
                 android:hint="ex : 집, 학교 등"
                 android:inputType="text"
                 android:textColor="@color/themecolor"
-                android:text="@={singviewmodel.addressName}"/>
+                android:text="@={viewmodel.addressName}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -150,7 +150,7 @@
             android:background="@drawable/btn_theme"
             android:textColor="@color/themecolor"
             android:textStyle="bold"
-            android:onClick="@{()->singviewmodel.addAddress()}"/>
+            android:onClick="@{()->viewmodel.addAddress()}"/>
 
     </LinearLayout>
 </layout>

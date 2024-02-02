@@ -12,6 +12,12 @@ data class PrivacyDataModel(
     var address:String
 )
 
+data class AddressData(
+    val addressTitledatas : String,
+    val addressdatas : String,
+    var mainaddress : Boolean
+)
+
 data class ProfileDataModel(
     var email : String,
     var nickname: String,

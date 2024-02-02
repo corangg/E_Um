@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.example.appointment.R
 import com.example.appointment.ui.fragment.schedule.Schedule_Fragment
 import com.example.appointment.databinding.ActivityMainBinding
@@ -13,15 +14,11 @@ import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.chat.Chat_Fragment
 import com.example.appointment.ui.fragment.friend.Friend_Fragment
 import com.example.appointment.ui.fragment.profile.Profile_Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-
     lateinit var binding: ActivityMainBinding
     val mainViewmodel : MainViewmodel by viewModels()
-
-
-    lateinit var alarmManager: AlarmManager
-    lateinit var pendingIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

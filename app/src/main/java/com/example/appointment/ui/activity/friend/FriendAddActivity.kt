@@ -11,24 +11,46 @@ import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityFriendAddBinding
+import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.MainViewmodel
 
-class FriendAddActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFriendAddBinding
+class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
 
-    private val mainViewmodel : MainViewmodel by viewModels()
+    val mainViewmodel: MainViewmodel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_friend_add)
+    override fun layoutResId(): Int {
+        return R.layout.activity_friend_add
+    }
+
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
-
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        setObserve()
     }
+
+    override fun setObserve() {
+        mainViewmodel.searchFriend.observe(this){
+            if(it){
+                binding.layoutFriendCheck.visibility = View.VISIBLE
+                Glide.with(this).load(mainViewmodel.searchFriendImgURL.value).into(binding.imgProfile)
+            }else{
+                Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        mainViewmodel.friendRequestCheck.observe(this){
+            when(it){
+                1 -> {
+                    finish()
+                    Toast.makeText(this,"친구 신청 완료.",Toast.LENGTH_SHORT).show()
+                }
+                2 -> Toast.makeText(this,"본인 계정 입니다.",Toast.LENGTH_SHORT).show()
+                3 -> Toast.makeText(this,"검색된 계정이 없습니다.",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
@@ -53,27 +75,5 @@ class FriendAddActivity : AppCompatActivity() {
             mainViewmodel.fnFriendRequest(nickName)//수정
             true
         }else-> super.onOptionsItemSelected(item)
-    }
-
-    private fun setObserve(){
-        mainViewmodel.searchFriend.observe(this){
-            if(it){
-                binding.layoutFriendCheck.visibility = View.VISIBLE
-                Glide.with(this).load(mainViewmodel.searchFriendImgURL.value).into(binding.imgProfile)
-            }else{
-                Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        mainViewmodel.friendRequestCheck.observe(this){
-            when(it){
-                1 -> {
-                    finish()
-                    Toast.makeText(this,"친구 신청 완료.",Toast.LENGTH_SHORT).show()
-                }
-                2 -> Toast.makeText(this,"본인 계정 입니다.",Toast.LENGTH_SHORT).show()
-                3 -> Toast.makeText(this,"검색된 계정이 없습니다.",Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }

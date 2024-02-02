@@ -10,31 +10,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleAlarmListAdapter
 import com.example.appointment.databinding.ActivityScheduleAlarmBinding
+import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.schedule.ScheduleAccept_Fragment
 
-class ScheduleAlarmActivity : AppCompatActivity(), OnItemClickListener {
-    private lateinit var binding : ActivityScheduleAlarmBinding
+class ScheduleAlarmActivity : BaseActivity<ActivityScheduleAlarmBinding>(), OnItemClickListener {
     private lateinit var adapter : ScheduleAlarmListAdapter
     private val mainViewmodel: MainViewmodel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_schedule_alarm)
+    override fun layoutResId(): Int {
+        return R.layout.activity_schedule_alarm
+    }
+
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         mainViewmodel.fnScheduleListData()
 
         adapter = ScheduleAlarmListAdapter(mainViewmodel.scheduleAlarmDataList.value!!,this)
         binding.recycleScheduleAlarm.adapter=adapter
-
-        setObserve()
     }
 
     override fun onItemClick(position: Int) {
@@ -53,7 +51,7 @@ class ScheduleAlarmActivity : AppCompatActivity(), OnItemClickListener {
         return super.onSupportNavigateUp()
     }
 
-    private fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.scheduleAlarmDataList.observe(this){
             binding.recycleScheduleAlarm.layoutManager = LinearLayoutManager(this)
             adapter = ScheduleAlarmListAdapter(it,this)

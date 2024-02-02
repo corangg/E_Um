@@ -18,19 +18,6 @@
         android:orientation="vertical"
         android:background="@color/white">
 
-        <!--<androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            app:titleTextColor="@color/themecolor"
-            app:menu="@menu/menu"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:id="@+id/line_toolbar"
-            android:background="@color/themecolor" />-->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -58,12 +45,8 @@
                 app:itemIconTint="@color/navigation_ic_color"
                 app:itemTextColor="@color/navigation_ic_color"
                 app:menu="@menu/navigation_menu"
-                app:onNavigationItemSelectedListener="@{(item)->viewmodel.fnBottomNavigationItemSelected(item)}"
-                />
+                app:onNavigationItemSelectedListener="@{(item)->viewmodel.fnBottomNavigationItemSelected(item)}"/>
         </RelativeLayout>
 
     </LinearLayout>
 </layout>
-
-    <!--app:labelVisibilityMode="labeled"
-                    app:onNavigationItemSelected="@{(item) -> viewmodel.bottomNavigationItemSelected(item)}"-->

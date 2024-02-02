@@ -24,10 +24,4 @@
         android:enabled="true"
         android:title="일정"/>
 
-    <!--<item
-        android:id="@+id/navigation_menu"
-        android:icon="@drawable/ic_tab_menu"
-        android:enabled="true"
-        android:title="더보기"/>-->
-
 </menu>

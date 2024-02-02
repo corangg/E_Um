@@ -7,30 +7,29 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityPasswordEditBinding
+import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.MainViewmodel
 
-class PasswordEditActivity : AppCompatActivity() {
-    lateinit var binding : ActivityPasswordEditBinding
+class PasswordEditActivity : BaseActivity<ActivityPasswordEditBinding>() {
 
     val mainViewmodel : MainViewmodel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_password_edit)
+    override fun layoutResId(): Int {
+        return R.layout.activity_password_edit
+    }
+
+    override fun initializeUI() {
         binding.viewmodel = mainViewmodel
-        binding.lifecycleOwner = this
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        setObserve()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
-    fun setObserve(){
+    override fun setObserve(){
         mainViewmodel.passwordUpdate.observe(this){
             when(it){
                 0-> Toast.makeText(this,"비밀번호 확인 완료",Toast.LENGTH_SHORT).show()

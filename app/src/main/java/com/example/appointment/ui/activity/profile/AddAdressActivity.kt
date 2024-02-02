@@ -2,33 +2,27 @@ package com.example.appointment.ui.activity.profile
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
+import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityAddAdressBinding
+import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.logIn.Login_Viewmodel
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
 
-class AddAdressActivity : AppCompatActivity() {
-    lateinit var binding : ActivityAddAdressBinding
+class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
 
-    val signupViewmodel : Signup_Viewmodel by viewModels()
-    val loginViewmodel: Login_Viewmodel by viewModels()
+    val viewModel: Signup_Viewmodel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_add_adress)
-        binding.singviewmodel = signupViewmodel
-        binding.lifecycleOwner = this
+    override fun layoutResId(): Int {
+        return R.layout.activity_add_adress
+    }
 
-        setObserve()
-
+    override fun initializeUI() {
+        binding.viewmodel = viewModel
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -42,38 +36,33 @@ class AddAdressActivity : AppCompatActivity() {
         when (requestCode) {
             AdressSearchActivity.ADDRESS_REQUEST_CODE -> {
                 if (resultCode == RESULT_OK) {
-                    signupViewmodel.addressData.value = data?.extras?.getString("address")
-                    signupViewmodel.splitAddress()
+                    viewModel.addressData.value = data?.extras?.getString("address")
+                    viewModel.splitAddress()
                 }
 
             }
         }
     }
 
-    fun setObserve(){
-        signupViewmodel.searchAddress.observe(this){
+    override fun setObserve(){
+        viewModel.searchAddress.observe(this){
             if(it){
                 Intent(this, AdressSearchActivity::class.java).apply {
                     startActivityForResult(this, AdressSearchActivity.ADDRESS_REQUEST_CODE)
                 }
             }
         }
-        signupViewmodel.addressAdd.observe(this){
+        viewModel.addressAdd.observe(this){
             if(it){
                 val email = intent.getStringExtra("email")
                 val db = AddressDBHelper(this,email).writableDatabase
-                loginViewmodel.email
-                db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf(signupViewmodel.addressName.value,signupViewmodel.address))
+                db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf(viewModel.addressName.value,viewModel.address))
                 db.close()
 
-                //val intent = intent
-
-
-                intent.putExtra("addressName",signupViewmodel.addressName.value)
-                intent.putExtra("address",signupViewmodel.address)
+                intent.putExtra("addressName",viewModel.addressName.value)
+                intent.putExtra("address",viewModel.address)
                 setResult(Activity.RESULT_OK,intent)
                 finish()
-
             }
         }
     }
