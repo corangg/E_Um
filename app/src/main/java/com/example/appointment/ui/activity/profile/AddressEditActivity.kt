@@ -222,7 +222,6 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
 
         val db = AddressDBHelper(this,email).readableDatabase
         val cursor = db.rawQuery("select * from ADDRESS_TB",null)
-        //cursor.moveToFirst()
         cursor.run{
             while (moveToNext()){
                 addressTitledatas?.add(cursor.getString(1))
@@ -266,17 +265,6 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         viewmodel.handleActivityResult(requestCode,resultCode,data)
-        /*if(requestCode==RequestCode.ADD_ADDRESS_REQUEST_CODE && resultCode== Activity.RESULT_OK){
-            data!!.getStringExtra("addressName")?.let{
-                addressTitledatas?.add(it)
-                adapter.notifyDataSetChanged()
-            }
-            data!!.getStringExtra("address")?.let{
-                addressdatas?.add(it)
-                adapter.notifyDataSetChanged()
-            }
-            mainaddress?.add(false)
-        }*/
     }
 
     override fun onItemClickDelete(position: Int) {

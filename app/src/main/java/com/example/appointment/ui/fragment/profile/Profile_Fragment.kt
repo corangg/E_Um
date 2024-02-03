@@ -68,16 +68,6 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
         binding.layoutNickname.isEnabled=false
         binding.layoutPassword.isEnabled = false
         binding.layoutAddress.isEnabled = false
-
-        /*binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_profile_edit -> {
-                    profileViewModel.profileEditMode(photoUri)
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
-        }//이럴거면 걍 itemselect에서 호출하면 되는거 아닌가?*/
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
