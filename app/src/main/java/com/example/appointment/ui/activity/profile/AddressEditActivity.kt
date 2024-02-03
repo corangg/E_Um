@@ -15,11 +15,15 @@ import com.example.appointment.ui.adapter.AddressListAdapter
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.FirebaseCertified.Companion.email
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
+import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.databinding.ActivityProfileAddressBinding
 import com.example.appointment.model.AddressData
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.logIn.Login_Viewmodel
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.profile.EditAddressViewModel
+import com.google.android.play.integrity.internal.ad
 
 /*
 class AddressEditActivity : BaseActivity<ActivityProfileAddressBinding>(), AddressListAdapter.OnItemClickListener {
@@ -179,9 +183,7 @@ class AddressEditActivity : BaseActivity<ActivityProfileAddressBinding>(), Addre
 class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickListener {
     lateinit var binding: ActivityProfileAddressBinding
 
-    //val mainViewmodel : MainViewmodel by viewModels()
-    val mainViewmodel : MainViewmodel by viewModels()
-    val loginViewmodel: Login_Viewmodel by viewModels()
+    val viewmodel : EditAddressViewModel by viewModels()
 
     var addressTitledatas: MutableList<String>? = null
     var addressdatas: MutableList<String>? = null
@@ -194,7 +196,7 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_profile_address)
-        binding.viewmodel = mainViewmodel
+        binding.viewmodel = viewmodel
 
         binding.lifecycleOwner = this
         setObserve()
@@ -202,7 +204,7 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mainViewmodel.profileAddress.value = intent.getStringExtra("mainaddress")
+        viewmodel.titleAddress.value = intent.getStringExtra("mainaddress")
 
         addressdatas = mutableListOf<String>()
         addressTitledatas = mutableListOf<String>()
@@ -219,7 +221,6 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
         mainAddress = intent.getStringExtra("mainaddress")
 
         val db = AddressDBHelper(this,email).readableDatabase
-        loginViewmodel.email
         val cursor = db.rawQuery("select * from ADDRESS_TB",null)
         //cursor.moveToFirst()
         cursor.run{
@@ -248,26 +249,11 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_add ->{
-            val intent = Intent(this, AddAdressActivity::class.java)
-            intent.putExtra("email",email)
-            startActivityForResult(intent,10)
-
+            viewmodel.selectMenuAdd()
             true
         }
         R.id.menu_edit->{
-
-            if(item.title == "수정") {
-                item.title = "저장"
-                adapter.setItemEditable(true)
-                adapter.notifyDataSetChanged()
-
-            }else{
-                item.title = "수정"
-                adapter.setItemEditable(false)
-                adapter.notifyDataSetChanged()
-            }
-
-            adapter.notifyDataSetChanged()
+            viewmodel.seledtMenuEdit()
             true
         }else-> super.onOptionsItemSelected(item)
     }
@@ -279,7 +265,8 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==10 && resultCode== Activity.RESULT_OK){
+        viewmodel.handleActivityResult(requestCode,resultCode,data)
+        /*if(requestCode==RequestCode.ADD_ADDRESS_REQUEST_CODE && resultCode== Activity.RESULT_OK){
             data!!.getStringExtra("addressName")?.let{
                 addressTitledatas?.add(it)
                 adapter.notifyDataSetChanged()
@@ -289,28 +276,54 @@ class AddressEditActivity : AppCompatActivity(), AddressListAdapter.OnItemClickL
                 adapter.notifyDataSetChanged()
             }
             mainaddress?.add(false)
-        }
+        }*/
     }
 
-
     override fun onItemClickDelete(position: Int) {
-        mainViewmodel.fnAddressDelete(position.toLong())
+        val dbHelper = AddressDBHelper(this, auth.currentUser?.email)
+        dbHelper.deleteRow(position.toLong())
         adapter.notifyDataSetChanged()
     }
 
     override fun onItemClickTitle(address: String) {
-        mainViewmodel.profileAddress.value = address
+        viewmodel.titleAddress.value = address
         adapter.notifyDataSetChanged()
     }
 
-
-
     fun setObserve(){
-        mainViewmodel.profileAddress.observe(this){
+        viewmodel.titleAddress.observe(this){
             val intent = Intent()
             intent.putExtra("titleAddress",it)
             setResult(Activity.RESULT_OK, intent)
         }
 
+        viewmodel.startAddAddress.observe(this){
+            if(it){
+                val intent = Intent(this, AddAdressActivity::class.java)
+                intent.putExtra("email",email)
+                startActivityForResult(intent, RequestCode.ADD_ADDRESS_REQUEST_CODE)
+            }
+        }
+
+        viewmodel.addressEdit.observe(this){
+            val menuItemTitle = binding.toolbar.menu.findItem(R.id.menu_edit)
+            if(it){
+                menuItemTitle.title = "저장"
+                adapter.setItemEditable(true)
+                adapter.notifyDataSetChanged()
+            }else{
+                menuItemTitle.title = "수정"
+                adapter.setItemEditable(false)
+                adapter.notifyDataSetChanged()
+            }
+            adapter.notifyDataSetChanged()
+        }
+
+        viewmodel.addAddressData.observe(this){
+            addressTitledatas?.add(it.addressTitledatas)
+            addressdatas?.add(it.addressdatas)
+            mainaddress?.add(it.mainaddress)
+            adapter.notifyDataSetChanged()
+        }
     }
 }

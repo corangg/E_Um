@@ -7,9 +7,11 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide.init
 import com.example.appointment.FirebaseCertified
 
 import com.example.appointment.StartEvent
+import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.firestore
@@ -19,26 +21,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 //@HiltViewModel@Inject constructorprivate val utils :Utils,
-class ProfileViewModel (application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Application) : AndroidViewModel(application) {
 
-    var profileNickname: MutableLiveData<String> = MutableLiveData("")
-    var profileStatusMessage: MutableLiveData<String> = MutableLiveData("")
-    var profileName: MutableLiveData<String> = MutableLiveData("")
-    var profilePhone: MutableLiveData<String> = MutableLiveData("")
-    var profileEmail: MutableLiveData<String> = MutableLiveData("")
-    var profilePassword: MutableLiveData<String> = MutableLiveData("")
-    var profileAddress: MutableLiveData<String> = MutableLiveData("")
-    var profileImgURL :MutableLiveData<String> = MutableLiveData("")
+    val profileNickname: MutableLiveData<String> = MutableLiveData("")
+    val profileStatusMessage: MutableLiveData<String> = MutableLiveData("")
+    val profileName: MutableLiveData<String> = MutableLiveData("")
+    val profilePhone: MutableLiveData<String> = MutableLiveData("")
+    val profileEmail: MutableLiveData<String> = MutableLiveData("")
+    val profilePassword: MutableLiveData<String> = MutableLiveData("")
+    val profileAddress: MutableLiveData<String> = MutableLiveData("")
+    val profileImgURL :MutableLiveData<String> = MutableLiveData("")
 
     val editProfileData :MutableLiveData<Boolean> = MutableLiveData(false)
-    var openGallery :MutableLiveData<Boolean> = MutableLiveData(false)
-    var nickNameEditActivityStart:MutableLiveData<Boolean> = MutableLiveData(false)
-    var passwordEdit :MutableLiveData<Boolean> = MutableLiveData(false)
-    var addressEditActivityStart :MutableLiveData<Boolean> = MutableLiveData(false)
-    var logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
-    var imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
+    val openGallery :MutableLiveData<Boolean> = MutableLiveData(false)
+    val nickNameEditActivityStart:MutableLiveData<Boolean> = MutableLiveData(false)
+    val passwordEdit :MutableLiveData<Boolean> = MutableLiveData(false)
+    val addressEditActivityStart :MutableLiveData<Boolean> = MutableLiveData(false)
+    val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
 
-    var accountError: MutableLiveData<Int> = MutableLiveData(-1)
+    val accountError: MutableLiveData<Int> = MutableLiveData(-1)
 
     private val utils = Utils()
 
@@ -81,7 +84,7 @@ class ProfileViewModel (application: Application) : AndroidViewModel(application
 
     fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         when (requestCode) {
-            Profile_Fragment.NICKNAME_REQUEST_CODE->{
+            RequestCode.NICKNAME_REQUEST_CODE->{
                 if(resultCode == Activity.RESULT_OK){
                     data?.let {
                         profileNickname.value = it.getStringExtra("nickname")
@@ -89,7 +92,7 @@ class ProfileViewModel (application: Application) : AndroidViewModel(application
                     }
                 }
             }
-            Profile_Fragment.ADDRESS_REQUEST_CODE->{
+            RequestCode.ADDRESS_REQUEST_CODE->{
                 if(resultCode == Activity.RESULT_OK){
                     data?.let {
                         profileAddress.value = it.getStringExtra("titleAddress")

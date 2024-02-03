@@ -3,6 +3,6 @@ package com.example.appointment
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
+//@HiltAndroidApp
 class AppoinmentApplicaion : Application() {
 }

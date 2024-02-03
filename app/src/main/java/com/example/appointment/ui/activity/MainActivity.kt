@@ -21,11 +21,13 @@ import javax.inject.Inject
 //@AndroidEntryPoint
 //@Inject
 //lateinit var profileFragment: Profile_Fragment
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val mainViewmodel : MainViewmodel by viewModels()
 
 
+    @Inject lateinit var profileFragment: Profile_Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         mainViewmodel.selectFragment.observe(this){
             when(it.toString()){
                 "profile"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, /*profileFragment*/Profile_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, profileFragment/*Profile_Fragment()*/).commit()
                 }
                 "friends"->{
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Friend_Fragment()).commit()

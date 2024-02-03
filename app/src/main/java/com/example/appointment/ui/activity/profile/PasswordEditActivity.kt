@@ -9,17 +9,18 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityPasswordEditBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.profile.PasswordEditViewModel
 
 class PasswordEditActivity : BaseActivity<ActivityPasswordEditBinding>() {
 
-    val mainViewmodel : MainViewmodel by viewModels()
+    val passwordEditViewModel : PasswordEditViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_password_edit
     }
 
     override fun initializeUI() {
-        binding.viewmodel = mainViewmodel
+        binding.viewmodel = passwordEditViewModel
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -30,7 +31,7 @@ class PasswordEditActivity : BaseActivity<ActivityPasswordEditBinding>() {
         return super.onSupportNavigateUp()
     }
     override fun setObserve(){
-        mainViewmodel.passwordUpdate.observe(this){
+        passwordEditViewModel.passwordUpdate.observe(this){
             when(it){
                 0-> Toast.makeText(this,"비밀번호 확인 완료",Toast.LENGTH_SHORT).show()
                 1-> Toast.makeText(this,"비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show()

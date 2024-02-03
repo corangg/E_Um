@@ -14,7 +14,7 @@ import com.example.appointment.ui.activity.BaseActivity
 
 class AdressSearchActivity : BaseActivity<ActivityAdressBinding>() {
     companion object{
-        const val ADDRESS_REQUEST_CODE =2928
+
     }
 
     inner class KaKaoJavaScriptInterface {

@@ -6,14 +6,16 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
 import com.example.appointment.databinding.ActivityAddAdressBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.logIn.Login_Viewmodel
+import com.example.appointment.viewmodel.profile.AddAddressViewModel
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
 
 class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
 
-    val viewModel: Signup_Viewmodel by viewModels()
+    val viewModel: AddAddressViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_add_adress
@@ -32,27 +34,19 @@ class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            AdressSearchActivity.ADDRESS_REQUEST_CODE -> {
-                if (resultCode == RESULT_OK) {
-                    viewModel.addressData.value = data?.extras?.getString("address")
-                    viewModel.splitAddress()
-                }
-
-            }
-        }
+        viewModel.resultAddress(requestCode,resultCode,data)
     }
 
     override fun setObserve(){
         viewModel.searchAddress.observe(this){
             if(it){
                 Intent(this, AdressSearchActivity::class.java).apply {
-                    startActivityForResult(this, AdressSearchActivity.ADDRESS_REQUEST_CODE)
+                    startActivityForResult(this, RequestCode.ADDRESS_REQUEST_CODE)
                 }
             }
         }
-        viewModel.addressAdd.observe(this){
+
+        viewModel.editAddress.observe(this){
             if(it){
                 val email = intent.getStringExtra("email")
                 val db = AddressDBHelper(this,email).writableDatabase
@@ -60,7 +54,7 @@ class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
                 db.close()
 
                 intent.putExtra("addressName",viewModel.addressName.value)
-                intent.putExtra("address",viewModel.address)
+                intent.putExtra("address",viewModel.addressData.value + viewModel.detailAddress.value)
                 setResult(Activity.RESULT_OK,intent)
                 finish()
             }

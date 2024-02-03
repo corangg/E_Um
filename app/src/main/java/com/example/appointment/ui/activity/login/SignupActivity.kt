@@ -8,8 +8,9 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
+import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
 import com.example.appointment.databinding.ActivitySignupBinding
-import com.example.appointment.ui.activity.profile.AdressSearchActivity.Companion.ADDRESS_REQUEST_CODE
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
 
 class SignupActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class SignupActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            ADDRESS_REQUEST_CODE -> {
+            RequestCode.ADDRESS_REQUEST_CODE -> {
                 if (resultCode == RESULT_OK) {
                     signupViewModel.addressData.value = data?.extras?.getString("address")
                     signupViewModel.splitAddress()

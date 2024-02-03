@@ -381,10 +381,7 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         }
     }
 
-    fun fnAddressDelete(recyclePosition:Long) {
-        val dbHelper = AddressDBHelper(context, auth.currentUser?.email)
-        dbHelper.deleteRow(recyclePosition)
-    }
+
 
 
 

@@ -9,29 +9,28 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityNickNameBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.profile.NickNameEditViewModel
 
 class NickNameActivity : BaseActivity<ActivityNickNameBinding>() {
-    val mainViewmodel: MainViewmodel by viewModels()
+    val nicknameViewmodel: NickNameEditViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_nick_name
     }
 
     override fun initializeUI() {
-        binding.viewmodle = mainViewmodel
+        binding.viewmodle = nicknameViewmodel
 
-        mainViewmodel.profileNickname.value = intent.getStringExtra("nickname")
-        mainViewmodel.profileStatusMessage.value = intent.getStringExtra("statusmessage")
+        nicknameViewmodel.nickName.value = intent.getStringExtra("nickname")
+        nicknameViewmodel.statusMessage.value = intent.getStringExtra("statusmessage")
     }
 
     override fun setObserve(){
-        mainViewmodel.nickNameEditSave.observe(this){
-            if(it){
-                intent.putExtra("nickname",mainViewmodel.profileNickname.value)
-                intent.putExtra("statusmessage",mainViewmodel.profileStatusMessage.value)
-                setResult(Activity.RESULT_OK,intent)
-                finish()
-            }
+        nicknameViewmodel.nickNameEditSave.observe(this){
+            intent.putExtra("nickname",nicknameViewmodel.nickName.value)
+            intent.putExtra("statusmessage",nicknameViewmodel.statusMessage.value)
+            setResult(Activity.RESULT_OK,intent)
+            finish()
         }
 
     }

@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
+import com.example.appointment.data.RequestCode.Companion.NICKNAME_REQUEST_CODE
 import com.example.appointment.ui.activity.profile.AddressEditActivity
 import com.example.appointment.ui.activity.profile.NickNameActivity
 import com.example.appointment.ui.activity.profile.PasswordEditActivity
@@ -31,10 +33,10 @@ import javax.inject.Inject
 import kotlin.text.Typography.dagger
 
 //@AndroidEntryPoint@Inject constructor()
-class Profile_Fragment : BaseFragment<FragmentProfileBinding>() {
+@AndroidEntryPoint
+class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBinding>() {
     companion object{
-        const val NICKNAME_REQUEST_CODE =2911
-        const val ADDRESS_REQUEST_CODE =2912
+
     }
 
     private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -75,8 +77,17 @@ class Profile_Fragment : BaseFragment<FragmentProfileBinding>() {
                 }
                 else -> super.onOptionsItemSelected(item)
             }
-        }
+        }//이럴거면 걍 itemselect에서 호출하면 되는거 아닌가?
     }
+
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+
+        R.id.menu_profile_edit -> {
+            profileViewModel.profileEditMode(photoUri)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }*/
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -155,9 +166,9 @@ class Profile_Fragment : BaseFragment<FragmentProfileBinding>() {
         }
 
         profileViewModel.editProfileData.observe(viewLifecycleOwner){
-            val menuItem = binding.toolbar.menu.findItem(R.id.menu_profile_edit)
+            val menuItemTitle = binding.toolbar.menu.findItem(R.id.menu_profile_edit)
             if(it){
-                menuItem?.title = "저장"
+                menuItemTitle.title = "저장"
 
                 binding.btnPasswordEdit.visibility = View.VISIBLE
                 binding.btnAddressEdit.visibility = View.VISIBLE
@@ -169,7 +180,7 @@ class Profile_Fragment : BaseFragment<FragmentProfileBinding>() {
                 binding.layoutAddress.isEnabled = true
 
             }else{
-                menuItem?.title = "수정"
+                menuItemTitle.title = "수정"
 
                 binding.btnPasswordEdit.visibility = View.GONE
                 binding.btnAddressEdit.visibility = View.GONE
