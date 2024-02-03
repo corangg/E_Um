@@ -69,7 +69,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
         binding.layoutPassword.isEnabled = false
         binding.layoutAddress.isEnabled = false
 
-        binding.toolbar.setOnMenuItemClickListener { item ->
+        /*binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_profile_edit -> {
                     profileViewModel.profileEditMode(photoUri)
@@ -77,17 +77,17 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 }
                 else -> super.onOptionsItemSelected(item)
             }
-        }//이럴거면 걍 itemselect에서 호출하면 되는거 아닌가?
+        }//이럴거면 걍 itemselect에서 호출하면 되는거 아닌가?*/
     }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 
         R.id.menu_profile_edit -> {
             profileViewModel.profileEditMode(photoUri)
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }*/
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -164,11 +164,10 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 startActivityForResult(intent, NICKNAME_REQUEST_CODE)
             }
         }
-
         profileViewModel.editProfileData.observe(viewLifecycleOwner){
-            val menuItemTitle = binding.toolbar.menu.findItem(R.id.menu_profile_edit)
+            val menuItem = binding.toolbar.menu.findItem(R.id.menu_profile_edit)
             if(it){
-                menuItemTitle.title = "저장"
+                menuItem?.title = "저장"
 
                 binding.btnPasswordEdit.visibility = View.VISIBLE
                 binding.btnAddressEdit.visibility = View.VISIBLE
@@ -180,7 +179,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 binding.layoutAddress.isEnabled = true
 
             }else{
-                menuItemTitle.title = "수정"
+                menuItem?.title = "수정"
 
                 binding.btnPasswordEdit.visibility = View.GONE
                 binding.btnAddressEdit.visibility = View.GONE
@@ -192,5 +191,6 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 binding.layoutAddress.isEnabled = false
             }
         }
+
     }
 }
