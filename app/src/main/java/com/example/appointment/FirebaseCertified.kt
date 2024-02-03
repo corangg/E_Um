@@ -4,13 +4,23 @@ import androidx.multidex.MultiDexApplication
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class FirebaseCertified: MultiDexApplication() {
     companion object{
-        lateinit var auth: FirebaseAuth
+        //lateinit var auth: FirebaseAuth
+        lateinit var firebaseAuth: FirebaseAuth
+
+
+
+
+
+
         var email: String? = null
         fun checkAuth():Boolean{
-            val currentUser = auth.currentUser
+            val currentUser = firebaseAuth.currentUser
             return currentUser?.let {
                 email = currentUser.email
                 if(currentUser.isEmailVerified){
@@ -24,6 +34,6 @@ class FirebaseCertified: MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        auth = Firebase.auth
+        firebaseAuth= Firebase.auth
     }
 }

@@ -15,10 +15,17 @@ import com.example.appointment.ui.fragment.chat.Chat_Fragment
 import com.example.appointment.ui.fragment.friend.Friend_Fragment
 import com.example.appointment.ui.fragment.profile.Profile_Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+//@AndroidEntryPoint
+//@Inject
+//lateinit var profileFragment: Profile_Fragment
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val mainViewmodel : MainViewmodel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         mainViewmodel.selectFragment.observe(this){
             when(it.toString()){
                 "profile"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Profile_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, /*profileFragment*/Profile_Fragment()).commit()
                 }
                 "friends"->{
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Friend_Fragment()).commit()

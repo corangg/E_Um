@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appointment.AddressDBHelper
@@ -16,9 +17,12 @@ import com.example.appointment.apiservice.NaverKeWord
 import com.example.appointment.apiservice.NaverReverseGeocode
 
 import com.example.appointment.R
+
+import com.example.appointment.StartEvent
 import com.example.appointment.apiservice.TMapCarRoute
 import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.apiservice.TMapWalkRoute
+
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.CarRouteRequest
 import com.example.appointment.model.CarRouteResponse
@@ -207,13 +211,14 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         return false
     }
 
-    fun fnProfileAddressEdit(){
-        addressEditActivityStart.value = true
-        addressEditActivityStart.value = false
+
+
+    fun fnProfileAddressEdit(test:MutableLiveData<Boolean>){
+        StartEvent(test)
     }
 
     fun fnLogout(){
-        FirebaseCertified.auth.signOut()
+        FirebaseCertified.firebaseAuth.signOut()
         FirebaseCertified.email = null
         logOutSuccess.value = true
     }
@@ -287,9 +292,7 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         nickNameEditActivityStart.value = true
     }
 
-    fun fnNickNameSave(){
-        nickNameEditSave.value = true
-    }
+
 
     fun fnNicknameEditDataSet(nickname:String?, statusmessage:String?){
         profileNickname.value = nickname
@@ -299,6 +302,37 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
 
     fun fnPasswordEdit(){
         passwordEdit.value = true
+    }
+
+    fun fnSplitAddress():List<String>{
+        val splitArray = profileAddress.value!!.split(",")
+        return splitArray
+    }
+
+    fun fnOpenGallery(){
+        openGallery.value = true
+        openGallery.value = false
+    }
+
+    fun fnProfileImageUpdate(photoUri:Uri?){
+        if(photoUri!=null){
+            var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+            var storagePath = storage.reference.child("userProfile").child(auth.currentUser?.email.toString()).child("profileimg")
+
+            storagePath.putFile(photoUri!!).continueWithTask{
+                return@continueWithTask storagePath.downloadUrl
+            }.addOnCompleteListener{downloadUrl->
+                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("imgURL",downloadUrl.result.toString())
+                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("timestamp",timestamp)
+            }
+        }
+    }
+
+
+
+
+    fun fnNickNameSave(){
+        nickNameEditSave.value = true
     }
 
     fun fnPasswordCheck(){
@@ -352,29 +386,7 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         dbHelper.deleteRow(recyclePosition)
     }
 
-    fun fnSplitAddress():List<String>{
-        val splitArray = profileAddress.value!!.split(",")
-        return splitArray
-    }
 
-    fun fnOpenGallery(){
-        openGallery.value = true
-        openGallery.value = false
-    }
-
-    fun fnProfileImageUpdate(photoUri:Uri?){
-        if(photoUri!=null){
-            var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-            var storagePath = storage.reference.child("userProfile").child(auth.currentUser?.email.toString()).child("profileimg")
-
-            storagePath.putFile(photoUri!!).continueWithTask{
-                return@continueWithTask storagePath.downloadUrl
-            }.addOnCompleteListener{downloadUrl->
-                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("imgURL",downloadUrl.result.toString())
-                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("timestamp",timestamp)
-            }
-        }
-    }
 
     fun fnSearchFriend(){
         if(searchFriendEmail.value != ""){

@@ -79,7 +79,7 @@ class Login_Viewmodel(application: Application): AndroidViewModel(application) {
     }
 
     fun checkAuth(){
-        val currentUser = FirebaseCertified.auth.currentUser
+        val currentUser = FirebaseCertified.firebaseAuth.currentUser
 
         currentUser?.let {
             email = currentUser.email

@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.FirebaseCertified.Companion.auth
 import com.example.appointment.model.ChatDataModel
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -39,7 +38,7 @@ class ChatViewModel(application: Application)  : AndroidViewModel(application){
                         snapshot.child("message").value.toString(),
                         messageCount
                     )
-                    fnChatMessageCheckCountSet(chatRoom,messageCount)
+                    //fnChatMessageCheckCountSet(chatRoom,messageCount)
                     profileList.add(profileData)
                     messageCount = messageCount + 1
 
@@ -65,7 +64,7 @@ class ChatViewModel(application: Application)  : AndroidViewModel(application){
 
     }
 
-    fun fnChatMessageCheckCountSet(chatRoom:String, messageCount:Int){
+    /*fun fnChatMessageCheckCountSet(chatRoom:String, messageCount:Int){
         val reference = database.getReference("chat").child(chatRoom)
         val chatRoomNameReplace = chatRoom.replace("_",".")
         val chatRoomNameSplitArray = chatRoomNameReplace.split("||")
@@ -75,5 +74,5 @@ class ChatViewModel(application: Application)  : AndroidViewModel(application){
         }else if(auth.currentUser!!.email == chatRoomNameSplitArray[1]){
             reference.child(chatRoomInfoName.value!!).child("email2MessageCheck").setValue(messageCount)
         }
-    }
+    }*/
 }
