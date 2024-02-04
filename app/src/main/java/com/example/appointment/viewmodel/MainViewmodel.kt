@@ -22,6 +22,7 @@ import com.example.appointment.StartEvent
 import com.example.appointment.apiservice.TMapCarRoute
 import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.apiservice.TMapWalkRoute
+import com.example.appointment.data.Utils
 
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.CarRouteRequest
@@ -47,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
@@ -55,6 +57,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -278,11 +281,15 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
     }
 
     fun fnProfileEdit(){
-        firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("nickname",profileNickname.value.toString())
-        firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("statusmessage",profileStatusMessage.value.toString())
+        viewModelScope.launch {
+            firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("nickname",profileNickname.value.toString())
+            firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("statusmessage",profileStatusMessage.value.toString())
+        }
     }
 
     fun fnPrivacyEdit(){
+        val aa =
+
         firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("zonecode",fnSplitAddress()[0])
         firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("nickname",profileNickname.value.toString())
         firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("address",fnSplitAddress()[1])
@@ -434,6 +441,31 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         }
     }
 
+
+    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
+
+    fun fnFriendRequestAlarm() {
+        val userEmail = Utils.auth.currentUser?.email!!
+        val alarmRequestList = mutableListOf<FriendRequestAlarmData>()
+        val emailReplace = userEmail.replace(".", "_")
+        val reference = Utils.database.getReference(emailReplace).child("friendRequest")
+
+        reference.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    friendRequestAlarmStatus.value = true
+
+                } else {
+                    friendRequestAlarmStatus.value = false
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+
     fun fnFriendAlarmReceive() {
         val userEmail = auth.currentUser?.email!!
         val alarmRequestList = mutableListOf<FriendRequestAlarmData>()
@@ -443,6 +475,7 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         reference.child("friendRequest").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    true
 
                 } else {
                     friendRequestAlarmDataList.value = alarmRequestList
@@ -720,6 +753,9 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         }
     }
 
+
+
+
     fun fnChatMessageSet(chatRoom:String?, chatCount:Int?){
         val profileList = mutableListOf<ChatDataModel>()
         val reference = database.getReference("chat").child(chatRoom!!)
@@ -769,6 +805,57 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         val dateFormat = SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault())
         val currentDate = Date(System.currentTimeMillis())
         return dateFormat.format(currentDate)
+    }
+
+    suspend fun test(reference: DatabaseReference): List<FriendRequestAlarmData> = suspendCancellableCoroutine { continuation ->
+        val email = auth.currentUser?.email.toString()
+        var chatRoomSize : Int = 0
+
+        val eventListener = object  : ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+                val emailPath = snapshot.key
+                val friendEmail = emailPath?.replace("_",".")
+                var splitArray = friendEmail?.split("||")
+                //fnNotCheckChatCount(emailPath!!)
+                val totalChatCount = snapshot.childrenCount.toInt()
+
+                if(email == splitArray!![0]){
+                    chatProfile(emailPath,totalChatCount)
+                    chatRoomSize = chatRoomSize + 1
+
+                }else if(email == splitArray[1]){
+                    chatProfile(emailPath,totalChatCount)
+                    chatRoomSize = chatRoomSize + 1
+                }
+                if(chatRoomSize == 0){
+                    chatRoomProfileArray.value = mutableListOf()
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Error reading data", error.toException())
+            }
+
+        }
+
+        reference.addChildEventListener(eventListener)
+
+        // 취소될 때 ValueEventListener를 제거
+        continuation.invokeOnCancellation {
+            reference.removeEventListener(eventListener)
+        }
+
+
     }
 
 

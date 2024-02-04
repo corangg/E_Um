@@ -40,14 +40,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_nickname"
-                android:text="@{profiledata.nickname, default = 닉네임}"
+                android:text="@{profiledata.nickname}"
                 android:textStyle="bold"
                 android:textSize="14dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{profiledata.statusmessage, default = 상태메세지}"
+                android:text="@{profiledata.statusmessage}"
                 android:textSize="9dp"
                 android:id="@+id/text_statusmessage"
                 android:layout_marginTop="5dp" />

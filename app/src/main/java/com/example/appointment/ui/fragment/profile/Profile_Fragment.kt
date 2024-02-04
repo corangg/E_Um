@@ -94,7 +94,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        profileViewModel.handleActivityResult(requestCode, resultCode, data)
+        profileViewModel.fnHandleActivityResult(requestCode, resultCode, data)
     }
 
     override fun setObserve(){
@@ -136,13 +136,6 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 if(profileViewModel.profileImgURL.value != ""){
                     Glide.with(this).load(profileViewModel.profileImgURL.value).into(binding.imgProfile)
                 }
-            }
-        }
-
-        profileViewModel.accountError.observe(viewLifecycleOwner){
-            when(it){
-                0->Toast.makeText(activity,"Error : 계정 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
-                1->Toast.makeText(activity,"Error : 문서가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 

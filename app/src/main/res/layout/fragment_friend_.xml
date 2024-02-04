@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
     </data>
 
     <LinearLayout
@@ -116,8 +116,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/recycle_friends"
-                        tools:listitem="@layout/item_friend_list"/>
+                        android:id="@+id/recycle_friends" />
 
                 </LinearLayout>
 

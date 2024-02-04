@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.friend.FriendAddViewModel" />
     </data>
 
     <LinearLayout
@@ -111,11 +111,5 @@
                 android:layout_marginTop="20dp"/>
 
         </LinearLayout>
-
-
-
-
-
-
     </LinearLayout>
 </layout>

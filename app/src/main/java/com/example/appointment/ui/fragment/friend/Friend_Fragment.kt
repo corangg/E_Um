@@ -18,16 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.appointment.ui.adapter.FriendListAdapter
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
 import com.example.appointment.ui.activity.friend.FriendAddActivity
 import com.example.appointment.ui.activity.friend.FriendAlarmActivity
 import com.example.appointment.databinding.FragmentFriendBinding
+import com.example.appointment.ui.activity.profile.AddressEditActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
-
+import com.example.appointment.viewmodel.profile.ProfileViewModel
 
 class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListener{
-    private val mainViewmodel: MainViewmodel by activityViewModels()
+    private val mainViewmodel: ProfileViewModel by activityViewModels()
     private lateinit var adapter: FriendListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +50,11 @@ class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListen
         if(mainViewmodel.profileImgURL.value != ""){
             Glide.with(this).load(mainViewmodel.profileImgURL.value).into(binding.imgProfile)
         }
-
-        mainViewmodel.fnFriendAlarmReceive()
     }
 
-    override fun onResume() {
-        mainViewmodel.fnFriendList()
-        super.onResume()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mainViewmodel.fnHandleActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -64,30 +64,22 @@ class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListen
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_friend_add->{
-            val intent: Intent=Intent(requireActivity(), FriendAddActivity::class.java)
-            intent.putExtra("nickname",mainViewmodel.profileNickname.value.toString())
-            startActivity(intent)
+            mainViewmodel.fnSelectFriendAddItem()
             true
         }
         R.id.menu_friend_alarm->{
-            val intent: Intent=Intent(requireActivity(), FriendAlarmActivity::class.java)
-            intent.putExtra("nickname",mainViewmodel.profileNickname.value.toString())
-            startActivity(intent)
+            mainViewmodel.fnSelectFriendAlarmItem()
             true
         }
         else-> super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(position: Int) {
-        mainViewmodel.selectFriendProfile.value = mainViewmodel.friendsProfileList.value!![position]
-
-        val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
+        mainViewmodel.fnSelectFriend(position)
     }
 
     override fun setObserve(){
-        mainViewmodel.friendAlarmReceiveStatus.observe(viewLifecycleOwner){
+        mainViewmodel.friendRequestAlarmStatus.observe(viewLifecycleOwner){
             if(it){
                 binding.friendAlarmIcOn.visibility = View.VISIBLE
 
@@ -106,6 +98,31 @@ class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListen
             )
             adapter.setList(it!!)
         }
+
+        mainViewmodel.startFriendAddActivity.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent=Intent(requireActivity(), FriendAddActivity::class.java)
+                intent.putExtra("nickname",mainViewmodel.profileNickname.value)
+                startActivity(intent)
+            }
+        }
+
+        mainViewmodel.startFriendAlarmActivity.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent=Intent(requireActivity(), FriendAlarmActivity::class.java)
+                intent.putExtra("nickname",mainViewmodel.profileNickname.value.toString())
+                startActivityForResult(intent, RequestCode.ACCEPT_FRIEND_REQUEST_CODE)
+            }
+        }
+
+        mainViewmodel.startFriendProfileFragment.observe(viewLifecycleOwner){
+            if(it){
+                val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
+            }
+        }
+
 
     }
 

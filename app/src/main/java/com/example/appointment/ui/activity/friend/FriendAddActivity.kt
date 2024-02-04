@@ -13,43 +13,21 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityFriendAddBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.friend.FriendAddViewModel
 
 class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
 
-    val mainViewmodel: MainViewmodel by viewModels()
+    val viewmodel: FriendAddViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_friend_add
     }
 
     override fun initializeUI() {
-        binding.viewmodel = mainViewmodel
+        binding.viewmodel = viewmodel
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-
-    override fun setObserve() {
-        mainViewmodel.searchFriend.observe(this){
-            if(it){
-                binding.layoutFriendCheck.visibility = View.VISIBLE
-                Glide.with(this).load(mainViewmodel.searchFriendImgURL.value).into(binding.imgProfile)
-            }else{
-                Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        mainViewmodel.friendRequestCheck.observe(this){
-            when(it){
-                1 -> {
-                    finish()
-                    Toast.makeText(this,"친구 신청 완료.",Toast.LENGTH_SHORT).show()
-                }
-                2 -> Toast.makeText(this,"본인 계정 입니다.",Toast.LENGTH_SHORT).show()
-                3 -> Toast.makeText(this,"검색된 계정이 없습니다.",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -67,13 +45,36 @@ class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_search_friend->{
-            mainViewmodel.fnSearchFriend()//수정
+            viewmodel.fnSearchFriend()
             true
         }
         R.id.menu_friend_request->{
             val nickName = intent.getStringExtra("nickname")
-            mainViewmodel.fnFriendRequest(nickName)//수정
+            viewmodel.fnSelectFriendRequestItem(nickName)
             true
         }else-> super.onOptionsItemSelected(item)
+    }
+
+    override fun setObserve() {
+        viewmodel.searchFriend.observe(this){
+            if(it){
+                binding.layoutFriendCheck.visibility = View.VISIBLE
+                Glide.with(this).load(viewmodel.searchFriendImgURL.value).into(binding.imgProfile)
+            }else{
+                Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewmodel.friendRequestCheck.observe(this){
+            when(it){
+                1 -> {
+                    finish()
+                    Toast.makeText(this,"친구 신청 완료.",Toast.LENGTH_SHORT).show()
+                }
+                2 -> Toast.makeText(this,"본인 계정 입니다.",Toast.LENGTH_SHORT).show()
+                3 -> Toast.makeText(this,"검색된 계정이 없습니다.",Toast.LENGTH_SHORT).show()
+                4 -> Toast.makeText(this,"친구 신청 실패.",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

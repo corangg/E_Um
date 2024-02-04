@@ -5,22 +5,28 @@ import android.app.Application
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide.init
+import androidx.lifecycle.viewModelScope
 import com.example.appointment.FirebaseCertified
 
 import com.example.appointment.StartEvent
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
+import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.data.Utils.Companion.storage
-import com.example.appointment.ui.fragment.profile.Profile_Fragment
+import com.example.appointment.model.ProfileDataModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.DocumentReference
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel@Inject constructorprivate val utils :Utils,
 @HiltViewModel
 class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Application) : AndroidViewModel(application) {
 
@@ -41,15 +47,48 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
     val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val accountError: MutableLiveData<Int> = MutableLiveData(-1)
 
     private val utils = Utils()
 
     init {
+        //공유로 쓸거면 애매해 지는데 나중에 옮기는거 고려해야 할듯
         fnGetPrivacyData()
         fnGetProfileData()
+        fnFriendRequestAlarm()
+        fnFriendList()
+
     }
 
+    fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        when (requestCode) {
+            RequestCode.NICKNAME_REQUEST_CODE->{
+                if(resultCode == Activity.RESULT_OK){
+                    data?.let {
+                        profileNickname.value = it.getStringExtra("nickname")
+                        profileStatusMessage.value = it.getStringExtra("statusmessage")
+                    }
+                }
+            }
+            RequestCode.ADDRESS_REQUEST_CODE->{
+                if(resultCode == Activity.RESULT_OK){
+                    data?.let {
+                        profileAddress.value = it.getStringExtra("titleAddress")
+                    }
+                }
+            }
+            RequestCode.ACCEPT_FRIEND_REQUEST_CODE->{
+                if(resultCode == Activity.RESULT_OK){
+                    data?.let {
+                        fnFriendRequestAlarm()
+                        fnFriendList()
+                    }
+                }
+            }
+        }
+    }
+
+
+    //profile
     fun fnProfileAddressEdit(data: MutableLiveData<Boolean>){
         StartEvent(data)
     }
@@ -82,83 +121,62 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         editProfileData.value = editProfileData.value?.not() ?: true
     }
 
-    fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        when (requestCode) {
-            RequestCode.NICKNAME_REQUEST_CODE->{
-                if(resultCode == Activity.RESULT_OK){
-                    data?.let {
-                        profileNickname.value = it.getStringExtra("nickname")
-                        profileStatusMessage.value = it.getStringExtra("statusmessage")
-                    }
-                }
-            }
-            RequestCode.ADDRESS_REQUEST_CODE->{
-                if(resultCode == Activity.RESULT_OK){
-                    data?.let {
-                        profileAddress.value = it.getStringExtra("titleAddress")
-                    }
-                }
-            }
-        }
-    }
-
     fun fnGetPrivacyData() {
-        val user = auth.currentUser
+        val userEmail = auth.currentUser?.email ?: ""
+        val docRef = firestore.collection("Privacy").document(userEmail)
 
-        if (user != null) {
-            val userEmail = user.email
-            val docRef = firestore.collection("Privacy").document(userEmail!!)
-
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val dataMap = documentSnapshot.data
-
+        viewModelScope.launch {
+            try {
+                val dataMap = utils.readDataFirebase(docRef)
+                if (dataMap != null){
                     profileEmail.value = dataMap?.get("email") as? String
                     profileName.value = dataMap?.get("name") as? String
                     profileNickname.value = dataMap?.get("nickname") as? String
                     profilePhone.value = dataMap?.get("phoneNumber") as? String
                     profilePassword.value = dataMap?.get("password") as? String
                     profileAddress.value = dataMap?.get("zonecode") as? String + "," + dataMap?.get("address") as? String
-                } else {
-                    accountError.value = 0
                 }
+            }catch (e: Exception) {
+                Log.e("Coroutine", "Error fetching friend list", e)
             }
         }
     }
 
     fun fnGetProfileData(){
-        val user = auth.currentUser
+        val userEmail = auth.currentUser!!.email
+        val docRef = firestore.collection("Profile").document(userEmail!!)
 
-        if (user != null) {
-            val userEmail = user.email
-            val docRef = firestore.collection("Profile").document(userEmail!!)
-
-            docRef.get().addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val dataMap = documentSnapshot.data
-
+        viewModelScope.launch {
+            try {
+                val dataMap = utils.readDataFirebase(docRef)
+                if (dataMap != null){
                     profileImgURL.value = dataMap?.get("imgURL") as? String
                     profileStatusMessage.value = dataMap?.get("statusmessage") as? String
                     imageUpload.value = true
-
-                } else {
-                    accountError.value = 1
                 }
+            }catch (e: Exception) {
+                Log.e("Coroutine", "Error fetching friend list", e)
             }
         }
     }
 
     fun fnProfileEdit(){
-        firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("nickname",profileNickname.value)
-        firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("statusmessage",profileStatusMessage.value)
+        val userEmail = auth.currentUser!!.email
+        val docRef = firestore.collection("Profile").document(userEmail!!)
+
+        utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
+        utils.updataDataFireBase(docRef,"statusmessage",profileStatusMessage.value)
+
     }
 
     fun fnPrivacyEdit(){
         val splitAddress = utils.splitString(profileAddress.value!!,",")
+        val userEmail = auth.currentUser!!.email
+        val docRef = firestore.collection("Privacy").document(userEmail!!)
 
-        firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("zonecode",splitAddress[0])
-        firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("nickname",profileNickname.value)
-        firestore.collection("Privacy").document(auth.currentUser?.email.toString()).update("address",splitAddress[1])
+        utils.updataDataFireBase(docRef,"zonecode",splitAddress[0])
+        utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
+        utils.updataDataFireBase(docRef,"address",splitAddress[1])
     }
 
     fun fnProfileImageUpdate(photoUri: Uri?){
@@ -166,12 +184,117 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             var storagePath = storage.reference.child("userProfile").child(auth.currentUser?.email.toString()).child("profileimg")
 
+            val userEmail = auth.currentUser!!.email
+            val docRef = firestore.collection("Profile").document(userEmail!!)
+
+
             storagePath.putFile(photoUri!!).continueWithTask{
                 return@continueWithTask storagePath.downloadUrl
             }.addOnCompleteListener{downloadUrl->
-                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("imgURL",downloadUrl.result.toString())
-                firestore.collection("Profile").document(auth.currentUser?.email.toString()).update("timestamp",timestamp)
+                viewModelScope.launch {
+                    utils.updataDataFireBase(docRef,"imgURL",downloadUrl.result.toString())
+                    utils.updataDataFireBase(docRef,"timestamp",timestamp)
+                }
             }
         }
     }
+
+
+    //friend_fragment
+
+    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
+    val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
+    val selectFriendProfile : MutableLiveData<ProfileDataModel> = MutableLiveData()
+
+    val startFriendAddActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun fnFriendRequestAlarm() {
+        val userEmail = auth.currentUser?.email!!
+        val emailReplace = userEmail.replace(".", "_")
+        val reference = database.getReference(emailReplace).child("friendRequest")
+
+        reference.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    friendRequestAlarmStatus.value = true
+
+                } else {
+                    friendRequestAlarmStatus.value = false
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }//코루틴사용해야함
+
+    fun fnFriendList(){
+        viewModelScope.launch {
+            val userEmail = auth.currentUser?.email ?: ""
+            val docRef = firestore.collection("Friend").document(userEmail)
+
+            val friendEmails = fetchFriendList(docRef)
+            val friendsProfileListReturn = fetchFriendProfiles(friendEmails)
+            friendsProfileList.value = friendsProfileListReturn
+        }
+    }
+
+    suspend fun fetchFriendList(docRef : DocumentReference): List<String> {
+        val friendList = mutableListOf<String>()
+
+        try {
+            val dataMap = utils.readDataFirebase(docRef)
+            if (dataMap != null) {
+                for ((_, value) in dataMap) {
+                    friendList.add(value.toString())
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("Coroutine", "Error fetching friend list", e)
+        }
+
+        return friendList
+    }
+
+    suspend fun fetchFriendProfiles(friendEmails: List<String>): MutableList<ProfileDataModel> {
+        val profileList = mutableListOf<ProfileDataModel>()
+
+        for (friendEmail in friendEmails) {
+            val docRef = firestore.collection("Profile").document(friendEmail)
+            try {
+                val dataMap = utils.readDataFirebase(docRef)
+                if (dataMap != null) {
+                    val profileData = ProfileDataModel(
+                        dataMap["email"] as String,
+                        dataMap["nickname"] as String,
+                        dataMap["statusmessage"] as String,
+                        "",
+                        dataMap["imgURL"] as String
+                    )
+                    profileList.add(profileData)
+                }
+            } catch (e: Exception) {
+                Log.e("Coroutine", "Error fetching friend profile", e)
+            }
+        }
+        return profileList
+    }
+
+    fun fnSelectFriendAddItem(){
+        StartEvent(startFriendAddActivity)
+    }
+
+    fun fnSelectFriendAlarmItem(){
+        StartEvent(startFriendAlarmActivity)
+    }
+
+    fun fnSelectFriend(position:Int){
+        selectFriendProfile.value = friendsProfileList.value!![position]
+        StartEvent(startFriendProfileFragment)
+    }
+
+
+
 }
