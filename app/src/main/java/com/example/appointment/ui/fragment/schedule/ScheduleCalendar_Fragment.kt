@@ -10,10 +10,11 @@ import com.example.appointment.R
 import com.example.appointment.databinding.FragmentSchduleCalendarBinding
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.profile.ProfileViewModel
 
 class ScheduleCalendar_Fragment : BaseFragment<FragmentSchduleCalendarBinding>() {
 
-    val mainViewmodel: MainViewmodel by activityViewModels()
+    val mainViewmodel: ProfileViewModel by activityViewModels()
 
     override fun layoutResId(): Int {
         return R.layout.fragment_schdule_calendar_
@@ -25,15 +26,12 @@ class ScheduleCalendar_Fragment : BaseFragment<FragmentSchduleCalendarBinding>()
 
         }
         binding.viewCalendar.setOnDateChangedListener { widget, date, selected ->
-            mainViewmodel.fnScheduleDateSet(date.year,date.month,date.day)
-            mainViewmodel.scheduleSetFragmentStart.value = true
+            mainViewmodel.fnScheduleDateSet(date)
         }
     }
     override fun setObserve(){
-        mainViewmodel.scheduleSetFragmentStart.observe(viewLifecycleOwner){
+        mainViewmodel.startScheduleSetFragment.observe(viewLifecycleOwner){
             if(it){
-                mainViewmodel.scheduleSetFragmentStart.value = false
-
                 val fragmentManager = requireActivity().supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
 

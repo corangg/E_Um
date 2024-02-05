@@ -33,7 +33,7 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
             if(it){
                 val intent:Intent = Intent(requireContext(), ChatActivity::class.java)
 
-                intent.putExtra("friendnickname",mainViewmodel.selectFriendProfile.value!!.nickname)//friendNicknameMutableList.value!![mainViewmodel.selectFriendPosition])
+                intent.putExtra("friendnickname",mainViewmodel.selectFriendProfile.value!!.nickname)
                 intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
                 intent.putExtra("friendProfileURL",mainViewmodel.selectFriendProfile.value!!.imgURL)

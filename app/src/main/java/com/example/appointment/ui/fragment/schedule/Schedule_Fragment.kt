@@ -2,15 +2,11 @@ package com.example.appointment.ui.fragment.schedule
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +15,6 @@ import com.example.appointment.ui.adapter.ScheduleListAdapter
 import com.example.appointment.ui.activity.schedule.ScheduleAlarmActivity
 import com.example.appointment.databinding.FragmentScheduleBinding
 import com.example.appointment.viewmodel.MainViewmodel
-import com.example.appointment.model.ScheduleSet
 import com.example.appointment.ui.adapter.OnItemLongClickListener
 import com.example.appointment.ui.fragment.BaseFragment
 

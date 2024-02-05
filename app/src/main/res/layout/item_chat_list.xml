@@ -43,14 +43,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_nickname"
-                android:text="@{chatroom.nickname, default = 닉네임}"
+                android:text="@{chatroom.nickname}"
                 android:textStyle="bold"
                 android:textSize="16dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{chatroom.lastMessage, default = 마지막채팅}"
+                android:text="@{chatroom.lastMessage}"
                 android:textSize="12dp"
                 android:layout_marginTop="5dp"
                 android:id="@+id/text_last_message"
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/text_notCheckMessage_count"
-                android:text="@{String.valueOf(chatroom.notCheckChat), default = 0}"
+                android:text="@{String.valueOf(chatroom.notCheckChat)}"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:gravity="center"

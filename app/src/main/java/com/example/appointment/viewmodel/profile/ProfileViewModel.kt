@@ -20,12 +20,14 @@ import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.data.Utils.Companion.storage
 import com.example.appointment.model.ChatRoomData
 import com.example.appointment.model.ProfileDataModel
+import com.google.android.play.integrity.internal.i
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,7 +64,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         fnGetProfileData()
         fnFriendRequestAlarm()
         fnFriendList()
-        fnChatRoomList()
+
     }
 
     fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
@@ -394,7 +396,6 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     //chatFragment
     val chatRoomProfileList:MutableLiveData<MutableList<ChatRoomData>> = MutableLiveData()
     var chatRoomData = mutableListOf<ChatRoomData>()
-    val chatProfileList : MutableLiveData<MutableList<String?>> = MutableLiveData()
     val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
     val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
 
@@ -500,12 +501,22 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         val lastChatTime = snapshot.children.last().key?.toLong()
         val lastMessage = snapshot.children.last().child("message").value.toString()
 
+        var imgURL :String = ""
+
+        for (i in 0..friendsProfileList.value!!.size-1)
+        {
+            if(nickname==friendsProfileList.value!![i].nickname){
+                imgURL = friendsProfileList.value!![i].imgURL
+            }
+        }
+
         val chatRoomProfile = ChatRoomData(
             email,
             nickname,
             lastMessage,
             lastChatTime,
-            notCheckChatCount
+            notCheckChatCount,
+            imgURL
         )
         chatRoomData.add(chatRoomProfile)
         fnChatProfileArray()
@@ -513,25 +524,51 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
 
     fun fnChatProfileArray(){
         val sortedList = chatRoomData.sortedByDescending { it.time }
-        val chatProfile = mutableListOf<String?>()
-
-        for (i in 0..sortedList.size-1){
-            for (j in 0..friendsProfileList.value!!.size-1)
-            {
-                if(sortedList[i].nickname==friendsProfileList.value!![j].nickname){
-                    chatProfile.add(friendsProfileList.value!![j].imgURL)
-                }else{
-                }
-            }
-        }
-        chatProfileList.value = chatProfile
         chatRoomProfileList.value = sortedList.toMutableList()
     }
 
     fun fnSelectChat(position: Int){
         chatRoomFriendNickName.value = chatRoomProfileList.value!![position].nickname
-        chatFriendImg.value = chatProfileList.value!![position]
+        chatFriendImg.value = chatRoomProfileList.value!![position].imgURL//chatProfileList.value!![position]
         fnChatStart(chatRoomProfileList.value!![position].email)
     }
+
+
+
+    //ScheduleCalenderFragment
+
+    val scheduleDate : MutableLiveData<String> = MutableLiveData("")
+    val scheduleYYYYMMDD : MutableLiveData<String> = MutableLiveData("")
+    val startScheduleSetFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+
+
+    fun fnScheduleDateSet(date:CalendarDay){
+        val year = date.year
+        val month = date.month
+        val day = date.day
+
+        var monthString = "00"
+        var dayString = "00"
+
+        if(month<10){
+            monthString = "0"+month.toString()
+        }else{
+            monthString = month.toString()
+        }
+        if(day<10){
+            dayString = "0"+day.toString()
+        }else{
+            dayString = day.toString()
+        }
+
+        scheduleDate.value = year.toString()+"년 "+monthString+"월 "+dayString+"일"
+        scheduleYYYYMMDD.value = year.toString()+monthString+dayString
+
+        StartEvent(startScheduleSetFragment)
+
+    }
+
+
+
 
 }

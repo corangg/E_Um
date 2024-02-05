@@ -2,16 +2,11 @@ package com.example.appointment.ui.fragment.friend
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,15 +17,13 @@ import com.example.appointment.data.RequestCode
 import com.example.appointment.ui.activity.friend.FriendAddActivity
 import com.example.appointment.ui.activity.friend.FriendAlarmActivity
 import com.example.appointment.databinding.FragmentFriendBinding
-import com.example.appointment.ui.activity.profile.AddressEditActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
+import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.viewmodel.profile.ProfileViewModel
 
-class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListener{
+class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickListener{
     private val mainViewmodel: ProfileViewModel by activityViewModels()
-    private lateinit var adapter: FriendListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,14 +82,8 @@ class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListen
         }
 
         mainViewmodel.friendsProfileList.observe(viewLifecycleOwner){
-            binding.recycleFriends.layoutManager = LinearLayoutManager(context)
-            adapter = FriendListAdapter(it,this)
-            binding.recycleFriends.adapter=adapter
+            setAdapter(binding.recycleFriends,FriendListAdapter(it,this),it,true)
 
-            binding.recycleFriends.addItemDecoration(
-                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-            )
-            adapter.setList(it!!)
         }
 
         mainViewmodel.startFriendAddActivity.observe(viewLifecycleOwner){
@@ -122,11 +109,5 @@ class Friend_Fragment : BaseFragment<FragmentFriendBinding>(), OnItemClickListen
                 transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
             }
         }
-
-
     }
-
-
-
-
 }

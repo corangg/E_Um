@@ -1,10 +1,7 @@
 package com.example.appointment.ui.activity.schedule
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R

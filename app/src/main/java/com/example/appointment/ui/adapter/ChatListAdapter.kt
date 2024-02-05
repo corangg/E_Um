@@ -11,7 +11,6 @@ class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatLi
 
     fun bindChatListItem(
         chatRoomData: ChatRoomData,
-        chatRoomProfile: String?,
         position: Int,
         onItemClickListener: OnItemClickListener){
         binding.chatroom = chatRoomData
@@ -20,8 +19,8 @@ class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatLi
             binding.notCheckMessageCount.visibility = View.GONE
         }
 
-        if(chatRoomProfile != ""){
-            Glide.with(binding.root).load(chatRoomProfile).into(binding.imgProfile)
+        if(chatRoomData.imgURL != ""){
+            Glide.with(binding.root).load(chatRoomData.imgURL).into(binding.imgProfile)
         }
 
         binding.profile.setOnClickListener {
@@ -31,7 +30,6 @@ class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatLi
 }
 class ChatListAdapter(
     private val chatRoomData:MutableList<ChatRoomData>?,
-    private val chatRoomProfile:MutableList<String?>?,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<ChatRoomData,ChatListViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {
@@ -41,9 +39,8 @@ class ChatListAdapter(
 
     override fun onBindViewHolder(holder: ChatListViewHolder, item: ChatRoomData, position: Int) {
         val chatRoomData = itemList[position]
-        val chatRoomProfile = chatRoomProfile?.get(position)
 
-        holder.bindChatListItem(chatRoomData, chatRoomProfile,position, onItemClickListener)
+        holder.bindChatListItem(chatRoomData,position, onItemClickListener)
     }
 }
 

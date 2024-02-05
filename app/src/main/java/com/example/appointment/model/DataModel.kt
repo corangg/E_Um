@@ -75,7 +75,8 @@ data class ChatRoomData(
     var nickname:String,
     var lastMessage:String,
     var time:Long? = 0,
-    val notCheckChat:Int = 0
+    val notCheckChat:Int = 0,
+    val imgURL: String
 )
 
 data class ScheduleSet(

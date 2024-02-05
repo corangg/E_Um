@@ -945,7 +945,8 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
                                     secondenickname.toString(),
                                     lastMessage,
                                     lastChatTime,
-                                    notCheckChatCount
+                                    notCheckChatCount,
+                                    ""
                                 )
                                 chatRoomData.add(chatRoomProfile)//
                                 chatProfileArray()
@@ -967,7 +968,7 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
                                     firstnickname.toString(),
                                     lastMessage,
                                     lastChatTime,
-                                    notCheckChatCount
+                                    notCheckChatCount,""
                                 )
 
                                 chatRoomData.add(chatRoomProfile)//

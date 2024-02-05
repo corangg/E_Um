@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.viewbinding.ViewBinding
 
 
-abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     protected lateinit var binding: B
 

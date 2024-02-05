@@ -2,7 +2,6 @@ package com.example.appointment.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemFriendListBinding
 import com.example.appointment.model.ProfileDataModel

@@ -8,6 +8,7 @@ import com.example.appointment.R
 import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.databinding.ActivityChatBinding
+import com.example.appointment.model.ChatDataModel
 import com.example.appointment.model.ChatStartData
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.chat.ChatViewModel
@@ -31,14 +32,17 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
 
         viewModel.fnChatMessageSet(chatRoomName, chatCount)
     }
+    fun setAdapter(list:MutableList<ChatDataModel>){
+        binding.recycleMessage.layoutManager = LinearLayoutManager(this)
+        adapter = ChatAdapter(list,viewModel.userEmail,intent.getStringExtra("friendProfileURL"),intent.getStringExtra("friendnickname"))
+        binding.recycleMessage.adapter=adapter
+        binding.recycleMessage.scrollToPosition(list.size -1)
+    }
 
     override fun setObserve(){
         viewModel.chatData.observe(this, Observer {
             if(it!=null){
-                binding.recycleMessage.layoutManager = LinearLayoutManager(this)
-                adapter = ChatAdapter(it,viewModel.userEmail,intent.getStringExtra("friendProfileURL"),intent.getStringExtra("friendnickname"))
-                binding.recycleMessage.adapter=adapter
-                binding.recycleMessage.scrollToPosition(it.size -1)
+                setAdapter(it)
             }
         })
     }

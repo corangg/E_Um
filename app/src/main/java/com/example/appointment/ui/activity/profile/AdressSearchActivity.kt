@@ -13,10 +13,6 @@ import com.example.appointment.databinding.ActivityAdressBinding
 import com.example.appointment.ui.activity.BaseActivity
 
 class AdressSearchActivity : BaseActivity<ActivityAdressBinding>() {
-    companion object{
-
-    }
-
     inner class KaKaoJavaScriptInterface {
 
         @JavascriptInterface
