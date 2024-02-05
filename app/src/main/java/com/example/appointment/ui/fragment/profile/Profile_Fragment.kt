@@ -1,6 +1,5 @@
 package com.example.appointment.ui.fragment.profile
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,11 +9,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.appointment.R
@@ -29,8 +25,6 @@ import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.profile.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
-import kotlin.text.Typography.dagger
 
 //@AndroidEntryPoint@Inject constructor()
 @AndroidEntryPoint
@@ -73,7 +67,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 
         R.id.menu_profile_edit -> {
-            profileViewModel.profileEditMode(photoUri)
+            profileViewModel.fnProfileEditMode(photoUri)
             true
         }
         else -> super.onOptionsItemSelected(item)

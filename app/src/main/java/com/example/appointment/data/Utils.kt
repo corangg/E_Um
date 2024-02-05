@@ -28,12 +28,6 @@ class Utils {
         val database = FirebaseDatabase.getInstance()
     }
 
-    fun splitString(data:String,splitpoint:String):List<String>{
-        val splitArray = data.split(splitpoint)
-
-        return splitArray
-    }
-
     fun reverseString(data:String,reversePoint:String):String{
         return data.split(reversePoint).reversed().joinToString (reversePoint)
     }

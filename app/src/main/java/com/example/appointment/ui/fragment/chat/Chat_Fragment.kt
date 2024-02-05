@@ -15,13 +15,15 @@ import com.example.appointment.R
 import com.example.appointment.ui.adapter.ChatListAdapter
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentChatBinding
+import com.example.appointment.model.ChatStartData
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewmodel
+import com.example.appointment.viewmodel.profile.ProfileViewModel
 
 
 class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
-    private val mainViewmodel: MainViewmodel by activityViewModels()
+    private val mainViewmodel: ProfileViewModel by activityViewModels()
     private lateinit var adapter: ChatListAdapter
     override fun layoutResId(): Int {
         return R.layout.fragment_chat_
@@ -33,22 +35,19 @@ class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
-
     override fun onResume() {
         mainViewmodel.fnChatRoomList()
         super.onResume()
     }
 
     override fun onItemClick(position: Int) {
-        mainViewmodel.chatRoomFriendNickName.value = mainViewmodel.chatRoomProfileArray.value!![position].nickname
-        mainViewmodel.chatRoomProfileURL.value = mainViewmodel.chatProfileArray.value!![position]
-        mainViewmodel.fnChatStart(mainViewmodel.chatRoomProfileArray.value!![position].email)
+        mainViewmodel.fnSelectChat(position)
     }
 
     override fun setObserve(){
-        mainViewmodel.chatRoomProfileArray.observe(viewLifecycleOwner, Observer {
+        mainViewmodel.chatRoomProfileList.observe(viewLifecycleOwner, Observer {
             binding.recycleChat.layoutManager = LinearLayoutManager(context)
-            adapter = ChatListAdapter(mainViewmodel.chatRoomProfileArray.value, mainViewmodel.chatProfileArray.value,this)
+            adapter = ChatListAdapter(mainViewmodel.chatRoomProfileList.value, mainViewmodel.chatProfileList.value,this)
             binding.recycleChat.adapter=adapter
             adapter.setList(it!!)
             binding.recycleChat.addItemDecoration(
@@ -59,11 +58,13 @@ class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
         mainViewmodel.startChatActivity.observe(viewLifecycleOwner){
             if(it){
                 val intent: Intent = Intent(requireContext(), ChatActivity::class.java)
+
                 intent.putExtra("friendnickname",mainViewmodel.chatRoomFriendNickName.value)
                 intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
-                intent.putExtra("friendProfileURL",mainViewmodel.chatRoomProfileURL.value)
+                intent.putExtra("friendProfileURL",mainViewmodel.chatFriendImg.value)
                 intent.putExtra("chatCount",mainViewmodel.chatCount.value)
+
                 startActivity(intent)
             }
         }

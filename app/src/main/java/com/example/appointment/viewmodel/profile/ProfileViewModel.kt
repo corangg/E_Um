@@ -18,15 +18,16 @@ import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.data.Utils.Companion.storage
+import com.example.appointment.model.ChatRoomData
 import com.example.appointment.model.ProfileDataModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -117,7 +118,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         logOutSuccess.value = true
     }
 
-    fun profileEditMode(uri: Uri?) {
+    fun fnProfileEditMode(uri: Uri?) {
         if(editProfileData.value == true){
             fnProfileImageUpdate(uri)
             fnProfileEdit()
@@ -172,13 +173,13 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     }
 
     fun fnPrivacyEdit(){
-        val splitAddress = utils.splitString(profileAddress.value!!,",")
+        val splitAddress = profileAddress.value?.split(",")
         val userEmail = auth.currentUser!!.email
         val docRef = firestore.collection("Privacy").document(userEmail!!)
 
-        utils.updataDataFireBase(docRef,"zonecode",splitAddress[0])
+        utils.updataDataFireBase(docRef,"zonecode",splitAddress!![0])
         utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
-        utils.updataDataFireBase(docRef,"address",splitAddress[1])
+        utils.updataDataFireBase(docRef,"address",splitAddress!![1])
     }
 
     fun fnProfileImageUpdate(photoUri: Uri?){
@@ -381,5 +382,148 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         StartEvent(friendDeleteSuccess)
     }
 
+
+    //chatFragment
+    val chatRoomProfileList:MutableLiveData<MutableList<ChatRoomData>> = MutableLiveData()
+    var chatRoomData = mutableListOf<ChatRoomData>()
+    val chatProfileList : MutableLiveData<MutableList<String?>> = MutableLiveData()
+    val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
+    val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
+
+    fun fnChatRoomList(){
+        val reference = database.getReference("chat")
+        var chatRoomSize : Int = 0
+
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    utils.readDataFRDAddChildEventListener(reference){
+                        val emailPath = it.key?: ""
+                        val replaceEmailPath = emailPath.replace("_",".")
+                        val splitArray = replaceEmailPath.split("||")
+                        val totalChatCount = it.childrenCount.toInt()
+
+                        if(chatRoomSize == 0){
+                            chatRoomProfileList.value = mutableListOf()
+                        }//원래는 밑이었는데 밑이면 아예 의미가 없을꺼 같은데? 이상하면 확인해 보자
+
+                        if(userEmail == splitArray[0]){
+                            chatProfile(emailPath,totalChatCount)
+                            chatRoomSize = chatRoomSize + 1
+
+                        }else if(userEmail == splitArray[1]){
+                            chatProfile(emailPath,totalChatCount)
+                            chatRoomSize = chatRoomSize + 1
+                        }
+                    }
+                } else {
+                    chatRoomProfileList.value = mutableListOf()
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    fun chatProfile(emailPath:String?,totalChatCount:Int){
+        val reference = database.getReference("chat").child(emailPath!!)
+        chatRoomData = mutableListOf()
+
+        /*var a:Int =  0
+        utils.readDataFRDAddChildEventListener(reference){
+            a = a+1
+
+            if(a>totalChatCount){
+                asf(reference,a)
+
+
+                *//*val at = it.child("message").value.toString()
+
+
+                at*//*
+            }
+
+            true
+        }*/
+        //채팅 오면 바로 리셋되게 하고 싶은데 어떻게 해야될지 고민임 폰이 하나라 확인이 어려움 쳇엑티 처럼 하면 되나?
+
+        fnLastChatSet(reference,totalChatCount)
+    }
+
+    fun fnLastChatSet(reference:DatabaseReference,totalChatCount:Int){
+        reference.limitToFirst(1).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+
+                    val firstemail = snapshot.children.first().child("email1").value.toString()
+                    val secondeemail = snapshot.children.first().child("email2").value.toString()
+                    val firstnickname = snapshot.children.first().child("nickname1").value.toString()
+                    val secondenickname = snapshot.children.first().child("nickname2").value.toString()
+                    val emil1CheckCount = snapshot.children.first().child("email1MessageCheck").value.toString().toInt()
+                    val emil2CheckCount = snapshot.children.first().child("email2MessageCheck").value.toString().toInt()
+
+                    if(firstemail == userEmail){
+                        reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val notCheckChatCount = totalChatCount - emil2CheckCount - 1
+
+                                fnChatRoomDataAdd(snapshot,notCheckChatCount,secondeemail,secondenickname)
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                    }else{
+                        reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val notCheckChatCount : Int = totalChatCount - emil1CheckCount - 1
+
+                                fnChatRoomDataAdd(snapshot,notCheckChatCount,firstemail,firstnickname)
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    fun fnChatRoomDataAdd(snapshot: DataSnapshot, notCheckChatCount: Int, email: String, nickname: String){
+        val lastChatTime = snapshot.children.last().key?.toLong()
+        val lastMessage = snapshot.children.last().child("message").value.toString()
+
+        val chatRoomProfile = ChatRoomData(
+            email,
+            nickname,
+            lastMessage,
+            lastChatTime,
+            notCheckChatCount
+        )
+        chatRoomData.add(chatRoomProfile)
+        fnChatProfileArray()
+    }
+
+    fun fnChatProfileArray(){
+        val sortedList = chatRoomData.sortedByDescending { it.time }
+        val chatProfile = mutableListOf<String?>()
+
+        for (i in 0..sortedList.size-1){
+            for (j in 0..friendsProfileList.value!!.size-1)
+            {
+                if(sortedList[i].nickname==friendsProfileList.value!![j].nickname){
+                    chatProfile.add(friendsProfileList.value!![j].imgURL)
+                }else{
+                }
+            }
+        }
+        chatProfileList.value = chatProfile
+        chatRoomProfileList.value = sortedList.toMutableList()
+    }
+
+    fun fnSelectChat(position: Int){
+        chatRoomFriendNickName.value = chatRoomProfileList.value!![position].nickname
+        chatFriendImg.value = chatProfileList.value!![position]
+        fnChatStart(chatRoomProfileList.value!![position].email)
+    }
 
 }

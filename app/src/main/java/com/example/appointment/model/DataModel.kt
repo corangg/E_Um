@@ -28,6 +28,41 @@ data class ProfileDataModel(
     var imgURL: String
 )
 
+data class ChatStartData(
+    val friendNickName:String?,
+    val chatRoomName : String?,
+    val friendProfileImg : String?,
+    val chatCount : Int?
+): Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readInt()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(friendNickName)
+        parcel.writeString(chatRoomName)
+        parcel.writeString(friendProfileImg)
+        parcel.writeInt(chatCount!!)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ChatStartData> {
+        override fun createFromParcel(parcel: Parcel): ChatStartData {
+            return ChatStartData(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ChatStartData?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
 data class ChatDataModel(
     var email:String,
     var time:String,

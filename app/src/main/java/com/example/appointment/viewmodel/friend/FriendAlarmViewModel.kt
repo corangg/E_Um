@@ -35,9 +35,9 @@ class FriendAlarmViewModel(application: Application) : AndroidViewModel(applicat
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    utils.readDataFRDAddChildEventListener(reference) { snapshot ->
-                        val sendernickname = snapshot.key
-                        val senderEmail = snapshot.getValue(String::class.java)
+                    utils.readDataFRDAddChildEventListener(reference) {
+                        val sendernickname = it.key
+                        val senderEmail = it.getValue(String::class.java)
 
                         val friendRequestData = FriendRequestAlarmData(
                             senderEmail!!,

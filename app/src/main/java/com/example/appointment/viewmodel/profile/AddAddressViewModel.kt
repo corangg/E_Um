@@ -35,9 +35,10 @@ class AddAddressViewModel(application: Application): AndroidViewModel(applicatio
         when (requestCode) {
             RequestCode.ADDRESS_REQUEST_CODE -> {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
+                    val splitArray = addressData.value?.split(",")
                     addressData.value = data?.extras?.getString("address")
-                    zoneCode.value = utils.splitString(addressData.value!!,",")[0]
-                    address.value = utils.splitString(addressData.value!!,",")[1]
+                    zoneCode.value = splitArray!![0]
+                    address.value = splitArray!![1]
                 }
             }
         }

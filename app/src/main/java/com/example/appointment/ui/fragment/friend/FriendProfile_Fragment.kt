@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentFriendProfileBinding
+import com.example.appointment.model.ChatStartData
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.ui.fragment.schedule.ScheduleCalendar_Fragment
 import com.example.appointment.viewmodel.profile.ProfileViewModel
@@ -37,6 +38,7 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
                 intent.putExtra("friendProfileURL",mainViewmodel.selectFriendProfile.value!!.imgURL)
                 intent.putExtra("chatCount",mainViewmodel.chatCount.value)
+
                 startActivity(intent)
             }
         }
