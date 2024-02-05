@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel"/>
+            type="com.example.appointment.viewmodel.chat.ChatViewModel"/>
 
     </data>
 
@@ -39,17 +39,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/recycle_view"
             android:layout_above="@id/layout_edit"
-            android:layout_below="@+id/toolbarlatout"
-            >
-
+            android:layout_below="@+id/toolbarlatout">
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/recycle_message" />
-
-
-
-
         </ScrollView>
 
         <LinearLayout

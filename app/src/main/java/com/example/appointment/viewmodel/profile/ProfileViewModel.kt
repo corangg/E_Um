@@ -54,7 +54,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     private val utils = Utils()
 
     private val userEmail = auth.currentUser?.email ?: ""
-    val userEmailReplace = userEmail!!.replace(".", "_")
+    private val userEmailReplace = userEmail!!.replace(".", "_")
 
     init {
         //공유로 쓸거면 애매해 지는데 나중에 옮기는거 고려해야 할듯
@@ -62,7 +62,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         fnGetProfileData()
         fnFriendRequestAlarm()
         fnFriendList()
-
+        fnChatRoomList()
     }
 
     fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
@@ -89,6 +89,14 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
                         fnFriendList()
                     }
                 }
+            }
+            RequestCode.CHAT_REQUEST_CODE->{
+                if(resultCode == Activity.RESULT_OK){
+                    data?.let {
+                        fnChatRoomList()
+                    }
+                }
+
             }
         }
     }

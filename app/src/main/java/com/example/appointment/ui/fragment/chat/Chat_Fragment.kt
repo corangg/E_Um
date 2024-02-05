@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
 import com.example.appointment.ui.adapter.ChatListAdapter
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentChatBinding
@@ -35,17 +36,12 @@ class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
-    override fun onResume() {
-        mainViewmodel.fnChatRoomList()
-        super.onResume()
-    }
-
     override fun onItemClick(position: Int) {
         mainViewmodel.fnSelectChat(position)
     }
 
     override fun setObserve(){
-        mainViewmodel.chatRoomProfileList.observe(viewLifecycleOwner, Observer {
+        mainViewmodel.chatRoomProfileList.observe(viewLifecycleOwner){
             binding.recycleChat.layoutManager = LinearLayoutManager(context)
             adapter = ChatListAdapter(mainViewmodel.chatRoomProfileList.value, mainViewmodel.chatProfileList.value,this)
             binding.recycleChat.adapter=adapter
@@ -53,7 +49,7 @@ class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
             binding.recycleChat.addItemDecoration(
                 DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
             )
-        })
+        }
 
         mainViewmodel.startChatActivity.observe(viewLifecycleOwner){
             if(it){
@@ -65,9 +61,14 @@ class Chat_Fragment : BaseFragment<FragmentChatBinding>(), OnItemClickListener {
                 intent.putExtra("friendProfileURL",mainViewmodel.chatFriendImg.value)
                 intent.putExtra("chatCount",mainViewmodel.chatCount.value)
 
-                startActivity(intent)
+                startActivityForResult(intent, RequestCode.CHAT_REQUEST_CODE)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mainViewmodel.fnHandleActivityResult(requestCode, resultCode, data)
     }
 
 }
