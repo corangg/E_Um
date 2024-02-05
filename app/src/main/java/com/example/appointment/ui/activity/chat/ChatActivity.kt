@@ -24,6 +24,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
         binding.toolbar.title = intent.getStringExtra("friendnickname")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         setChatRoomData()
     }
 

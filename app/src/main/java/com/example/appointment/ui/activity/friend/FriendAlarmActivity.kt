@@ -51,8 +51,6 @@ class FriendAlarmActivity : BaseActivity<ActivityFriendAlarmBinding>() ,FriendRe
         setResult(Activity.RESULT_OK, intent)
     }
 
-
-
     override fun setObserve() {
         viewmodel.friendRequestAlarmDataList.observe(this) {
             binding.recycleAlarm.layoutManager = LinearLayoutManager(this)

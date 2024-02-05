@@ -23,8 +23,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +51,9 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
 
 
     private val utils = Utils()
+
+    private val userEmail = auth.currentUser?.email ?: ""
+    val userEmailReplace = userEmail!!.replace(".", "_")
 
     init {
         //공유로 쓸거면 애매해 지는데 나중에 옮기는거 고려해야 할듯
@@ -122,7 +127,6 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     }
 
     fun fnGetPrivacyData() {
-        val userEmail = auth.currentUser?.email ?: ""
         val docRef = firestore.collection("Privacy").document(userEmail)
 
         viewModelScope.launch {
@@ -143,8 +147,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     }
 
     fun fnGetProfileData(){
-        val userEmail = auth.currentUser!!.email
-        val docRef = firestore.collection("Profile").document(userEmail!!)
+        val docRef = firestore.collection("Profile").document(userEmail)
 
         viewModelScope.launch {
             try {
@@ -161,8 +164,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     }
 
     fun fnProfileEdit(){
-        val userEmail = auth.currentUser!!.email
-        val docRef = firestore.collection("Profile").document(userEmail!!)
+        val docRef = firestore.collection("Profile").document(userEmail)
 
         utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
         utils.updataDataFireBase(docRef,"statusmessage",profileStatusMessage.value)
@@ -211,9 +213,8 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun fnFriendRequestAlarm() {
-        val userEmail = auth.currentUser?.email!!
-        val emailReplace = userEmail.replace(".", "_")
-        val reference = database.getReference(emailReplace).child("friendRequest")
+        //val emailReplace = userEmail.replace(".", "_")
+        val reference = database.getReference(userEmailReplace).child("friendRequest")
 
         reference.addListenerForSingleValueEvent(object :
             ValueEventListener {
@@ -228,11 +229,10 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             override fun onCancelled(error: DatabaseError) {
             }
         })
-    }//코루틴사용해야함
+    }
 
     fun fnFriendList(){
         viewModelScope.launch {
-            val userEmail = auth.currentUser?.email ?: ""
             val docRef = firestore.collection("Friend").document(userEmail)
 
             val friendEmails = fetchFriendList(docRef)
@@ -295,6 +295,91 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         StartEvent(startFriendProfileFragment)
     }
 
+
+    //friendProfile
+    var chatCount : MutableLiveData<Int?> = MutableLiveData(0)
+    var chatRoomName:MutableLiveData<String?> = MutableLiveData("")
+    var startChatActivity:MutableLiveData<Boolean> = MutableLiveData(false)
+    var startScheduleCalendarFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    var friendDeleteSuccess:MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun fnChatStart(friendEmail: String?){
+        val friendEmailReplace = friendEmail!!.replace(".", "_")
+        val reference = database.getReference("chat")
+        val chatName = userEmailReplace + "||" + friendEmailReplace
+        val reversedchatName = utils.reverseString(chatName,"||")
+
+        reference.child(chatName).addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    chatCount.value = snapshot.childrenCount.toInt()
+                    chatRoomName.value=chatName
+                    StartEvent(startChatActivity)
+                } else {
+                    reference.child(reversedchatName).addListenerForSingleValueEvent(object :ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                chatCount.value = snapshot.childrenCount.toInt()
+                                chatRoomName.value = reversedchatName
+                                StartEvent(startChatActivity)
+                            } else {
+                                val chatPath = reference.child(reversedchatName).child(utils.fnGetCurrentTimeString())
+                                val dataMap = mapOf(
+                                    "email1" to userEmail,
+                                    "email2" to friendEmail,
+                                    "nickname1" to profileNickname.value,
+                                    "nickname2" to selectFriendProfile.value!!.nickname,
+                                    "email1MessageCheck" to "0",
+                                    "email2MessageCheck" to "0"
+                                )
+                                chatPath.setValue(dataMap).addOnSuccessListener {
+                                    chatCount.value = snapshot.childrenCount.toInt()
+                                    chatRoomName.value = reversedchatName
+                                    StartEvent(startChatActivity)
+                                }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.d("ChatStartError","error",error.toException())
+                        }
+                    })
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("ChatStartError","error",error.toException())
+            }
+        })
+    }
+
+    fun fnStartFragmentScheduleSet(data: MutableLiveData<Boolean>){
+        StartEvent(data)
+    }
+
+    fun fnFriendDelete(){
+        val docRef = firestore.collection("Friend")
+        val updates = HashMap<String, Any>()
+        val friendEmail = selectFriendProfile.value!!.email
+        val friendEmailReplace = friendEmail!!.replace(".", "_")
+        val chatName : String = userEmailReplace + "||" + friendEmailReplace
+        val reversedchatName = utils.reverseString(chatName,"||")
+        val chatReference = database.getReference("chat")
+        val appointmentReference = database.getReference("appointment")
+
+        updates[selectFriendProfile.value!!.nickname] = FieldValue.delete()
+        docRef.document(userEmail).update(updates)
+
+        updates[profileNickname.value!!] = FieldValue.delete()
+        docRef.document(friendEmail).update(updates)
+
+        chatReference.child(chatName).removeValue().addOnSuccessListener {
+            appointmentReference.child(chatName).removeValue()
+        }
+        chatReference.child(reversedchatName).removeValue().addOnSuccessListener {
+            appointmentReference.child(reversedchatName).removeValue()
+        }
+        fnFriendList()
+        StartEvent(friendDeleteSuccess)
+    }
 
 
 }

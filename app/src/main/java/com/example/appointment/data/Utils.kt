@@ -1,5 +1,6 @@
 package com.example.appointment.data
 
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -14,6 +15,8 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Date
+import java.util.Locale
 
 //@Inject constructor()
 class Utils {
@@ -30,6 +33,18 @@ class Utils {
 
         return splitArray
     }
+
+    fun reverseString(data:String,reversePoint:String):String{
+        return data.split(reversePoint).reversed().joinToString (reversePoint)
+    }
+
+    fun fnGetCurrentTimeString(): String {
+        val dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+        val currentDate = Date(System.currentTimeMillis())
+        return dateFormat.format(currentDate)
+    }
+
+
 
     /*  interface DataMapCallback {
         fun onDataMapReceived(dataMap: Map<String, Any>?)

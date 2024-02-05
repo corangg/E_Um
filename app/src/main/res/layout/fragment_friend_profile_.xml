@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />
+            type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
 
     </data>
 
@@ -99,7 +99,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{()->viewmodel.fnStartFragmentScheduleSet()}"
+                android:onClick="@{()->viewmodel.fnStartFragmentScheduleSet(viewmodel.startScheduleCalendarFragment)}"
                 android:orientation="vertical">
 
                 <ImageView
