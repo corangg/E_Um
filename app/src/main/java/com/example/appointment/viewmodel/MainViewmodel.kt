@@ -1012,6 +1012,10 @@ class MainViewmodel(application: Application) : AndroidViewModel(application){
         scheduleCalendarFragmentStart.value = true
         scheduleCalendarFragmentStart.value = false
     }
+
+    fun fnScheduleAmPmSet(bool : Boolean){
+        scheduleAmPmSet.value = bool
+    }
     fun fnScheduleAm(){
         scheduleAmPmSet.value = true
     }

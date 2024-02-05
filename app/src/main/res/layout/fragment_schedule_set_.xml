@@ -6,7 +6,7 @@
    <data>
       <variable
           name="viewmodel"
-          type="com.example.appointment.viewmodel.MainViewmodel" />
+          type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
 
    </data>
 
@@ -68,7 +68,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/btn_round_gray"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnScheduleAm()}"/>
+                android:onClick="@{()->viewmodel.fnScheduleAmPmSet(true)}"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="60dp"
@@ -80,7 +80,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/btn_round_gray"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnSchedulePm()}"/>
+                android:onClick="@{()->viewmodel.fnScheduleAmPmSet(false)}"/>
          </LinearLayout>
 
 
@@ -119,7 +119,6 @@
              android:text="@={viewmodel.scheduleMM}"
              android:gravity="center"
              android:maxLength="2"
-
              android:textColor="@color/themecolor"
              android:layout_marginLeft="10dp" />
 
@@ -171,19 +170,7 @@
              android:background="@drawable/ic_location"
              android:backgroundTint="@color/themecolor"
              android:layout_marginLeft="10dp"/>
-         <!--<EditText
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:hint="약속 장소"
-             android:layout_marginLeft="20dp"
-             android:textColorHint="@color/themecolor"
-             android:inputType="text"
-             android:textSize="20dp"
-             android:editable="false"
-             android:focusable="false"
-             android:gravity="center"
-             android:onClick="@{()->viewmodel.fnMapStart()}"
-             android:textColor="@color/themecolor"/>-->
+
          <com.google.android.material.textfield.TextInputLayout
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
@@ -204,7 +191,7 @@
                 android:textSize="20dp"
                 android:text="@={viewmodel.meetingPlaceAddress}"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnStartScheduleMapActivity()}"/>
+                android:onClick="@{()->viewmodel.fnStartScheduleMapActivity(viewmodel.startScheduleMapActivity)}"/>
          </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
 

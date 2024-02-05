@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
@@ -31,5 +32,11 @@ abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
     abstract fun initializeUI()
 
     abstract fun setObserve()
+
+    fun fragmentClose(){
+        val fragmentManager = requireActivity().supportFragmentManager
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
 
 }

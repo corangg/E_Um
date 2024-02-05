@@ -18,7 +18,20 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
+class APIData(){
+    companion object{
+        const val KEWORD_BASE_URL = "https://openapi.naver.com/"
+        const val KEWORD_CLIENT_ID = "a3vo4TcuBHWsYnQM5piZ"
+        const val KEWORD_API_KEY = "ykLrkfuepo"
 
+        const val NAVER_BASE_URL = "https://naveropenapi.apigw.ntruss.com/"
+        const val NAVER_CLIENT_ID = "tsyu4npcze"
+        const val NAVER_API_KEY = "cPhAjqfTinr2sIqCwb4SGfn9CjHBNFfIOoV7iYub"
+
+        const val TMAP_BASE_URL = "https://apis.openapi.sk.com"
+        const val TMAP_API_KEY = "VHK847GcwI6nhPfm8qYFO8x15oJl4IuM3L9ms1cl"
+    }
+}
 interface NaverKeWord{
     @GET("v1/search/local.json")
     fun getKeword(

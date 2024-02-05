@@ -2,6 +2,8 @@ package com.example.appointment.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.ImageView
+import android.widget.TextView
 import com.google.gson.annotations.SerializedName
 
 data class PrivacyDataModel(
@@ -132,6 +134,16 @@ data class PlaceItem(
     @SerializedName("roadAddress") val roadAddress: String,
     @SerializedName("mapx") val x: Double,
     @SerializedName("mapy") val y: Double,
+)
+
+
+data class SelectTransport(
+    val imgBus : ImageView,
+    val imgCar : ImageView,
+    val imgWalk : ImageView,
+    val textBus : TextView,
+    val textCar : TextView,
+    val textWalk : TextView
 )
 
 //NaverGeocode

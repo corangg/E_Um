@@ -2,6 +2,7 @@ package com.example.appointment.data
 
 import android.icu.text.SimpleDateFormat
 import android.util.Log
+import com.example.appointment.model.AlarmTime
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -15,6 +16,9 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Date
 import java.util.Locale
 
@@ -37,6 +41,94 @@ class Utils {
         val currentDate = Date(System.currentTimeMillis())
         return dateFormat.format(currentDate)
     }
+
+    fun <T> getRetrofitData(call: Call<T>, callback: (T?) -> Unit) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+            }
+        })
+    }
+
+    fun fnTimeToString(time : Int):String{
+        var HM :String = ""
+        val min = time.div(60)
+        val quotient = min.div(60)
+        val remainder = min.rem(60)
+        HM = quotient.toString() + "시간" + remainder + "분"
+
+        return  HM
+    }//이동시간 초를 시간 분 텍스트로
+
+    fun fnTimeSet(hh:String,mm:String):String{
+        var hour : String = ""
+        var min : String = ""
+        var time : String = ""
+        if(hh == "" && mm != ""){
+            hour = "00"
+            if(mm.toInt()<10){
+                min = "0" + mm
+            }else{
+                min = mm
+            }
+        }else if(hh != "" && mm == ""){
+            if(hh.toInt()<10){
+                hour = "0" + hh.toInt().toString()
+            }else{
+                hour = hh
+            }
+            min = "00"
+        }else if(hh != "" && mm != ""){
+            if(hh.toInt()<10){
+                hour = "0" + hh.toInt().toString()
+            }else{
+                hour = hh
+            }
+            if(mm.toInt()<10){
+                min = "0" + mm.toInt().toString()
+            }else{
+                min = mm
+            }
+        }
+
+        time = hour + min
+        return time
+    }//시간하고 분 스트링으로 붙이기
+
+    fun fnAlarmYYYYMMDDhhmm(alarmTime: AlarmTime):String{
+        var alarmYYYYMMDDhhmm : String = ""
+
+        var YYYY = alarmTime.YYYY.toString()
+        var MM = alarmTime.MM.toString()
+        var DD = alarmTime.DD.toString()
+        var hh = alarmTime.hh.toString()
+        var mm = alarmTime.mm.toString()
+
+        if(alarmTime.MM < 10){
+            MM = "0" + MM
+        }
+        if(alarmTime.DD < 10){
+            DD = "0" + DD
+        }
+        if(alarmTime.hh < 10){
+            hh = "0" + hh
+        }
+        if(alarmTime.mm < 10){
+            mm = "0" + mm
+        }
+
+        alarmYYYYMMDDhhmm = YYYY + MM + DD + hh + mm
+
+        return alarmYYYYMMDDhhmm
+    }
+
 
 
 

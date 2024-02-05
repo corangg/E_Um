@@ -12,14 +12,28 @@ import androidx.lifecycle.viewModelScope
 import com.example.appointment.FirebaseCertified
 
 import com.example.appointment.StartEvent
+import com.example.appointment.apiservice.APIData
+import com.example.appointment.apiservice.NaverGeocode
+import com.example.appointment.apiservice.TMapCarRoute
+import com.example.appointment.apiservice.TMapPublicTransportRoute
+import com.example.appointment.apiservice.TMapWalkRoute
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.data.Utils.Companion.storage
+import com.example.appointment.model.AlarmTime
+import com.example.appointment.model.CarRouteRequest
+import com.example.appointment.model.CarRouteResponse
 import com.example.appointment.model.ChatRoomData
+import com.example.appointment.model.GeocodingRespone
 import com.example.appointment.model.ProfileDataModel
+import com.example.appointment.model.PublicTransportRouteResponse
+import com.example.appointment.model.TransitRouteRequest
+import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.model.WalkRouteResponse
+import com.example.appointment.viewmodel.MainViewmodel
 import com.google.android.play.integrity.internal.i
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -30,6 +44,11 @@ import com.google.firebase.firestore.FieldValue
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,7 +83,6 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         fnGetProfileData()
         fnFriendRequestAlarm()
         fnFriendList()
-
     }
 
     fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
@@ -98,8 +116,18 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
                         fnChatRoomList()
                     }
                 }
-
             }
+            RequestCode.MAP_REQUEST_CODE->{
+                if(resultCode == Activity.RESULT_OK){
+                    data?.let {
+                        meetingPlaceAddress.value = it.getStringExtra("address")
+                        endX.value = it.getStringExtra("endX")
+                        endY.value = it.getStringExtra("endY")
+                        kewordName.value = it.getStringExtra("keywordName")
+                    }
+                }
+            }
+
         }
     }
 
@@ -533,14 +561,11 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         fnChatStart(chatRoomProfileList.value!![position].email)
     }
 
-
-
     //ScheduleCalenderFragment
 
     val scheduleDate : MutableLiveData<String> = MutableLiveData("")
     val scheduleYYYYMMDD : MutableLiveData<String> = MutableLiveData("")
     val startScheduleSetFragment : MutableLiveData<Boolean> = MutableLiveData(false)
-
 
     fun fnScheduleDateSet(date:CalendarDay){
         val year = date.year
@@ -561,13 +586,335 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             dayString = day.toString()
         }
 
-        scheduleDate.value = year.toString()+"년 "+monthString+"월 "+dayString+"일"
-        scheduleYYYYMMDD.value = year.toString()+monthString+dayString
+        scheduleDate.value = year.toString() + "년 "+ monthString + "월 " + dayString + "일"
+        scheduleYYYYMMDD.value = year.toString() + monthString + dayString
 
         StartEvent(startScheduleSetFragment)
-
+        fnStartingPointSet()
     }
 
+
+
+
+    //ScheduleSetFragment
+
+    val scheduleAmPmSet : MutableLiveData<Boolean> = MutableLiveData(true)
+    var scheduleHH : MutableLiveData<String> = MutableLiveData("")
+    var scheduleMM : MutableLiveData<String> = MutableLiveData("")
+    var scheduleAlarmHH : MutableLiveData<String> = MutableLiveData("")
+    var scheduleAlarmMM : MutableLiveData<String> = MutableLiveData("")
+    var meetingPlaceAddress :MutableLiveData<String> = MutableLiveData("")
+    var startScheduleMapActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    var publicTransportTime :MutableLiveData<String> = MutableLiveData("")
+    var carTime :MutableLiveData<String> = MutableLiveData("")
+    var walkTime : MutableLiveData<String> = MutableLiveData("")
+    var publicTransportCheck : MutableLiveData<Int> = MutableLiveData(-1)
+    var carCheck : MutableLiveData<Int> = MutableLiveData(-1)
+    var walkCheck : MutableLiveData<Int> = MutableLiveData(-1)
+    var startX:MutableLiveData<String> = MutableLiveData("")
+    var startY:MutableLiveData<String> = MutableLiveData("")
+    var endX:MutableLiveData<String> = MutableLiveData("")
+    var endY:MutableLiveData<String> = MutableLiveData("")
+    var transportTime : MutableLiveData<Int> = MutableLiveData()
+    var appointmentRequestSuccess : MutableLiveData<Boolean> = MutableLiveData()
+    var selectTransport : MutableLiveData<Int> = MutableLiveData(0)
+    var selectScheduleNickname : MutableLiveData<String> = MutableLiveData()
+    var scheduleEmailPath : MutableLiveData<String> = MutableLiveData()
+    var meetingTimeOver : MutableLiveData<Boolean> = MutableLiveData()
+    var kewordName : MutableLiveData<String?> = MutableLiveData("")
+    var startCheckAlarmTime : MutableLiveData<Int> = MutableLiveData(5)
+
+    fun fnScheduleAmPmSet(bool : Boolean){
+        scheduleAmPmSet.value = bool
+    }
+
+    fun fnStartScheduleMapActivity(data: MutableLiveData<Boolean>){
+        StartEvent(data)
+    }
+
+    fun fnDttmSet():String{
+        var hourint = 0
+
+        if(scheduleAmPmSet.value == true){
+            if(scheduleHH.value == ""){
+                hourint = 0
+            }else{
+                hourint = scheduleHH.value!!.toInt()
+            }
+        }else{
+            if(scheduleHH.value == ""){
+                hourint = 12
+            }else{
+                hourint = scheduleHH.value!!.toInt() + 12
+            }
+        }
+
+        val Dttm :String= scheduleYYYYMMDD.value!! + utils.fnTimeSet(hourint.toString(),scheduleMM.value!!)
+        return Dttm
+    }
+
+    fun fnAlarmTimeSet(alarmhhString: String,alarmmmString: String): AlarmTime {
+        var alarmTime : AlarmTime
+
+        var YYYY : Int = scheduleYYYYMMDD.value!!.substring(0,4).toInt()
+        var MM : Int = scheduleYYYYMMDD.value!!.substring(4,6).toInt()
+        var DD : Int = scheduleYYYYMMDD.value!!.substring(6,8).toInt()
+        var hh : Int = 0
+        var mm : Int = 0
+        val transportMin = transportTime.value!!.div(60)
+        var alarmhh : Int = 0
+        var alarmmm : Int = 0
+
+        if(scheduleHH.value != ""){
+            if(scheduleAmPmSet.value == true){
+                hh = scheduleHH.value!!.toInt()
+            }else{
+                hh = scheduleHH.value!!.toInt() + 12
+            }
+        }
+        if(scheduleMM.value != ""){
+            mm = scheduleMM.value!!.toInt()
+        }
+
+        if (alarmhhString != ""){
+            alarmhh = alarmhhString.toInt()
+        }
+
+        if (alarmmmString != ""){
+            alarmmm = alarmmmString.toInt()
+        }
+
+
+        mm = mm - transportMin.rem(60) - alarmmm
+        if(mm < 0){
+            mm = mm + 60
+            hh = hh - 1
+            if(mm<0){
+                mm = mm + 60
+                hh = hh - 1
+            }
+        }
+
+        hh = hh - transportMin.div(60) - alarmhh
+
+        if(hh < 0){
+            hh = hh + 24
+            DD = DD -1
+        }
+
+        if(DD < 1){
+            MM = MM - 1
+            when(MM){
+                0,1,3,5,7,8,10,12 -> DD = DD + 31
+                4,6,9,11 -> DD = DD + 30
+                2->{
+                    if(YYYY.rem(4)==0){
+                        DD = DD + 29
+                    }else{
+                        DD = DD + 28
+                    }
+                }
+            }
+        }
+
+        if(MM < 1){
+            MM = MM + 12
+            YYYY = YYYY - 1
+        }
+
+        alarmTime = AlarmTime(YYYY,MM,DD, hh, mm)
+
+        return alarmTime
+    }
+
+    fun fnStartingPointSet(){
+        val retrofit = Retrofit.Builder()
+            .baseUrl(APIData.NAVER_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val NaverGeo = retrofit.create(NaverGeocode::class.java)
+        var splitAddress = profileAddress.value.toString().split(",")
+
+        val call = NaverGeo.getGeocode(
+            APIData.NAVER_CLIENT_ID,
+            APIData.NAVER_API_KEY,
+            splitAddress[1])
+
+
+        utils.getRetrofitData(call){
+            if(it !=null){
+                if(it.addresses.size != 0){
+                    startX.value = it.addresses[0].x
+                    startY.value = it.addresses[0].y
+                }
+            }
+        }
+    }
+    fun fnPublicTransportTimeSet(){
+       if(meetingPlaceAddress.value==""){
+            publicTransportCheck.value = 3
+        }else{
+            val retrofit = Retrofit.Builder()
+                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+           val TMapTransitApiService = retrofit.create(TMapPublicTransportRoute::class.java)
+           val startEndPoint = TransitRouteRequest(
+                startX.value!!,
+                startY.value!!,
+                endX.value!!,
+                endY.value!!,
+                fnDttmSet())
+
+           val call = TMapTransitApiService.getPublicTransportRoute(MainViewmodel.TMAP_API_KEY,startEndPoint)
+
+           utils.getRetrofitData(call){
+               if(it !=null){
+                   if(it.metaData == null){
+                       publicTransportCheck.value = 5
+                   }else{
+                       publicTransportTime.value = utils.fnTimeToString(it.metaData.plan.itineraries[0].totalTime)
+                       transportTime.value = it.metaData.plan.itineraries[0].totalTime
+                       selectTransport.value = 1
+                   }
+               }else{
+                   publicTransportCheck.value = 4
+               }
+           }
+        }
+    }
+
+    fun fnCarTimeSet(){
+        if(meetingPlaceAddress.value==""){
+            carCheck.value = 3
+        }else{
+            val retrofit = Retrofit.Builder()
+                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val TMapCarApiService = retrofit.create(TMapCarRoute::class.java)
+            val startEndPoint = CarRouteRequest(startX.value!!.toDouble(),
+                startY.value!!.toDouble(),
+                endX.value!!.toDouble(),
+                endY.value!!.toDouble(),
+                fnDttmSet()+"00")
+
+            val call = TMapCarApiService.getCarRoute(MainViewmodel.TMAP_API_KEY,"1","CarRouteResponse",startEndPoint)
+
+            utils.getRetrofitData(call){
+                if(it !=null){
+                    carTime.value = utils.fnTimeToString(it.features[0].properties.totalTime)
+                    transportTime.value = it.features[0].properties.totalTime
+                    selectTransport.value = 2
+                }else{
+                    carCheck.value = 4
+                }
+            }
+        }
+    }
+
+    fun fnWalkingTimeSet(){
+        if(meetingPlaceAddress.value==""){
+            walkCheck.value = 3
+        }else{
+            val retrofit = Retrofit.Builder()
+                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val TMapWalkApiService = retrofit.create(TMapWalkRoute::class.java)
+            val startEndPoint = WalkRouteRequest(startX.value!!.toDouble(),
+                startY.value!!.toDouble(),
+                endX.value!!.toDouble(),
+                endY.value!!.toDouble(),
+                "출발점",
+                "도착점")
+            val call = TMapWalkApiService.getWalkRoute(MainViewmodel.TMAP_API_KEY,"1","WalkRouteResponse",startEndPoint)
+
+            utils.getRetrofitData(call){
+                if(it != null){
+                    walkTime.value = utils.fnTimeToString(it.features[0].properties.totalTime)
+                    transportTime.value = it.features[0].properties.totalTime
+                    selectTransport.value = 3
+                }else {
+                    walkCheck.value = 4
+                }
+            }
+        }
+    }
+
+    fun fnAppointmentRequest(){
+        val userEmailReplace = userEmail.replace(".","_")
+        val friendEmail = selectFriendProfile.value!!.email
+        val friendEmailReplace = friendEmail.replace(".","_")
+        val childName = userEmailReplace+"||"+friendEmailReplace
+        val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+        val alarmTimeSet = fnAlarmTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+        val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
+        val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
+
+        if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
+            StartEvent(meetingTimeOver)
+        }else{
+
+            val dataMap = mapOf(
+                "email1" to userEmail,
+                "email2" to friendEmail,
+                "nickname1" to profileNickname.value,
+                "nickname2" to selectFriendProfile.value!!.nickname,
+                "meetingPlace" to meetingPlaceAddress.value,
+                "meetingPlaceName" to kewordName.value,
+                "meetingplaceX" to endX.value,
+                "meetingplaceY" to endY.value,
+                "meetingTime" to fnDttmSet(),
+                "email1Status" to "consent",
+                "email2Status" to "wait",
+                "email1ProfileImgURl" to profileImgURL.value,
+                "email2ProfileImgURl" to selectFriendProfile.value!!.imgURL,
+                "email1Transport" to selectTransport.value,
+                "email2Transport" to "",
+                "email1Alarm" to alarmTime,
+                "email1StartX" to startX.value,
+                "email1StartY" to startY.value,
+                "email2StartX" to "",
+                "email2StartY" to "",
+                "email1TransportTime" to transportTime.value,
+                "email2TransportTime" to "",
+                "email1StartCheck" to "not",
+                "email2StartCheck" to "not",
+            )
+
+            val reference = database.getReference("appointment").child(childName)
+            reference.setValue(dataMap).addOnSuccessListener{
+                scheduleEmailPath.value = childName
+                StartEvent(appointmentRequestSuccess)
+
+                fnScheduleSetDataReset()
+            }
+        }
+    }
+
+    fun fnScheduleSetDataReset(){
+        scheduleHH.value = ""
+        scheduleMM.value = ""
+        scheduleYYYYMMDD.value = ""
+        scheduleAmPmSet.value = true
+        scheduleAlarmHH.value = ""
+        scheduleAlarmMM.value = ""
+        selectTransport.value = 0
+        transportTime.value = 0
+        meetingPlaceAddress.value = ""
+        endX.value = ""
+        endY.value = ""
+        selectScheduleNickname.value = ""
+        scheduleEmailPath.value = ""
+        publicTransportTime.value = ""
+        carTime.value = ""
+        walkTime.value = ""
+    }
 
 
 

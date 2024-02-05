@@ -46,7 +46,7 @@ object AlarmUtil {
         calendar.set(Calendar.MONTH, alarmTime.MM-1)
         calendar.set(Calendar.DAY_OF_MONTH, alarmTime.DD)
         calendar.set(Calendar.HOUR_OF_DAY, alarmTime.hh)
-        calendar.set(Calendar.MINUTE, alarmTime.mm-chackAlarmTime)
+        calendar.set(Calendar.MINUTE, alarmTime.mm-chackAlarmTime)//alarmTime.mm이 5보다 작으면 시간 주나 아마 그럴거 같은데
         calendar.set(Calendar.SECOND, 0)
 
 
