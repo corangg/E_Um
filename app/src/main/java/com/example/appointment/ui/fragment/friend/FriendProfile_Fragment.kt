@@ -45,10 +45,7 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
 
         mainViewmodel.startScheduleCalendarFragment.observe(viewLifecycleOwner){
             if(it){
-                val fragmentManager = requireActivity().supportFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-
-                transaction.replace(R.id.fragment_friend_profile, ScheduleCalendar_Fragment()).addToBackStack(null).commit()
+                getTransaction().replace(R.id.fragment_friend_profile, ScheduleCalendar_Fragment()).addToBackStack(null).commit()
             }
         }
 

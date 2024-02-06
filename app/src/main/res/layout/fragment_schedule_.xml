@@ -6,7 +6,7 @@
     <data>
        <variable
            name="viewmodel"
-           type="com.example.appointment.viewmodel.MainViewmodel" />
+           type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
     </data>
 
     <LinearLayout
@@ -84,7 +84,7 @@
                         android:text="확인"
                         android:textStyle="bold"
 
-                        android:onClick="@{()->viewmodel.fnScheduleRefuseOk()}"/>
+                        android:onClick="@{()->viewmodel.fnScheduleRefuseOk(viewmodel.scheduleRefuseOkView)}"/>
 
                 </LinearLayout>
 
@@ -124,7 +124,7 @@
                             android:layout_weight="1"
                             android:text="제거"
                             android:textStyle="bold"
-                            android:onClick="@{()->viewmodel.fnScheduleListDelete()}"/>
+                            android:onClick="@{()->viewmodel.fnScheduleListDelete(true)}"/>
                         <androidx.appcompat.widget.AppCompatButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                             android:layout_weight="1"
                             android:text="취소"
                             android:textStyle="bold"
-                            android:onClick="@{()->viewmodel.fnScheduleListDeleteCancel()}"/>
+                            android:onClick="@{()->viewmodel.fnScheduleListDelete(false)}"/>
                     </LinearLayout>
                 </LinearLayout>
 

@@ -8,7 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.MutableLiveData
 import androidx.viewbinding.ViewBinding
+import javax.security.auth.callback.Callback
 
 abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
 
@@ -38,5 +41,10 @@ abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
+    fun getTransaction():FragmentTransaction{
+        val fragmentManager = requireActivity().supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        return transaction
+    }
 
 }

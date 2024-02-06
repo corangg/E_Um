@@ -104,9 +104,7 @@ class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickLis
 
         mainViewmodel.startFriendProfileFragment.observe(viewLifecycleOwner){
             if(it){
-                val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
+                getTransaction().replace(R.id.fragment_friend_profile, FriendProfile_Fragment()).addToBackStack(null).commit()
             }
         }
     }

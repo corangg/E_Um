@@ -32,10 +32,7 @@ class ScheduleCalendar_Fragment : BaseFragment<FragmentSchduleCalendarBinding>()
     override fun setObserve(){
         mainViewmodel.startScheduleSetFragment.observe(viewLifecycleOwner){
             if(it){
-                val fragmentManager = requireActivity().supportFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-
-                transaction.replace(R.id.fragment_Schedule_set, ScheduleSet_Fragment()).addToBackStack(null).commit()
+                getTransaction().replace(R.id.fragment_Schedule_set, ScheduleSet_Fragment()).addToBackStack(null).commit()
             }
         }
     }

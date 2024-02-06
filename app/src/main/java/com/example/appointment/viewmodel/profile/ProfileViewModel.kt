@@ -30,11 +30,13 @@ import com.example.appointment.model.ChatRoomData
 import com.example.appointment.model.GeocodingRespone
 import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.model.PublicTransportRouteResponse
+import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
 import com.example.appointment.model.WalkRouteResponse
 import com.example.appointment.viewmodel.MainViewmodel
 import com.google.android.play.integrity.internal.i
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -915,6 +917,206 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         carTime.value = ""
         walkTime.value = ""
     }
+
+
+    //scheduleFragment
+
+    var scheduleDeleteText : MutableLiveData<String> = MutableLiveData()
+    var scheduleDataList : MutableLiveData<MutableList<ScheduleSet>> = MutableLiveData()
+    var selectPosition : MutableLiveData<Int> = MutableLiveData(-1)
+    var scheduleRefuseOkView : MutableLiveData<Boolean> = MutableLiveData()
+    var scheduleListDelete : MutableLiveData<Boolean> = MutableLiveData(false)
+    var scheduleAlarmDataList : MutableLiveData<MutableList<ScheduleSet>> = MutableLiveData(mutableListOf())
+
+
+    val viewRefuseView : MutableLiveData<Boolean> = MutableLiveData(false)
+    val viewScheduleDelteView : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startScheduleEditFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startScheduleAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+
+
+
+    fun fnScheduleClick(position: Int,status: String){
+        if(status == "refuse"){
+            selectPosition.value = position
+            StartEvent(viewRefuseView)
+        }else if(status == "consent"||status == "wait"){
+            fnSchedulEditDataSet(position)
+            StartEvent(startScheduleEditFragment)
+        }
+    }
+
+    fun fnScheduleLongClick(position: Int){
+        scheduleDeleteText.value = scheduleDataList.value!![position].nickname + "님과의 약속을 제거하시겠습니까?"
+        StartEvent(viewScheduleDelteView)
+        selectPosition.value = position
+    }
+
+    fun fnSelectScheduleAlarmItem(){
+        StartEvent(startScheduleAlarmActivity)
+    }
+    fun fnScheduleRefuseOk(data: MutableLiveData<Boolean>){
+        val emailPath : String = scheduleDataList.value!![selectPosition.value!!].scheduleName
+        val reference = database.getReference("appointment").child(emailPath)
+
+        reference.removeValue()
+        fnScheduleListData()
+        StartEvent(data)
+    }
+
+    fun fnScheduleListDelete(data : Boolean){
+        if(data){
+            val emailPath : String = scheduleDataList.value!![selectPosition.value!!].scheduleName
+            val reference = database.getReference("appointment").child(emailPath)
+
+            reference.removeValue()
+            fnScheduleListData()
+        }
+        StartEvent(scheduleListDelete)
+    }
+
+    fun fnFRDPathSplit(emailPath:String):Int{
+        val emailPathReplace = emailPath?.replace("_",".")
+        var splitArray = emailPathReplace?.split("||")
+        if(userEmail == splitArray!![0]){
+            return 1
+        }else if(userEmail == splitArray[1]){
+            return 2
+        }
+        return 0
+    }
+
+    fun fnScheduleTimeSplit(date:String){
+        val YYYYMMDD = date.substring(0,8)
+        val YYYY = date.substring(0,4)
+        val MM = date.substring(4,6)
+        val DD = date.substring(6,8)
+        val hh = date.substring(8,10)
+        val mm = date.substring(10,12)
+
+        val date = YYYY+"년 "+MM+"월 "+DD+"일"
+
+        if(hh.toInt()<12){
+            scheduleAmPmSet.value = true
+            scheduleHH.value = hh
+
+        }else{
+            scheduleAmPmSet.value = false
+            val pmhh = hh.toInt() - 12
+            scheduleHH.value = pmhh.toString()
+        }
+
+        scheduleYYYYMMDD.value = YYYYMMDD
+        scheduleDate.value = date
+        scheduleMM.value = mm
+    }
+
+    fun fnScheduleListData(){
+        val scheduleList = mutableListOf<ScheduleSet>()
+        val scheduleAlarmList = mutableListOf<ScheduleSet>()
+
+        val reference = database.getReference("appointment")
+
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    utils.readDataFRDAddChildEventListener(reference){
+                        val emailPath = it.key
+                        if(fnFRDPathSplit(emailPath!!) == 1){
+                            val scheduleData = ScheduleSet(
+                                emailPath,
+                                it.child("email2").value.toString(),
+                                it.child("nickname2").value.toString(),
+                                it.child("email2ProfileImgURl").value.toString(),
+                                it.child("meetingTime").value.toString(),
+                                it.child("meetingPlace").value.toString(),
+                                it.child("meetingPlaceName").value.toString(),
+                                it.child("email2Status").value.toString(),
+                                it.child("meetingplaceX").value.toString(),
+                                it.child("meetingplaceY").value.toString(),
+                                it.child("email2Alarm").value.toString(),
+                                it.child("email2Transport").value.toString(),
+                                it.child("email2StartX").value.toString(),
+                                it.child("email2StartY").value.toString(),
+                                it.child("email2TransportTime").value.toString(),
+                                it.child("email1Transport").value.toString(),
+                                it.child("email1Alarm").value.toString(),
+                            )
+                            if(it.child("email1Status").value.toString() == "consent"){
+                                scheduleList.add(scheduleData)
+                                scheduleDataList.value = scheduleList
+                                scheduleAlarmDataList.value = scheduleAlarmList
+                            }else if(it.child("email1Status").value.toString() == "wait"){
+                                scheduleAlarmList.add(scheduleData)
+                                scheduleAlarmDataList.value = scheduleAlarmList
+                            }
+                        }else if(fnFRDPathSplit(emailPath!!) == 2){
+                            val scheduleData = ScheduleSet(
+                                emailPath,
+                                it.child("email1").value.toString(),
+                                it.child("nickname1").value.toString(),
+                                it.child("email1ProfileImgURl").value.toString(),
+                                it.child("meetingTime").value.toString(),
+                                it.child("meetingPlace").value.toString(),
+                                it.child("meetingPlaceName").value.toString(),
+                                it.child("email1Status").value.toString(),
+                                it.child("meetingplaceX").value.toString(),
+                                it.child("meetingplaceY").value.toString(),
+                                it.child("email1Alarm").value.toString(),
+                                it.child("email1Transport").value.toString(),
+                                it.child("email1StartX").value.toString(),
+                                it.child("email1StartY").value.toString(),
+                                it.child("email1TransportTime").value.toString(),
+                                it.child("email2Transport").value.toString(),
+                                it.child("email2Alarm").value.toString(),
+                            )
+                            if(it.child("email2Status").value.toString() == "consent"){
+                                scheduleList.add(scheduleData)
+                                scheduleDataList.value = scheduleList
+                                scheduleAlarmDataList.value = scheduleAlarmList
+                            }else if(it.child("email2Status").value.toString() == "wait"){
+                                scheduleAlarmList.add(scheduleData)
+                                scheduleAlarmDataList.value = scheduleAlarmList
+                            }
+                        }
+                    }
+                } else {
+                    scheduleDataList.value = scheduleList
+                    scheduleAlarmDataList.value = scheduleAlarmList
+                }
+            }override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    fun fnSchedulEditDataSet(position: Int){
+        val notSplitTime = scheduleDataList.value!![position].time
+        val meetingAddress = scheduleDataList.value!![position].meetingPlaceAddress
+        val endpointX = scheduleDataList.value!![position].endX
+        val endpointY = scheduleDataList.value!![position].endY
+        val emailPath = scheduleDataList.value!![position].scheduleName
+        val transport = scheduleDataList.value!![position].myTransport
+        val alarm = scheduleDataList.value!![position].myAlarmTime
+
+        fnScheduleTimeSplit(notSplitTime)//문제있음//고친건가?
+        meetingPlaceAddress.value = meetingAddress
+        endX.value = endpointX
+        endY.value = endpointY
+        scheduleEmailPath.value = emailPath
+        selectTransport.value = transport.toInt()
+        selectScheduleNickname.value = scheduleDataList.value!![position].nickname
+        scheduleAlarmHH.value = alarm.substring(0,2).toInt().toString()
+        scheduleAlarmMM.value = alarm.substring(2,4).toInt().toString()
+
+        when(selectTransport.value){
+            1 -> fnPublicTransportTimeSet()
+            2 -> fnCarTimeSet()
+            3 -> fnWalkingTimeSet()
+        }
+    }
+
+
+
+
 
 
 

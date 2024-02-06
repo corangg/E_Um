@@ -17,10 +17,11 @@ import com.example.appointment.databinding.FragmentScheduleBinding
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.adapter.OnItemLongClickListener
 import com.example.appointment.ui.fragment.BaseFragment
+import com.example.appointment.viewmodel.profile.ProfileViewModel
 
 
 class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
-    private val mainViewmodel: MainViewmodel by activityViewModels()
+    private val mainViewmodel: ProfileViewModel by activityViewModels()
     private lateinit var adapter: ScheduleListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,60 +53,38 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_schedule_alarm->{
-            val intent: Intent=Intent(requireActivity(), ScheduleAlarmActivity::class.java)
-            intent.putExtra("address",mainViewmodel.profileAddress.value)
-            startActivity(intent)
+            mainViewmodel.fnSelectScheduleAlarmItem()
             true
         }
         else-> super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(position: Int, status: String) {
-        if(status == "refuse"){
-            binding.layoutRefuseCheck.visibility = View.VISIBLE
-            mainViewmodel.selectPosition.value = position
-
-        }else if(status == "consent"||status == "wait"){
-            val fragmentManager = requireActivity().supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-
-            mainViewmodel.fnSchedulEditDataSet(position)
-            transaction.replace(R.id.fragment_Schedule_edit, ScheduleEdit_Fragment()).addToBackStack(null).commit()
-        }
-
+        mainViewmodel.fnScheduleClick(position, status)
     }
 
     override fun onItemLongClick(position: Int) {
-        binding.layoutLongClickAction.visibility = View.VISIBLE
-        mainViewmodel.fnDeleteTextSet(position)
-        mainViewmodel.selectPosition.value = position
+        mainViewmodel.fnScheduleLongClick(position)
     }
 
     override fun setObserve(){
-        mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
-            binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
-            adapter = ScheduleListAdapter(it,this,this)
-            binding.recycleSchedule.adapter=adapter
-
-            binding.recycleSchedule.addItemDecoration(
-                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-            )
-            adapter.setList(it)
-        }
-
-        mainViewmodel.scheduleAlarmDataList.observe(viewLifecycleOwner){
-                if(mainViewmodel.scheduleAlarmDataList.value!!.size > 0){
-                    binding.scheduleAlarmIcOn.visibility = View.VISIBLE
-                }else{
-                    binding.scheduleAlarmIcOn.visibility = View.GONE
-                }
-        }
-
-        mainViewmodel.scheduleListDelete.observe(viewLifecycleOwner){
+        mainViewmodel.startScheduleEditFragment.observe(viewLifecycleOwner){
             if(it){
-                binding.layoutLongClickAction.visibility = View.GONE
-            }else{
-                binding.layoutLongClickAction.visibility = View.GONE
+               getTransaction().replace(R.id.fragment_Schedule_edit, ScheduleEdit_Fragment()).addToBackStack(null).commit()
+            }
+        }
+
+        mainViewmodel.viewScheduleDelteView.observe(viewLifecycleOwner){
+            if(it){
+                binding.layoutLongClickAction.visibility = View.VISIBLE
+            }
+        }
+
+        mainViewmodel.startFriendAlarmActivity.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent=Intent(requireActivity(), ScheduleAlarmActivity::class.java)
+                intent.putExtra("address",mainViewmodel.profileAddress.value)
+                startActivity(intent)
             }
         }
 
@@ -114,6 +93,29 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
                 binding.layoutRefuseCheck.visibility = View.GONE
             }
         }
-    }
 
+        mainViewmodel.scheduleListDelete.observe(viewLifecycleOwner){
+            if(it){
+                binding.layoutLongClickAction.visibility = View.GONE
+            }
+        }
+
+        mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
+            binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
+            adapter = ScheduleListAdapter(it,this,this)
+            binding.recycleSchedule.adapter=adapter
+            adapter.setList(it)
+            binding.recycleSchedule.addItemDecoration(
+                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+            )
+        }
+
+        mainViewmodel.scheduleAlarmDataList.observe(viewLifecycleOwner){
+            if(mainViewmodel.scheduleAlarmDataList.value!!.size > 0){
+                binding.scheduleAlarmIcOn.visibility = View.VISIBLE
+            }else{
+                binding.scheduleAlarmIcOn.visibility = View.GONE
+            }
+        }
+    }
 }
