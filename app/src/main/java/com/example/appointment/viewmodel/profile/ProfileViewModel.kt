@@ -1153,6 +1153,85 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
         }
     }
 
+    //ScheduleAlarmActivity
+
+    val startScheduleAcceptFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun fnScheduleAcceptClick(position: Int,intent: Intent){
+        val notSplitTime = scheduleAlarmDataList.value!![position].time
+        val meetingAddress = scheduleAlarmDataList.value!![position].meetingPlaceAddress
+        val endpointX = scheduleAlarmDataList.value!![position].endX
+        val endpointY = scheduleAlarmDataList.value!![position].endY
+        val emailPath = scheduleAlarmDataList.value!![position].scheduleName
+        val address = intent.getStringExtra("address")
 
 
+        fnScheduleTimeSplit(notSplitTime)
+        profileAddress.value = address!!
+        meetingPlaceAddress.value = meetingAddress
+        endX.value = endpointX
+        endY.value = endpointY
+        scheduleEmailPath.value = emailPath
+        selectScheduleNickname.value = scheduleAlarmDataList.value!![position].nickname//내 닉네임 아님?
+        fnStartingPointSet()
+        StartEvent(startScheduleAcceptFragment)
+    }
+
+    var scheduleAcceptSucess : MutableLiveData<Boolean> = MutableLiveData(false)
+    val scheduleRefuse : MutableLiveData<Boolean> = MutableLiveData(false)
+
+
+
+    fun fnScheduleAccept(){
+        val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
+
+        val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(fnAlarmTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!))
+
+        if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
+            meetingTimeOver.value = true
+            meetingTimeOver.value = false
+        }else{
+            val emailPath = scheduleEmailPath.value
+            val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+            val reference = database.getReference("appointment").child(emailPath!!)
+            if(fnFRDPathSplit(emailPath!!) == 1){
+                reference.child("email1Alarm").setValue(alarmTime)
+                reference.child("email1Transport").setValue(selectTransport.value)
+                reference.child("email1StartX").setValue(startX.value)
+                reference.child("email1StartY").setValue(startY.value)
+                reference.child("email1TransportTime").setValue(transportTime.value)
+                reference.child("email1Status").setValue("consent").addOnSuccessListener {
+                    StartEvent(scheduleAcceptSucess)
+                    fnScheduleListData()
+                }
+            }else if(fnFRDPathSplit(emailPath!!) == 2){
+                reference.child("email2Alarm").setValue(alarmTime)
+                reference.child("email2Transport").setValue(selectTransport.value)
+                reference.child("email2StartX").setValue(startX.value)
+                reference.child("email2StartY").setValue(startY.value)
+                reference.child("email2TransportTime").setValue(transportTime.value)
+                reference.child("email2Status").setValue("consent").addOnSuccessListener {
+                    StartEvent(scheduleAcceptSucess)
+                    fnScheduleListData()
+                }
+            }
+        }
+    }
+
+    fun fnScheduleRefuse(){
+
+        val emailPath = scheduleEmailPath.value
+        val reference = database.getReference("appointment").child(emailPath!!)
+        if(fnFRDPathSplit(emailPath!!) == 1){
+            reference.child("email1Status").setValue("refuse").addOnSuccessListener {
+                StartEvent(scheduleRefuse)
+                fnScheduleListData()
+            }
+        }else if(fnFRDPathSplit(emailPath!!) == 2){
+            reference.child("email2Status").setValue("refuse").addOnSuccessListener {
+                StartEvent(scheduleRefuse)
+                fnScheduleListData()
+            }
+        }
+    }
 }

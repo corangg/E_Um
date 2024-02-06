@@ -86,7 +86,7 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
             }
         }
 
-        mainViewmodel.startFriendAlarmActivity.observe(viewLifecycleOwner){
+        mainViewmodel.startScheduleAlarmActivity.observe(viewLifecycleOwner){
             if(it){
                 val intent: Intent=Intent(requireActivity(), ScheduleAlarmActivity::class.java)
                 intent.putExtra("address",mainViewmodel.profileAddress.value)

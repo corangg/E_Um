@@ -86,7 +86,6 @@ abstract class BaseSceduleSet_Fragment<B:ViewDataBinding>:BaseFragment<B>() {
         AlarmUtil.setAlarm(requireContext(),alarmTime,nickName)
         AlarmUtil.checkStartMeeting(requireContext(),startTime,startCheckData,alarmCheckTime)
         AlarmUtil.startMeeting(requireContext(),startTime,startCheckData)
-
     }
 
 

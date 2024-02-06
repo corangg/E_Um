@@ -7,14 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleAlarmListAdapter
 import com.example.appointment.databinding.ActivityScheduleAlarmBinding
+import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
+import com.example.appointment.ui.fragment.friend.FriendProfile_Fragment
 import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.schedule.ScheduleAccept_Fragment
+import com.example.appointment.viewmodel.profile.ProfileViewModel
 
-class ScheduleAlarmActivity : BaseActivity<ActivityScheduleAlarmBinding>(), OnItemClickListener {
-    private lateinit var adapter : ScheduleAlarmListAdapter
-    private val mainViewmodel: MainViewmodel by viewModels()
+class ScheduleAlarmActivity : AdapterActivity<ActivityScheduleAlarmBinding>(), OnItemClickListener {
+    private val mainViewmodel: ProfileViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_schedule_alarm
@@ -27,16 +29,11 @@ class ScheduleAlarmActivity : BaseActivity<ActivityScheduleAlarmBinding>(), OnIt
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mainViewmodel.fnScheduleListData()
-
-        adapter = ScheduleAlarmListAdapter(mainViewmodel.scheduleAlarmDataList.value!!,this)
-        binding.recycleScheduleAlarm.adapter=adapter
     }
 
     override fun onItemClick(position: Int) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_Schedule_Accept,
-            ScheduleAccept_Fragment()
-        ).addToBackStack(null).commit()
-        mainViewmodel.fnScheduleAcceptDataSet(position, intent.getStringExtra("address"))
+
+        mainViewmodel.fnScheduleAcceptClick(position,intent)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -50,14 +47,15 @@ class ScheduleAlarmActivity : BaseActivity<ActivityScheduleAlarmBinding>(), OnIt
 
     override fun setObserve(){
         mainViewmodel.scheduleAlarmDataList.observe(this){
-            binding.recycleScheduleAlarm.layoutManager = LinearLayoutManager(this)
-            adapter = ScheduleAlarmListAdapter(it,this)
-            binding.recycleScheduleAlarm.adapter=adapter
-            adapter.setList(it)
-            binding.recycleScheduleAlarm.addItemDecoration(
-                DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
-            )
+            setAdapter(binding.recycleScheduleAlarm,ScheduleAlarmListAdapter(it,this),it,true)
         }
 
+        mainViewmodel.startScheduleAcceptFragment.observe(this){
+            if (it){
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_Schedule_Accept,
+                    ScheduleAccept_Fragment()
+                ).addToBackStack(null).commit()
+            }
+        }
     }
 }
