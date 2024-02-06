@@ -24,8 +24,6 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
 
         setMaxNumber(binding.editAlarmHH,23)
         setMaxNumber(binding.editAlarmMM,59)
-
-        //mainViewmodel.fnStartingPointSet()//뭐 부족한듯
     }
 
     override fun setObserve(){
@@ -68,12 +66,9 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-                setAlarm(
-                    startCheckData,
-                    mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!),
-                    mainViewmodel.fnAlarmTimeSet("0","0"),
-                    mainViewmodel.selectScheduleNickname.value!!,
-                    mainViewmodel.startCheckAlarmTime.value!!)
+                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
+                setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
+                setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
 
                 Toast.makeText(activity,"약속을 수락하셨습니다.",Toast.LENGTH_SHORT).show()
             }

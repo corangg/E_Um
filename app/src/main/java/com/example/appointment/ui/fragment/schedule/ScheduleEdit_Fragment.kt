@@ -1,12 +1,17 @@
 package com.example.appointment.ui.fragment.schedule
 
+import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import com.example.appointment.AlarmUtil
 import com.example.appointment.R
+import com.example.appointment.data.RequestCode
 import com.example.appointment.data.ToastMessage
 import com.example.appointment.databinding.FragmentScheduleEditBinding
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.receiver.AlarmReceiver
+import com.example.appointment.receiver.StartCheckReceiver
 import com.example.appointment.viewmodel.MainViewModel
 
 class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBinding>() {
@@ -67,12 +72,18 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
                     mainViewmodel.startY.value!!,
                     mainViewmodel.scheduleEmailPath.value!!)
 
-                setAlarm(
+                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
+                setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
+                setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
+
+
+
+                /*setAlarm(
                     startCheckData,
                     mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!),
                     mainViewmodel.fnAlarmTimeSet("0","0"),
                     mainViewmodel.selectScheduleNickname.value!!,
-                    mainViewmodel.startCheckAlarmTime.value!!)
+                    mainViewmodel.startCheckAlarmTime.value!!)*/
 
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
