@@ -8,6 +8,7 @@ class RequestCode {
         const val ACCEPT_FRIEND_REQUEST_CODE = 2658
         const val CHAT_REQUEST_CODE = 2654
         const val MAP_REQUEST_CODE =2921
+        const val LOCATION_PERMISSION_REQUEST_CODE = 2934
 
         const val ADD_ADDRESS_REQUEST_CODE =2916
     }

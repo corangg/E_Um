@@ -13,6 +13,8 @@ class MapSearchResultsViewHolder(binding: ItemMapAddressBinding): BaseViewHolder
     ){
         binding.placeitem = mapinfoList
 
+        binding.name.text = mapinfoList.title.replace("<b>","").replace("</b>","")
+
         binding.itemSearch.setOnClickListener {
             onItemClickListener.onItemClick(position)
         }

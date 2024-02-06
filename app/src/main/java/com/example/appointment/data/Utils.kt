@@ -23,7 +23,7 @@ import java.util.Date
 import java.util.Locale
 
 //@Inject constructor()
-class Utils {
+class Utils() {
 
     companion object{
         val auth = FirebaseAuth.getInstance()
