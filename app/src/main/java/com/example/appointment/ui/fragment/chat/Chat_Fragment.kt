@@ -14,11 +14,11 @@ import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 
 
 class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListener {
-    private val mainViewmodel: ProfileViewModel by activityViewModels()
+    private val mainViewmodel: MainViewModel by activityViewModels()
 
     override fun layoutResId(): Int {
         return R.layout.fragment_chat_

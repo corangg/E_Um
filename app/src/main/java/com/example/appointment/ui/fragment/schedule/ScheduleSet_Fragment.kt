@@ -1,36 +1,21 @@
 package com.example.appointment.ui.fragment.schedule
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.os.Bundle
-import android.text.InputFilter
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import com.example.appointment.AlarmUtil
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.MAP_REQUEST_CODE
 import com.example.appointment.data.ToastMessage
 import com.example.appointment.ui.activity.schedule.ScheduleMapActivity
 import com.example.appointment.databinding.FragmentScheduleSetBinding
 import com.example.appointment.model.SelectTransport
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.StartCheckAlarmData
-import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 
 
 class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>() {
-    private val mainViewmodel: ProfileViewModel by activityViewModels()
+    private val mainViewmodel: MainViewModel by activityViewModels()
     val toast = ToastMessage()
     override fun layoutResId(): Int {
         return R.layout.fragment_schedule_set_

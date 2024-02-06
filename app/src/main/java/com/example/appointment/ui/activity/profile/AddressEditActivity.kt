@@ -7,23 +7,16 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.ui.adapter.AddressListAdapter
 import com.example.appointment.AddressDBHelper
-import com.example.appointment.FirebaseCertified.Companion.email
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.databinding.ActivityProfileAddressBinding
-import com.example.appointment.model.AddressData
-import com.example.appointment.ui.activity.BaseActivity
-import com.example.appointment.viewmodel.logIn.Login_Viewmodel
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.viewmodel.profile.EditAddressViewModel
-import com.google.android.play.integrity.internal.ad
 
 /*
 class AddressEditActivity : BaseActivity<ActivityProfileAddressBinding>(), AddressListAdapter.OnItemClickListener {

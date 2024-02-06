@@ -10,10 +10,10 @@ import com.example.appointment.databinding.FragmentFriendProfileBinding
 import com.example.appointment.model.ChatStartData
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.ui.fragment.schedule.ScheduleCalendar_Fragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 
 class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
-    private val mainViewmodel: ProfileViewModel by activityViewModels()
+    private val mainViewmodel: MainViewModel by activityViewModels()
 
     override fun layoutResId(): Int {
         return R.layout.fragment_friend_profile_

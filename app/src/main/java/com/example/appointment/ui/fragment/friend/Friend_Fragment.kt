@@ -20,10 +20,10 @@ import com.example.appointment.databinding.FragmentFriendBinding
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 
 class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickListener{
-    private val mainViewmodel: ProfileViewModel by activityViewModels()
+    private val mainViewmodel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

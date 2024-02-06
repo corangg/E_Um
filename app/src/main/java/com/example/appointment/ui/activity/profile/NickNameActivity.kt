@@ -1,14 +1,10 @@
 package com.example.appointment.ui.activity.profile
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityNickNameBinding
 import com.example.appointment.ui.activity.BaseActivity
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.viewmodel.profile.NickNameEditViewModel
 
 class NickNameActivity : BaseActivity<ActivityNickNameBinding>() {

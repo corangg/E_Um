@@ -14,14 +14,13 @@ import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleListAdapter
 import com.example.appointment.ui.activity.schedule.ScheduleAlarmActivity
 import com.example.appointment.databinding.FragmentScheduleBinding
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.adapter.OnItemLongClickListener
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 
 
 class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
-    private val mainViewmodel: ProfileViewModel by activityViewModels()
+    private val mainViewmodel: MainViewModel by activityViewModels()
     private lateinit var adapter: ScheduleListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

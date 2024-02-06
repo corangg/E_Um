@@ -1,4 +1,4 @@
-package com.example.appointment.viewmodel.profile
+package com.example.appointment.viewmodel
 
 import android.app.Activity
 import android.app.Application
@@ -6,10 +6,12 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
+import android.view.MenuItem
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appointment.FirebaseCertified
+import com.example.appointment.R
 
 import com.example.appointment.StartEvent
 import com.example.appointment.apiservice.APIData
@@ -25,18 +27,11 @@ import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.data.Utils.Companion.storage
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.CarRouteRequest
-import com.example.appointment.model.CarRouteResponse
 import com.example.appointment.model.ChatRoomData
-import com.example.appointment.model.GeocodingRespone
 import com.example.appointment.model.ProfileDataModel
-import com.example.appointment.model.PublicTransportRouteResponse
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
-import com.example.appointment.model.WalkRouteResponse
-import com.example.appointment.viewmodel.MainViewmodel
-import com.google.android.play.integrity.internal.i
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -46,16 +41,14 @@ import com.google.firebase.firestore.FieldValue
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Application) : AndroidViewModel(application) {
+class MainViewModel @Inject constructor (application: Application) : AndroidViewModel(application) {
 
+    var selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
     val profileStatusMessage: MutableLiveData<String> = MutableLiveData("")
     val profileName: MutableLiveData<String> = MutableLiveData("")
@@ -80,12 +73,35 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     private val userEmailReplace = userEmail!!.replace(".", "_")
 
     init {
-        //공유로 쓸거면 애매해 지는데 나중에 옮기는거 고려해야 할듯
         fnGetPrivacyData()
         fnGetProfileData()
         fnFriendRequestAlarm()
         fnFriendList()
     }
+
+    fun fnBottomNavigationItemSelected(item : MenuItem):Boolean{
+        when(item.itemId){
+            R.id.navigation_profile->{
+                selectFragment.value = "profile"
+                return true
+            }
+            R.id.navigation_friends->{
+                selectFragment.value = "friends"
+                return true
+            }
+            R.id.navigation_chat->{
+                chatRoomData = mutableListOf()
+                selectFragment.value = "chat"
+                return true
+            }
+            R.id.navigation_schedule->{
+                selectFragment.value = "schedule"
+                return true
+            }
+        }
+        return false
+    }
+
 
     fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         when (requestCode) {
@@ -758,7 +774,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             publicTransportCheck.value = 3
         }else{
             val retrofit = Retrofit.Builder()
-                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .baseUrl(APIData.TMAP_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -770,7 +786,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
                 endY.value!!,
                 fnDttmSet())
 
-           val call = TMapTransitApiService.getPublicTransportRoute(MainViewmodel.TMAP_API_KEY,startEndPoint)
+           val call = TMapTransitApiService.getPublicTransportRoute(APIData.TMAP_API_KEY,startEndPoint)
 
            utils.getRetrofitData(call){
                if(it !=null){
@@ -793,7 +809,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             carCheck.value = 3
         }else{
             val retrofit = Retrofit.Builder()
-                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .baseUrl(APIData.TMAP_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -804,7 +820,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
                 endY.value!!.toDouble(),
                 fnDttmSet()+"00")
 
-            val call = TMapCarApiService.getCarRoute(MainViewmodel.TMAP_API_KEY,"1","CarRouteResponse",startEndPoint)
+            val call = TMapCarApiService.getCarRoute(APIData.TMAP_API_KEY,"1","CarRouteResponse",startEndPoint)
 
             utils.getRetrofitData(call){
                 if(it !=null){
@@ -823,7 +839,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
             walkCheck.value = 3
         }else{
             val retrofit = Retrofit.Builder()
-                .baseUrl(MainViewmodel.TMAP_BASE_URL)
+                .baseUrl(APIData.TMAP_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -834,7 +850,7 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
                 endY.value!!.toDouble(),
                 "출발점",
                 "도착점")
-            val call = TMapWalkApiService.getWalkRoute(MainViewmodel.TMAP_API_KEY,"1","WalkRouteResponse",startEndPoint)
+            val call = TMapWalkApiService.getWalkRoute(APIData.TMAP_API_KEY,"1","WalkRouteResponse",startEndPoint)
 
             utils.getRetrofitData(call){
                 if(it != null){

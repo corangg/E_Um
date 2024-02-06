@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
+            type="com.example.appointment.viewmodel.MainViewModel" />
     </data>
 
     <LinearLayout

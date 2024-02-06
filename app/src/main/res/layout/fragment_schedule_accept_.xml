@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.appointment.viewmodel.profile.ProfileViewModel" />
+            type="com.example.appointment.viewmodel.MainViewModel" />
 
     </data>
 
@@ -340,51 +340,6 @@
                 android:gravity="center"
                 android:textSize="18dp"
                 android:layout_marginLeft="5dp" />
-            <!--<EditText
-
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_Alarm_HH"
-                android:hint="0"
-                android:textColorHint="@color/themecolor"
-                android:inputType="number"
-                android:textSize="20dp"
-                android:gravity="center"
-                android:maxLength="2"
-                android:text="@={viewmodel.scheduleAlarmHH}"
-                android:textColor="@color/themecolor"
-                android:layout_marginLeft="20dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="시간 :"
-                android:textColor="@color/themecolor"
-                android:textSize="20dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"/>
-
-            <EditText
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_Alarm_MM"
-                android:hint="00"
-                android:textColorHint="@color/themecolor"
-                android:inputType="number"
-                android:textSize="20dp"
-                android:gravity="center"
-                android:text="@={viewmodel.scheduleAlarmMM}"
-                android:maxLength="2"
-                android:textColor="@color/themecolor"
-                android:layout_marginLeft="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="분 전"
-                android:textColor="@color/themecolor"
-                android:gravity="center"
-                android:textSize="24dp"
-                android:layout_marginLeft="10dp"/>-->
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

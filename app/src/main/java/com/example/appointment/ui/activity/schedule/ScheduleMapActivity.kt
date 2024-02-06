@@ -11,8 +11,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.ui.adapter.MapSearchResultsAdapter
 
 
@@ -20,10 +18,7 @@ import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.appointment.databinding.ActivityScheduleMapBinding
 import com.example.appointment.ui.activity.AdapterActivity
-import com.example.appointment.ui.activity.BaseActivity
-import com.example.appointment.ui.adapter.FriendRequestAlarmAdapter
 import com.example.appointment.ui.adapter.OnItemClickListener
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.viewmodel.schedule.ScheduleMapViewModel
 import com.naver.maps.geometry.LatLng
 

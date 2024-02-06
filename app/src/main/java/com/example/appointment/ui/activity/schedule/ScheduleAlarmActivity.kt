@@ -2,21 +2,17 @@ package com.example.appointment.ui.activity.schedule
 
 import android.view.Menu
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleAlarmListAdapter
 import com.example.appointment.databinding.ActivityScheduleAlarmBinding
 import com.example.appointment.ui.activity.AdapterActivity
-import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
-import com.example.appointment.ui.fragment.friend.FriendProfile_Fragment
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.ui.fragment.schedule.ScheduleAccept_Fragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
+
 
 class ScheduleAlarmActivity : AdapterActivity<ActivityScheduleAlarmBinding>(), OnItemClickListener {
-    private val mainViewmodel: ProfileViewModel by viewModels()
+    private val mainViewmodel: MainViewModel by viewModels()
 
     override fun layoutResId(): Int {
         return R.layout.activity_schedule_alarm

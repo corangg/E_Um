@@ -9,9 +9,9 @@ import android.location.Location
 import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.appointment.apiservice.APIData
 import com.example.appointment.receiver.StartCheckAlarmReceiver
 import com.example.appointment.apiservice.TMapDistanceRoute
-import com.example.appointment.viewmodel.MainViewmodel
 import com.example.appointment.model.DistanceRouteResponse
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -152,13 +152,13 @@ class MeetingStartService : Service() {
         var distance : Int = -1
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(MainViewmodel.TMAP_BASE_URL)
+            .baseUrl(APIData.TMAP_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val TMapDistanceApiService = retrofit.create(TMapDistanceRoute::class.java)
 
-        val call = TMapDistanceApiService.getDistanceRoute(MainViewmodel.TMAP_API_KEY,"1","DistanceRouteResponse", startX, startY, endX, endY)
+        val call = TMapDistanceApiService.getDistanceRoute(APIData.TMAP_API_KEY,"1","DistanceRouteResponse", startX, startY, endX, endY)
 
         call.enqueue(object : Callback<DistanceRouteResponse> {
             override fun onResponse(call: Call<DistanceRouteResponse>, response: Response<DistanceRouteResponse>) {

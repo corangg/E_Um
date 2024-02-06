@@ -22,18 +22,15 @@ import com.example.appointment.ui.activity.profile.PasswordEditActivity
 import com.example.appointment.databinding.FragmentProfileBinding
 import com.example.appointment.ui.activity.login.LoginActivity
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.profile.ProfileViewModel
+import com.example.appointment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 //@AndroidEntryPoint@Inject constructor()
 @AndroidEntryPoint
 class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBinding>() {
-    companion object{
 
-    }
-
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val profileViewModel: MainViewModel by activityViewModels()
     private lateinit var mActivity: AppCompatActivity
     private var photoUri : Uri? = null
     private var photoResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){

@@ -1,23 +1,16 @@
 package com.example.appointment.viewmodel.schedule
 
 import android.app.Application
-import android.graphics.PointF
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.appointment.apiservice.APIData
 import com.example.appointment.apiservice.NaverKeWord
 import com.example.appointment.apiservice.NaverReverseGeocode
 import com.example.appointment.data.Utils
 import com.example.appointment.model.KeyWordResponse
 import com.example.appointment.model.PlaceItem
 import com.example.appointment.model.ReverseGeocodingResponse
-import com.example.appointment.viewmodel.MainViewmodel
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.NaverMap
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -64,13 +57,13 @@ class ScheduleMapViewModel(application: Application): AndroidViewModel(applicati
 
     fun fnSearchKeyword(keyword: String){
         val retrofit = Retrofit.Builder()
-            .baseUrl(MainViewmodel.KEWORD_BASE_URL)
+            .baseUrl(APIData.KEWORD_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val naverapi = retrofit.create(NaverKeWord::class.java)
         val call = naverapi.getKeword(
-            MainViewmodel.KEWORD_CLIENT_ID,
-            MainViewmodel.KEWORD_API_KEY,keyword,5)
+            APIData.KEWORD_CLIENT_ID,
+            APIData.KEWORD_API_KEY,keyword,5)
 
         utils.getRetrofitData(call){
             if(it!=null){
@@ -98,13 +91,13 @@ class ScheduleMapViewModel(application: Application): AndroidViewModel(applicati
 
     fun fnReverseGeo(coords:String){
         val retrofit = Retrofit.Builder()
-            .baseUrl(MainViewmodel.NAVER_BASE_URL)
+            .baseUrl(APIData.NAVER_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val naverapi = retrofit.create(NaverReverseGeocode::class.java)
         val call = naverapi.getReverseGeocode(
-            MainViewmodel.NAVER_CLIENT_ID,
-            MainViewmodel.NAVER_API_KEY,coords,"json","addr,roadaddr")
+            APIData.NAVER_CLIENT_ID,
+            APIData.NAVER_API_KEY,coords,"json","addr,roadaddr")
 
         utils.getRetrofitData(call){
             if(it!=null){

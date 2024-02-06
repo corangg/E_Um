@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_nickname"
-                android:text="@{scheduleset.nickname, default = 닉네임}"
+                android:text="@{scheduleset.nickname}"
                 android:textStyle="bold"
                 android:textSize="16dp" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/text_address"
                 android:layout_marginTop="5dp"
-                android:text="@{scheduleset.meetingPlaceKeyword + @string/rest + scheduleset.meetingPlaceAddress, default = 주소}"
+                android:text="@{scheduleset.meetingPlaceKeyword + @string/rest + scheduleset.meetingPlaceAddress}"
                 android:textSize="14dp"
                 android:maxEms="8"
                 android:ellipsize="end"

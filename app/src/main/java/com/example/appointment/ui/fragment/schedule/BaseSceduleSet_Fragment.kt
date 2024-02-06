@@ -3,21 +3,15 @@ package com.example.appointment.ui.fragment.schedule
 import android.graphics.PorterDuff
 import android.text.InputFilter
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
 import com.example.appointment.AlarmUtil
 import com.example.appointment.R
-import com.example.appointment.data.ToastMessage
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
 import com.example.appointment.ui.fragment.BaseFragment
-import com.example.appointment.viewmodel.MainViewmodel
-import com.example.appointment.viewmodel.profile.ProfileViewModel
 
 abstract class BaseSceduleSet_Fragment<B:ViewDataBinding>:BaseFragment<B>() {
 
