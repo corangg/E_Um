@@ -1115,8 +1115,43 @@ class ProfileViewModel @Inject constructor (/*val utils: Utils,*/application: Ap
     }
 
 
+    //ScheduleEditFragment
 
 
+    var scheduleEditSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
+
+
+    fun fnScheduleEditSuccess(){
+        val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
+
+        val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(fnAlarmTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!))
+
+        if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
+            StartEvent(meetingTimeOver)
+        }else{
+            val emailPath = scheduleEmailPath.value
+            val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+            val reference = database.getReference("appointment").child(emailPath!!)
+            if(fnFRDPathSplit(emailPath!!) == 1){
+                reference.child("email1Alarm").setValue(alarmTime)
+                reference.child("email1StartX").setValue(startX.value)
+                reference.child("email1StartY").setValue(startY.value)
+                reference.child("email1TransportTime").setValue(transportTime.value)
+                reference.child("email1Transport").setValue(selectTransport.value).addOnSuccessListener {
+                    StartEvent(scheduleEditSuccess)
+                    fnScheduleSetDataReset()
+                }
+            }else if(fnFRDPathSplit(emailPath!!) == 2){
+                reference.child("email2Alarm").setValue(alarmTime)
+                reference.child("email2StartX").setValue(startX.value)
+                reference.child("email2StartY").setValue(startY.value)
+                reference.child("email2TransportTime").setValue(transportTime.value)
+                reference.child("email2Transport").setValue(selectTransport.value)
+                StartEvent(scheduleEditSuccess)
+                fnScheduleSetDataReset()
+            }
+        }
+    }
 
 
 

@@ -74,6 +74,12 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
             }
         }
 
+        mainViewmodel.viewRefuseView.observe(this){
+            if(it){
+                binding.layoutRefuseCheck.visibility = View.VISIBLE
+            }
+        }
+
         mainViewmodel.viewScheduleDelteView.observe(viewLifecycleOwner){
             if(it){
                 binding.layoutLongClickAction.visibility = View.VISIBLE
