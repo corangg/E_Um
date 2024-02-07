@@ -68,7 +68,6 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
                     mainViewmodel.scheduleEmailPath.value!!)
 
                 setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
-                //setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
                 setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
 
                 val fragmentManager = requireActivity().supportFragmentManager

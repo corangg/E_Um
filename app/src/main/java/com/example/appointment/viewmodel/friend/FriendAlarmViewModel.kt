@@ -53,7 +53,7 @@ class FriendAlarmViewModel(application: Application) : AndroidViewModel(applicat
             }
             override fun onCancelled(error: DatabaseError) {
             }
-        })//수정 필요 addListenerForSingleValueEvent모듈화 계속 오류남 나중에 해보자
+        })
     }
 
     fun fnFriendRequestAccept(friendEmail:String, friendNickname: String,nickname: String){

@@ -67,7 +67,6 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
                 setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
-                //setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
                 setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
 
                 Toast.makeText(activity,"약속을 수락하셨습니다.",Toast.LENGTH_SHORT).show()

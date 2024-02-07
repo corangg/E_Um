@@ -146,9 +146,5 @@ abstract class BaseStartService : Service(){
         })
     }
 
-
-
-
-
     abstract fun startBroadcast(intent: Intent)
 }

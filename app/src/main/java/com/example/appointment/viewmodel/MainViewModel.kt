@@ -975,8 +975,9 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
         val emailPath : String = scheduleDataList.value!![selectPosition.value!!].scheduleName
         val reference = database.getReference("appointment").child(emailPath)
 
-        reference.removeValue()
-        fnScheduleListData()
+        reference.removeValue().addOnSuccessListener {
+            fnScheduleListData()
+        }
         StartEvent(data)
     }
 
@@ -1030,7 +1031,7 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
 
     fun fnScheduleListData(){
         val scheduleList = mutableListOf<ScheduleSet>()
-        val scheduleAlarmList = mutableListOf<ScheduleSet>()//여기서 아무대도 안가?
+        val scheduleAlarmList = mutableListOf<ScheduleSet>()
 
         val reference = database.getReference("appointment")
 
@@ -1095,13 +1096,18 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
                                 scheduleAlarmList.add(scheduleData)
                                 scheduleAlarmDataList.value = scheduleAlarmList
                             }
+                        }else{
+                            scheduleDataList.value = scheduleList
+                            scheduleAlarmDataList.value = scheduleAlarmList
                         }
                     }
                 } else {
                     scheduleDataList.value = scheduleList
                     scheduleAlarmDataList.value = scheduleAlarmList
                 }
-            }override fun onCancelled(error: DatabaseError) {}
+            }override fun onCancelled(error: DatabaseError) {
+                true
+            }
         })
     }
 
