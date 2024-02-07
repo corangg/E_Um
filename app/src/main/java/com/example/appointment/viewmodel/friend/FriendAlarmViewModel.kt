@@ -11,6 +11,7 @@ import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.model.ChatDataModel
 import com.example.appointment.model.FriendRequestAlarmData
+import com.example.appointment.viewmodel.BaseViewModel
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,13 +19,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 
 
-class FriendAlarmViewModel(application: Application) : AndroidViewModel(application) {
+class FriendAlarmViewModel(application: Application) : BaseViewModel(application) {
     init {
         fnFriendRequestedList()
     }
     val friendRequestAlarmDataList : MutableLiveData<MutableList<FriendRequestAlarmData>> = MutableLiveData()
-
-    private val utils = Utils()
 
     fun fnFriendRequestedList() {
         val userEmail = auth.currentUser?.email!!

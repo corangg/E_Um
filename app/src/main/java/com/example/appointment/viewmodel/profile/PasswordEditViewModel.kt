@@ -3,10 +3,12 @@ package com.example.appointment.viewmodel.profile
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.firestore
+import com.example.appointment.viewmodel.BaseViewModel
 
-class PasswordEditViewModel(application: Application): AndroidViewModel(application) {
+class PasswordEditViewModel(application: Application) : BaseViewModel(application) {
     val profilePasswordCheck: MutableLiveData<String?> = MutableLiveData("")
     val newpassword :MutableLiveData<String?> = MutableLiveData("")
     val newpasswordCheck :MutableLiveData<String?> = MutableLiveData("")

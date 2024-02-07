@@ -10,11 +10,12 @@ import com.example.appointment.data.Utils
 import com.example.appointment.model.KeyWordResponse
 import com.example.appointment.model.PlaceItem
 import com.example.appointment.model.ReverseGeocodingResponse
+import com.example.appointment.viewmodel.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ScheduleMapViewModel(application: Application): AndroidViewModel(application) {
+class ScheduleMapViewModel(application: Application) : BaseViewModel(application){
     var searchKewordAndAddress : MutableLiveData<String?> = MutableLiveData("")
     var showKeywordList : MutableLiveData<Boolean> = MutableLiveData(false)
     var searchKewordList : MutableLiveData<MutableList<PlaceItem>> = MutableLiveData()
@@ -27,9 +28,6 @@ class ScheduleMapViewModel(application: Application): AndroidViewModel(applicati
     var showSelectKeywordTab : MutableLiveData<Boolean> = MutableLiveData(false)
     var endX:MutableLiveData<String> = MutableLiveData("")
     var endY:MutableLiveData<String> = MutableLiveData("")
-
-
-    private val utils = Utils()
 
     fun fnClickMap(latitude: Double, longitude: Double, coords: String){
         endX.value = longitude.toString()

@@ -1,24 +1,11 @@
 package com.example.appointment.viewmodel.logIn
 
 import android.app.Application
-import android.view.View
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.AddressDBHelper
-import com.example.appointment.FirebaseCertified
-import com.example.appointment.R
+import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
-import com.example.appointment.ui.activity.login.LoginActivity
 import com.example.appointment.viewmodel.BaseViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Firebase
-import com.google.firebase.FirebaseError.ERROR_INVALID_EMAIL
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
 
 class Login_Viewmodel(application: Application): BaseViewModel(application) {
 

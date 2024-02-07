@@ -11,19 +11,17 @@ import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
+import com.example.appointment.viewmodel.BaseViewModel
 import kotlinx.coroutines.launch
 
-class FriendAddViewModel (application: Application) : AndroidViewModel(application){
+class FriendAddViewModel (application: Application) : BaseViewModel(application){
     val searchFriendEmail : MutableLiveData<String?> = MutableLiveData("")
     val searchFriendNickName :MutableLiveData<String?> = MutableLiveData("")
     val searchFriendStatusMessage :MutableLiveData<String?> = MutableLiveData("")
     var searchFriendImgURL :MutableLiveData<String?> = MutableLiveData("")
 
     var searchFriend :MutableLiveData<Boolean> = MutableLiveData()
-
     var friendRequestCheck : MutableLiveData<Int> = MutableLiveData(0)
-
-    private val utils = Utils()
 
     fun fnSearchFriend(){
         if(searchFriendEmail.value != ""){

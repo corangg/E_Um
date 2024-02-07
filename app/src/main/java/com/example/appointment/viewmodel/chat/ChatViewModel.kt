@@ -7,7 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
+import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.model.ChatDataModel
+import com.example.appointment.viewmodel.BaseViewModel
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,19 +17,12 @@ import com.google.firebase.database.FirebaseDatabase
 import java.util.Date
 import java.util.Locale
 
-class ChatViewModel(application: Application)  : AndroidViewModel(application){
+class ChatViewModel(application: Application) : BaseViewModel(application){
     var chatRoomName: MutableLiveData<String?> = MutableLiveData("")
     var chatData: MutableLiveData<MutableList<ChatDataModel>?> = MutableLiveData()
     var chatRoomInfoName : MutableLiveData<String> = MutableLiveData("")
     var sendMessage:MutableLiveData<String?> = MutableLiveData(null)
     var profileNickname: MutableLiveData<String?> = MutableLiveData("")
-
-    val database = FirebaseDatabase.getInstance()
-    val userEmail = auth.currentUser?.email ?: ""
-
-    private val utils = Utils()
-
-
 
     fun fnChatMessageSet(chatRoom:String?, chatCount:Int?){
         val profileList = mutableListOf<ChatDataModel>()

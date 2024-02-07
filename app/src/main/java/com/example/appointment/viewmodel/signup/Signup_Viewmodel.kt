@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.data.RequestCode
+import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.firestore
 import com.example.appointment.model.PrivacyDataModel

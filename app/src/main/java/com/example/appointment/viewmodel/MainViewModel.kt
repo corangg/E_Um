@@ -7,10 +7,9 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.appointment.FirebaseCertified
+import com.bumptech.glide.Glide.init
 import com.example.appointment.R
 
 import com.example.appointment.StartEvent
@@ -39,11 +38,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 
 //@HiltViewModel
 class MainViewModel /*@Inject constructor*/ (application: Application) : BaseViewModel(application) {
@@ -66,7 +63,6 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
     val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
 
-
     init {
         fnGetPrivacyData()
         fnGetProfileData()
@@ -75,6 +71,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     }
 
     fun fnBottomNavigationItemSelected(item : MenuItem):Boolean{
+
         when(item.itemId){
             R.id.navigation_profile->{
                 selectFragment.value = "profile"
@@ -164,8 +161,8 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     }
 
     fun fnLogout(){
-        FirebaseCertified.firebaseAuth.signOut()
-        FirebaseCertified.email = null
+        auth.signOut()
+
         logOutSuccess.value = true
     }
 

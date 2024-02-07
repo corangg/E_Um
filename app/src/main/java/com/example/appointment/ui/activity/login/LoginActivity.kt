@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
-import com.example.appointment.FirebaseCertified.Companion.checkAuth
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityLoginBinding
 import com.example.appointment.ui.activity.BaseActivity

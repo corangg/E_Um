@@ -9,6 +9,7 @@ import com.example.appointment.StartEvent
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
+import com.example.appointment.viewmodel.BaseViewModel
 
 class AddAddressViewModel(application: Application): AndroidViewModel(application) {
     var zoneCode : MutableLiveData<String> = MutableLiveData("")
@@ -19,9 +20,6 @@ class AddAddressViewModel(application: Application): AndroidViewModel(applicatio
     var addressData : MutableLiveData<String> = MutableLiveData("")
     var searchAddress :MutableLiveData<Boolean> = MutableLiveData(false)
     var editAddress :MutableLiveData<Boolean> = MutableLiveData(false)
-
-    private val utils = Utils()
-
 
     fun searchAddress(data: MutableLiveData<Boolean>){
         StartEvent(data)
