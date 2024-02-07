@@ -985,8 +985,9 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
             val emailPath : String = scheduleDataList.value!![selectPosition.value!!].scheduleName
             val reference = database.getReference("appointment").child(emailPath)
 
-            reference.removeValue()
-            fnScheduleListData()
+            reference.removeValue().addOnSuccessListener {
+                fnScheduleListData()
+            }
         }
         StartEvent(scheduleListDelete)
     }
@@ -1029,7 +1030,7 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
 
     fun fnScheduleListData(){
         val scheduleList = mutableListOf<ScheduleSet>()
-        val scheduleAlarmList = mutableListOf<ScheduleSet>()
+        val scheduleAlarmList = mutableListOf<ScheduleSet>()//여기서 아무대도 안가?
 
         val reference = database.getReference("appointment")
 

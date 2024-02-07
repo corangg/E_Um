@@ -5,12 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
-import com.example.appointment.data.RequestCode
-import com.example.appointment.receiver.AlarmReceiver
-import com.example.appointment.receiver.StartCheckReceiver
-import com.example.appointment.receiver.StartMeetingReceiver
 import com.example.appointment.model.AlarmTime
-import com.example.appointment.model.StartCheckAlarmData
 
 object AlarmUtil {
     fun settingAlarm(context: Context,intent: Intent, requestCode: Int, alarmTime: AlarmTime, checkAlarmTime:Int){

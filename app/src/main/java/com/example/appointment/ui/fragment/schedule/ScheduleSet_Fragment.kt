@@ -100,7 +100,7 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
                     mainViewmodel.scheduleEmailPath.value!!)
 
                 setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
-                setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
+               //setCheckStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"),mainViewmodel.startCheckAlarmTime.value!!)
                 setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
 
                 Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.value!!.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()

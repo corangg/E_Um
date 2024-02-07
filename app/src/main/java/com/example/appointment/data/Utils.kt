@@ -201,11 +201,4 @@ class Utils() {
 
     }*///계속 오류나서 일단 지워둠
 
-    suspend fun updataFRD(reference: DatabaseReference,data: String?){
-        try {
-            reference.setValue(data).await()
-        } catch (e: Exception) {
-            Log.e("Coroutine", "Error fetching friend list", e)
-        }
-    }
 }

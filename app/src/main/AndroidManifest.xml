@@ -45,7 +45,7 @@
 
 
         <receiver
-            android:name=".receiver.StartCheckReceiver"
+            android:name=".receiver.CheckStartReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver

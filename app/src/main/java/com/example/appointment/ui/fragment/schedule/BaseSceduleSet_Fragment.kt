@@ -14,7 +14,7 @@ import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
 import com.example.appointment.receiver.AlarmReceiver
-import com.example.appointment.receiver.StartCheckReceiver
+import com.example.appointment.receiver.CheckStartReceiver
 import com.example.appointment.receiver.StartMeetingReceiver
 import com.example.appointment.ui.fragment.BaseFragment
 
@@ -88,7 +88,7 @@ abstract class BaseSceduleSet_Fragment<B:ViewDataBinding>:BaseFragment<B>() {
     }
 
     fun setCheckStartAlarm(startAlarmData : StartCheckAlarmData, alarmTime: AlarmTime, checkAlarmTime: Int){
-        val intent = Intent(context, StartCheckReceiver::class.java)
+        val intent = Intent(context, CheckStartReceiver::class.java)
         intent.putExtra("startX",startAlarmData.startX)
         intent.putExtra("startY",startAlarmData.startY)
         intent.putExtra("emailPath",startAlarmData.meetingName)
