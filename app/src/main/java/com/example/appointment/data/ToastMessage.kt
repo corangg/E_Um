@@ -3,7 +3,7 @@ package com.example.appointment.data
 import android.content.Context
 import android.widget.Toast
 
-class ToastMessage {
+object ToastMessage {
 
     fun transportCheck(it:Int,context: Context){
         when(it){
@@ -17,5 +17,9 @@ class ToastMessage {
 
     fun overdue(context: Context){
         Toast.makeText(context,"약속시간이 이미 지났습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    fun mismatchPassword(context: Context){
+        Toast.makeText(context,"비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
     }
 }

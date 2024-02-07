@@ -45,8 +45,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor (application: Application) : AndroidViewModel(application) {
+//@HiltViewModel
+class MainViewModel /*@Inject constructor*/ (application: Application) : BaseViewModel(application) {
 
     var selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
@@ -66,11 +66,6 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
     val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
     val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
 
-
-    private val utils = Utils()
-
-    private val userEmail = auth.currentUser?.email ?: ""
-    private val userEmailReplace = userEmail!!.replace(".", "_")
 
     init {
         fnGetPrivacyData()
@@ -432,7 +427,8 @@ class MainViewModel @Inject constructor (application: Application) : AndroidView
             appointmentReference.child(chatName).removeValue()
         }
         chatReference.child(reversedchatName).removeValue().addOnSuccessListener {
-            appointmentReference.child(reversedchatName).removeValue()
+            appointmentReference.child(reversedchatName).removeValue().addOnSuccessListener {
+            }
         }
         fnFriendList()
         StartEvent(friendDeleteSuccess)

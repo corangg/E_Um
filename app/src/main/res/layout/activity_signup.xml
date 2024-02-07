@@ -34,14 +34,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context=".ui.activity.login.SignupActivity"
+                    tools:context=".ui.activity.signup.SignupActivity"
                     android:orientation="vertical">
-                    <!-- <WebView
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:id="@+id/web_address"/>-->
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,16 +60,6 @@
                                 android:text="@={viewmodel.signUpEmail}"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- <androidx.appcompat.widget.AppCompatButton
-                             android:layout_width="wrap_content"
-                             android:layout_height="match_parent"
-                             android:layout_weight="1"
-                             android:layout_marginLeft="20dp"
-                             android:layout_marginRight="30dp"
-                             android:background="@drawable/button_1"
-                             android:text="@string/doublecheck"
-                             android:textColor="@color/themecolor"
-                             android:onClick="@{()->viewmodel.idcheck()}"/>-->
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout

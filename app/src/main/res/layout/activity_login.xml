@@ -87,7 +87,7 @@
                 android:textSize="20dp"
                 android:onClick="@{()->viewmodel.changeSignup()}"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <!--<androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_login_google"
@@ -102,7 +102,7 @@
                 android:paddingLeft="7dp"
                 android:paddingRight="38dp"
                 android:onClick="@{(view)->viewmodel.loginGoogle(view)}"
-                />
+                />-->
         </LinearLayout>
     </RelativeLayout>
 </layout>

@@ -77,7 +77,7 @@
             android:name=".ui.activity.profile.AdressSearchActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.activity.login.SignupActivity"
+            android:name=".ui.activity.signup.SignupActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.login.LoginActivity"

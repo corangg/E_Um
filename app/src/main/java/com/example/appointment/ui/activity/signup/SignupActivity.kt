@@ -1,34 +1,31 @@
-package com.example.appointment.ui.activity.login
+package com.example.appointment.ui.activity.signup
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
+import com.example.appointment.AddressDBHelper
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
 import com.example.appointment.R
-import com.example.appointment.data.RequestCode
 import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
+import com.example.appointment.data.ToastMessage
 import com.example.appointment.databinding.ActivitySignupBinding
+import com.example.appointment.ui.activity.BaseActivity
+import com.example.appointment.ui.activity.login.LoginActivity
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
 
-class SignupActivity : AppCompatActivity() {
-    lateinit var binding : ActivitySignupBinding
-
+class SignupActivity : BaseActivity<ActivitySignupBinding>() {
     val signupViewModel : Signup_Viewmodel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_signup)
-        binding.viewmodel = signupViewModel
-        binding.lifecycleOwner =this
+    override fun layoutResId(): Int {
+        return R.layout.activity_signup
+    }
 
+    override fun initializeUI() {
+        binding.viewmodel = signupViewModel
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        setObserve()
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -37,22 +34,12 @@ class SignupActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            RequestCode.ADDRESS_REQUEST_CODE -> {
-                if (resultCode == RESULT_OK) {
-                    signupViewModel.addressData.value = data?.extras?.getString("address")
-                    signupViewModel.splitAddress()
-                }
-
-            }
-        }
+        signupViewModel.fnHandleActivityResult(requestCode, resultCode, data)
     }
 
-    fun setObserve(){
+    override fun setObserve(){
         signupViewModel.passwordCheck.observe(this){
-            if(it){
-                Toast.makeText(this,"비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
-            }
+            ToastMessage.mismatchPassword(this)
         }
         signupViewModel.signupSuccess.observe(this){
             if(it){
@@ -72,6 +59,11 @@ class SignupActivity : AppCompatActivity() {
                     startActivityForResult(this,ADDRESS_REQUEST_CODE)
                 }
             }
+        }
+        signupViewModel.titleAddress.observe(this){
+            val db = AddressDBHelper(this,signupViewModel.signUpEmail.value).writableDatabase
+            db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf("집",signupViewModel.titleAddress.value))
+            db.close()
         }
     }
 }

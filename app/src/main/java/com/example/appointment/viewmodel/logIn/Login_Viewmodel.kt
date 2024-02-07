@@ -7,36 +7,32 @@ import androidx.lifecycle.MutableLiveData
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.FirebaseCertified
 import com.example.appointment.R
+import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.ui.activity.login.LoginActivity
+import com.example.appointment.viewmodel.BaseViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseError.ERROR_INVALID_EMAIL
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 
-class Login_Viewmodel(application: Application): AndroidViewModel(application) {
+class Login_Viewmodel(application: Application): BaseViewModel(application) {
 
-    var showSignup_Fragment:MutableLiveData<Boolean> = MutableLiveData(false)
-    var showMainActivity:MutableLiveData<Boolean> = MutableLiveData(false)
-    var checkLogin:MutableLiveData<Boolean> = MutableLiveData(false)
+    val showSignup_Fragment:MutableLiveData<Boolean> = MutableLiveData(false)
+    val showMainActivity:MutableLiveData<Boolean> = MutableLiveData(false)
+    val checkLogin:MutableLiveData<Boolean> = MutableLiveData(false)
 
-    var loginEmail : MutableLiveData<String> = MutableLiveData("")
-    var loginPassword : MutableLiveData<String> = MutableLiveData("")
+    val loginEmail : MutableLiveData<String> = MutableLiveData("")
+    val loginPassword : MutableLiveData<String> = MutableLiveData("")
 
-    var loginfail:MutableLiveData<Int> = MutableLiveData(-1)
-
-    var auth:FirebaseAuth = Firebase.auth
-    var googleSignInClient : GoogleSignInClient
-    var context = getApplication<Application>().applicationContext
-
-    var email: String? = null
+    val loginfail:MutableLiveData<Int> = MutableLiveData(-1)
 
     init{
-        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id)).requestEmail().build()//getString(R.string.default_web_client_id)
-        googleSignInClient = GoogleSignIn.getClient(context,gso)
+        checkAuth()
     }
     fun changeSignup(){
         showSignup_Fragment.value = true
@@ -49,44 +45,27 @@ class Login_Viewmodel(application: Application): AndroidViewModel(application) {
             auth.signInWithEmailAndPassword(loginEmail.value.toString(),loginPassword.value.toString()).addOnCompleteListener {
                 if (it.isSuccessful) {
                     if (it.result.user?.isEmailVerified == true) {
-                        val db =
-                            AddressDBHelper(context, loginEmail.value.toString()).writableDatabase
                         showMainActivity.value = true
                     } else {
                         loginfail.value = 1
                     }
                 } else {
-                    loginfail.value = 2
-                }
-            }
-        }
-    }
+                    val errorCode = (it.exception as FirebaseAuthException).errorCode
 
-    fun loginGoogle(view : View){
-        (view.context as? LoginActivity)?.googleLoginResult?.launch(googleSignInClient.signInIntent)
-    }
-
-    fun firebaseAuthWithGoogle(idToken:String?){
-        val credential = GoogleAuthProvider.getCredential(idToken,null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful) {
-                if (it.result.user?.isEmailVerified == true) {
-                    showMainActivity.value = true
-
+                    when(errorCode){
+                        "ERROR_INVALID_EMAIL" -> loginfail.value = 2
+                        "ERROR_INVALID_CREDENTIAL" -> loginfail.value = 3
+                    }
                 }
             }
         }
     }
 
     fun checkAuth(){
-        val currentUser = FirebaseCertified.firebaseAuth.currentUser
-
+        val currentUser = auth.currentUser//FirebaseCertified.firebaseAuth.currentUser
         currentUser?.let {
-            email = currentUser.email
             if(currentUser.isEmailVerified){
                 checkLogin.value=true
-            }else{
-
             }
         }
     }

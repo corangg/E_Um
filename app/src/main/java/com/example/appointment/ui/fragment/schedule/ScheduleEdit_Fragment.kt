@@ -12,7 +12,6 @@ import com.example.appointment.viewmodel.MainViewModel
 class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBinding>() {
     private val mainViewmodel: MainViewModel by activityViewModels()
 
-    val toast = ToastMessage()
     override fun layoutResId(): Int {
         return R.layout.fragment_schedule_edit_
     }
@@ -43,20 +42,20 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
         }
 
         mainViewmodel.publicTransportCheck.observe(viewLifecycleOwner){
-            toast.transportCheck(it,requireContext())
+            ToastMessage.transportCheck(it,requireContext())
         }
 
         mainViewmodel.carCheck.observe(viewLifecycleOwner){
-            toast.transportCheck(it,requireContext())
+            ToastMessage.transportCheck(it,requireContext())
         }
 
         mainViewmodel.walkCheck.observe(viewLifecycleOwner){
-            toast.transportCheck(it,requireContext())
+            ToastMessage.transportCheck(it,requireContext())
         }
 
         mainViewmodel.meetingTimeOver.observe(viewLifecycleOwner){
             if(it){
-                toast.overdue(requireContext())
+                ToastMessage.overdue(requireContext())
             }
         }
 
