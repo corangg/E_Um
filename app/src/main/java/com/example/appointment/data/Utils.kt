@@ -71,7 +71,10 @@ class Utils() {
         var hour : String = ""
         var min : String = ""
         var time : String = ""
-        if(hh == "" && mm != ""){
+        if(hh == "" && mm == ""){
+            hour = "00"
+            min = "00"
+        }else if(hh == "" && mm != ""){
             hour = "00"
             if(mm.toInt()<10){
                 min = "0" + mm
@@ -97,6 +100,8 @@ class Utils() {
                 min = mm
             }
         }
+
+
 
         time = hour + min
         return time

@@ -14,14 +14,15 @@ import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleListAdapter
 import com.example.appointment.ui.activity.schedule.ScheduleAlarmActivity
 import com.example.appointment.databinding.FragmentScheduleBinding
+import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.ui.adapter.OnItemLongClickListener
+import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewModel
 
 
-class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
+class Schedule_Fragment : AdapterFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
     private val mainViewmodel: MainViewModel by activityViewModels()
-    private lateinit var adapter: ScheduleListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,13 +107,7 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
         }
 
         mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
-            binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
-            adapter = ScheduleListAdapter(this,this)
-            binding.recycleSchedule.adapter=adapter
-            adapter.setList(it)
-            binding.recycleSchedule.addItemDecoration(
-                DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-            )
+            setAdapter(binding.recycleSchedule, ScheduleListAdapter(this,this),it,true)
         }
 
         mainViewmodel.scheduleAlarmDataList.observe(viewLifecycleOwner){
