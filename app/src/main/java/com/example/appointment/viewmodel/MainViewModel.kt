@@ -609,6 +609,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
 
     //ScheduleSetFragment
 
+    val alarmSet : MutableLiveData<Boolean> = MutableLiveData(false)
     val scheduleAmPmSet : MutableLiveData<Boolean> = MutableLiveData(true)
     var scheduleHH : MutableLiveData<String> = MutableLiveData("")
     var scheduleMM : MutableLiveData<String> = MutableLiveData("")
@@ -901,6 +902,9 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
             val reference = database.getReference("appointment").child(childName)
             reference.setValue(dataMap).addOnSuccessListener{
                 scheduleEmailPath.value = childName
+                if(alarmTime != "0000"){
+                    StartEvent(alarmSet)
+                }
                 StartEvent(appointmentRequestSuccess)
 
                 fnScheduleSetDataReset()
@@ -1154,6 +1158,9 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
                 reference.child("email1StartY").setValue(startY.value)
                 reference.child("email1TransportTime").setValue(transportTime.value)
                 reference.child("email1Transport").setValue(selectTransport.value).addOnSuccessListener {
+                    if(alarmTime != "0000"){
+                        StartEvent(alarmSet)
+                    }
                     StartEvent(scheduleEditSuccess)
                     fnScheduleSetDataReset()
                 }
@@ -1163,6 +1170,9 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
                 reference.child("email2StartY").setValue(startY.value)
                 reference.child("email2TransportTime").setValue(transportTime.value)
                 reference.child("email2Transport").setValue(selectTransport.value)
+                if(alarmTime != "0000"){
+                    StartEvent(alarmSet)
+                }
                 StartEvent(scheduleEditSuccess)
                 fnScheduleSetDataReset()
             }
@@ -1217,6 +1227,9 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
                 reference.child("email1StartY").setValue(startY.value)
                 reference.child("email1TransportTime").setValue(transportTime.value)
                 reference.child("email1Status").setValue("consent").addOnSuccessListener {
+                    if(alarmTime != "0000"){
+                        StartEvent(alarmSet)
+                    }
                     StartEvent(scheduleAcceptSucess)
                     fnScheduleListData()
                 }
@@ -1227,6 +1240,9 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
                 reference.child("email2StartY").setValue(startY.value)
                 reference.child("email2TransportTime").setValue(transportTime.value)
                 reference.child("email2Status").setValue("consent").addOnSuccessListener {
+                    if(alarmTime != "0000"){
+                        StartEvent(alarmSet)
+                    }
                     StartEvent(scheduleAcceptSucess)
                     fnScheduleListData()
                 }

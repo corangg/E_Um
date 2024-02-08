@@ -89,19 +89,20 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
                 ToastMessage.overdue(requireContext())
             }
         }
-
-        mainViewmodel.appointmentRequestSuccess.observe(viewLifecycleOwner){
-            if(it){
-                fragmentClose()
-
+        mainViewmodel.alarmSet.observe(viewLifecycleOwner){
+            if (it){
                 val startCheckData = StartCheckAlarmData(
                     mainViewmodel.startX.value!!,
                     mainViewmodel.startY.value!!,
                     mainViewmodel.scheduleEmailPath.value!!)
-
-                setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
                 setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
+            }
+        }
 
+        mainViewmodel.appointmentRequestSuccess.observe(viewLifecycleOwner){
+            if(it){
+                fragmentClose()
+                setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
                 Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.value!!.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()
             }
         }
