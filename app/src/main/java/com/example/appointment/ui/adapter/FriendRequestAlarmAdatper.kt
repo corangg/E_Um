@@ -24,7 +24,6 @@ class FriendRequestAlarmViewHolder(binding: ItemFriendrequestalarmBinding): Base
 }
 
 class FriendRequestAlarmAdapter(
-    private val alarmList: MutableList<FriendRequestAlarmData>,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<FriendRequestAlarmData,FriendRequestAlarmViewHolder>(){
     interface OnItemClickListener {

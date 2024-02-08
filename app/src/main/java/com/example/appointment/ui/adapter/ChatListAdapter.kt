@@ -29,7 +29,6 @@ class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatLi
     }
 }
 class ChatListAdapter(
-    private val chatRoomData:MutableList<ChatRoomData>?,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<ChatRoomData,ChatListViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {

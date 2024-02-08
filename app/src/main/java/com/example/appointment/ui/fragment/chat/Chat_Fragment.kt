@@ -41,7 +41,7 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
 
     override fun setObserve(){
         mainViewmodel.chatRoomProfileList.observe(viewLifecycleOwner){
-            setAdapter(binding.recycleChat,ChatListAdapter(it,this),it,true)
+            setAdapter(binding.recycleChat,ChatListAdapter(this),it,true)
         }
 
         mainViewmodel.startChatActivity.observe(viewLifecycleOwner){

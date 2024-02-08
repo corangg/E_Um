@@ -92,7 +92,6 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
         profileViewModel.addressEditActivityStart.observe(viewLifecycleOwner){
             if(it){
                 val intent: Intent = Intent(requireActivity(), AddressEditActivity::class.java)
-                intent.putExtra("email",activity?.intent?.getStringExtra("email"))
                 intent.putExtra("mainaddress",profileViewModel. profileAddress.value)
 
                 startActivityForResult(intent, ADDRESS_REQUEST_CODE)

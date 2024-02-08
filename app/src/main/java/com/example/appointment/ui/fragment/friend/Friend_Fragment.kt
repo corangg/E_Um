@@ -82,7 +82,7 @@ class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickLis
         }
 
         mainViewmodel.friendsProfileList.observe(viewLifecycleOwner){
-            setAdapter(binding.recycleFriends,FriendListAdapter(it,this),it,true)
+            setAdapter(binding.recycleFriends,FriendListAdapter(this),it,true)
 
         }
 

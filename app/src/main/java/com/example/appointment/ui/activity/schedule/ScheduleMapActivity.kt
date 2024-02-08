@@ -186,7 +186,7 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
             if(it){
                 binding.recycleSearch.visibility = View.VISIBLE
 
-                setAdapter(binding.recycleView,MapSearchResultsAdapter(viewmodel.searchKewordList.value!!,this),viewmodel.searchKewordList.value!!,true)
+                setAdapter(binding.recycleView,MapSearchResultsAdapter(this),viewmodel.searchKewordList.value!!,true)
             }
         }
 

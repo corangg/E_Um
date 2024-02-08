@@ -4,66 +4,84 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.appointment.data.Utils
 import com.example.appointment.databinding.ItemMessageGetBinding
 import com.example.appointment.databinding.ItemMessageGetProfileBinding
 import com.example.appointment.databinding.ItemMessageSendBinding
+import com.example.appointment.model.ChatCreateData
 import com.example.appointment.model.ChatDataModel
 
-class ChatSendViewHolder(val binding: ItemMessageSendBinding): RecyclerView.ViewHolder(binding.root)
-class ChatGetFirstViewHolder(val binding: ItemMessageGetProfileBinding): RecyclerView.ViewHolder(binding.root)
-class ChatGetViewHolder(val binding: ItemMessageGetBinding): RecyclerView.ViewHolder(binding.root)
+class ChatSendViewHolder(binding: ItemMessageSendBinding): BaseViewHolder<ItemMessageSendBinding>(binding){
+    fun sendMessage(chatDataModel: ChatDataModel){
+        binding.textSendMessage.text = chatDataModel.message
+    }
+}
+class ChatGetFirstViewHolder(binding: ItemMessageGetProfileBinding): BaseViewHolder<ItemMessageGetProfileBinding>(binding){
+    fun getFirstMessage(chatDataModel: ChatDataModel, createData: ChatCreateData){
+        binding.textMessage.text = chatDataModel.message
+        binding.textNickname.text = createData.friendNickname
+        if(createData.profileURL != ""){
+            Glide.with(itemView).load(createData.profileURL).into(binding.imgProfile)
+        }
+    }
+}
+class ChatGetViewHolder(binding: ItemMessageGetBinding): BaseViewHolder<ItemMessageGetBinding>(binding){
+    fun getMessage(chatDataModel: ChatDataModel){
+        binding.textMessage.text = chatDataModel.message
+    }
+}
 
-class ChatAdapter(val chatMessage:MutableList<ChatDataModel>?, val email:String?, val profileURL:String?, val friendNickname:String?):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ChatAdapter(
+    private val chatMessage:MutableList<ChatDataModel>,
+    private val chatCreateData: ChatCreateData)
+    : BaseAdapter<ChatDataModel,BaseViewHolder<*>>(){
+
     private val TYPE_SEND = 1
     private val TYPE_GETFIRST = 2
     private val TYPE_GET = 3
 
     override fun getItemViewType(position: Int): Int {
-        return if(chatMessage!![position].email==email){
+        return if(chatMessage[position].email== Utils.auth.currentUser!!.email){
             TYPE_SEND
-        }else if(position == 0||chatMessage!![position].email!=chatMessage!![position-1].email){//position-1이 없음
+        }else if(position == 0||chatMessage[position].email!=chatMessage[position-1].email){//position-1이 없음
             TYPE_GETFIRST
         }else{
             TYPE_GET
         }
     }
 
-    override fun getItemCount(): Int {
-        return chatMessage?.size?:0
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType){
-            TYPE_SEND->{
-                ChatSendViewHolder(ItemMessageSendBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_SEND -> {
+                val binding = ItemMessageSendBinding.inflate(inflater, parent, false)
+                ChatSendViewHolder(binding)
             }
-            TYPE_GETFIRST->{
-                ChatGetFirstViewHolder(ItemMessageGetProfileBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+            TYPE_GETFIRST -> {
+                val binding = ItemMessageGetProfileBinding.inflate(inflater, parent, false)
+                ChatGetFirstViewHolder(binding)
             }
-            TYPE_GET->{
-                ChatGetViewHolder(ItemMessageGetBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+            TYPE_GET -> {
+                val binding = ItemMessageGetBinding.inflate(inflater, parent, false)
+                ChatGetViewHolder(binding)
             }
-            else->throw IllegalArgumentException("Invalid view type")
+            else -> throw IllegalArgumentException("Invalid view type")
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType){
-            TYPE_SEND->{
-                val binding:ItemMessageSendBinding=(holder as ChatSendViewHolder).binding
-                binding.textSendMessage.text = chatMessage!![position].message
+    override fun onBindViewHolder(holder: BaseViewHolder<*>, item: ChatDataModel, position: Int) {
+        when (holder) {
+            is ChatSendViewHolder -> {
+                val sendData = itemList[position]
+                holder.sendMessage(sendData)
             }
-            TYPE_GETFIRST->{
-                val binding:ItemMessageGetProfileBinding=(holder as ChatGetFirstViewHolder).binding
-                binding.textMessage.text = chatMessage!![position].message
-                binding.textNickname.text = friendNickname
-                if(profileURL != ""){
-                    Glide.with(holder.itemView).load(profileURL).into(binding.imgProfile)
-                }
+            is ChatGetFirstViewHolder -> {
+                val sendData = itemList[position]
+                holder.getFirstMessage(sendData,chatCreateData)
             }
-            TYPE_GET->{
-                val binding:ItemMessageGetBinding=(holder as ChatGetViewHolder).binding
-                binding.textSendMessage.text = chatMessage!![position].message
+            is ChatGetViewHolder -> {
+                val sendData = itemList[position]
+                holder.getMessage(sendData)
             }
         }
     }

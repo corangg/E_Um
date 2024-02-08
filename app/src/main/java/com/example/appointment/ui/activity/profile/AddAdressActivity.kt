@@ -50,6 +50,7 @@ class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
             if(it){
                 val fullAddress = viewModel.addressData.value + viewModel.detailAddress.value
                 val email = intent.getStringExtra("email")
+
                 val db = AddressDBHelper(this,email).writableDatabase
                 db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf(viewModel.addressName.value,fullAddress))
                 db.close()

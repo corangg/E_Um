@@ -46,7 +46,7 @@ class FriendAlarmActivity : AdapterActivity<ActivityFriendAlarmBinding>() ,Frien
 
     override fun setObserve() {
         viewmodel.friendRequestAlarmDataList.observe(this) {
-            setAdapter(binding.recycleAlarm,FriendRequestAlarmAdapter(it, this),it,true)
+            setAdapter(binding.recycleAlarm,FriendRequestAlarmAdapter(this),it,true)
         }
     }
 }

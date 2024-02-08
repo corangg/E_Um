@@ -22,7 +22,6 @@ class MapSearchResultsViewHolder(binding: ItemMapAddressBinding): BaseViewHolder
 }
 
 class MapSearchResultsAdapter(
-    private val mapinfoList:MutableList<PlaceItem>,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<PlaceItem,MapSearchResultsViewHolder>(){
 

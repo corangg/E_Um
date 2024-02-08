@@ -24,7 +24,6 @@ class FriendListViewHolder(binding: ItemFriendListBinding): BaseViewHolder<ItemF
 }
 
 class FriendListAdapter(
-    private val friendProfile:MutableList<ProfileDataModel>?,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<ProfileDataModel,FriendListViewHolder>(){
 

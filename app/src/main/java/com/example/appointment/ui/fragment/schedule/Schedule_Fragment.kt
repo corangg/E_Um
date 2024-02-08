@@ -107,7 +107,7 @@ class Schedule_Fragment : BaseFragment<FragmentScheduleBinding>(), ScheduleListA
 
         mainViewmodel.scheduleDataList.observe(viewLifecycleOwner){
             binding.recycleSchedule.layoutManager = LinearLayoutManager(context)
-            adapter = ScheduleListAdapter(it,this,this)
+            adapter = ScheduleListAdapter(this,this)
             binding.recycleSchedule.adapter=adapter
             adapter.setList(it)
             binding.recycleSchedule.addItemDecoration(

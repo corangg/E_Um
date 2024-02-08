@@ -7,13 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.databinding.ActivityChatBinding
+import com.example.appointment.model.ChatCreateData
 import com.example.appointment.model.ChatDataModel
+import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.chat.ChatViewModel
 
-class ChatActivity : BaseActivity<ActivityChatBinding>() {
+class ChatActivity : AdapterActivity<ActivityChatBinding>() {
     val viewModel: ChatViewModel by viewModels()
-    private lateinit var adapter: ChatAdapter
+
+    lateinit var chatCreateData : ChatCreateData
 
     override fun layoutResId(): Int {
         return R.layout.activity_chat
@@ -27,20 +30,15 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = intent.getStringExtra("friendnickname")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        chatCreateData = ChatCreateData(intent.getStringExtra("friendProfileURL")!!,intent.getStringExtra("friendnickname")!!)
 
         viewModel.fnChatMessageSet(chatRoomName, chatCount)
-    }
-    fun setAdapter(list:MutableList<ChatDataModel>){
-        binding.recycleMessage.layoutManager = LinearLayoutManager(this)
-        adapter = ChatAdapter(list,viewModel.userEmail,intent.getStringExtra("friendProfileURL"),intent.getStringExtra("friendnickname"))
-        binding.recycleMessage.adapter=adapter
-        binding.recycleMessage.scrollToPosition(list.size -1)
     }
 
     override fun setObserve(){
         viewModel.chatData.observe(this, Observer {
             if(it!=null){
-                setAdapter(it)
+                setAdapter(binding.recycleMessage,ChatAdapter(it, chatCreateData),it,false)
             }
         })
     }

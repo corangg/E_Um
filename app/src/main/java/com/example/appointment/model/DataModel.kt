@@ -19,7 +19,7 @@ data class PrivacyDataModel(
 data class AddressData(
     val addressTitledatas : String,
     val addressdatas : String,
-    var mainaddress : Boolean
+    var titleaddress : Boolean
 )
 
 data class ProfileDataModel(
@@ -30,7 +30,7 @@ data class ProfileDataModel(
     var imgURL: String
 )
 
-data class ChatStartData(
+/*data class ChatStartData(
     val friendNickName:String?,
     val chatRoomName : String?,
     val friendProfileImg : String?,
@@ -63,13 +63,17 @@ data class ChatStartData(
             return arrayOfNulls(size)
         }
     }
-}
+}*/
 
 data class ChatDataModel(
     var email:String,
     var time:String,
     var message:String,
     var messageCount:Int? = 0
+)
+data class ChatCreateData(
+    val profileURL:String,
+    val friendNickname:String
 )
 
 data class ChatRoomData(

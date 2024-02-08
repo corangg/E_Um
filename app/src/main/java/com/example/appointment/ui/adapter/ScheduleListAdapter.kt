@@ -47,7 +47,6 @@ class ScheduleListViewHolder(binding: ItemScheduleBinding): BaseViewHolder<ItemS
 
 }
 class ScheduleListAdapter(
-    private val scheduleDataList : MutableList<ScheduleSet>,
     private val onItemClickListener: OnItemClickListener,
     private val onItemLongClickListener: OnItemLongClickListener)
     : BaseAdapter<ScheduleSet,ScheduleListViewHolder>(){

@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentFriendProfileBinding
-import com.example.appointment.model.ChatStartData
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.ui.fragment.schedule.ScheduleCalendar_Fragment
 import com.example.appointment.viewmodel.MainViewModel

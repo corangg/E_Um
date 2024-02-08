@@ -30,7 +30,6 @@ class ScheduleAlarmListViewHolder(binding: ItemScheduleAlarmBinding): BaseViewHo
 }
 
 class ScheduleAlarmListAdapter(
-    private val scheduleDataList : MutableList<ScheduleSet>,
     private val onItemClickListener: OnItemClickListener)
     : BaseAdapter<ScheduleSet,ScheduleAlarmListViewHolder>(){
 

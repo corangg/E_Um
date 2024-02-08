@@ -43,7 +43,7 @@ class ScheduleAlarmActivity : AdapterActivity<ActivityScheduleAlarmBinding>(), O
 
     override fun setObserve(){
         mainViewmodel.scheduleAlarmDataList.observe(this){
-            setAdapter(binding.recycleScheduleAlarm,ScheduleAlarmListAdapter(it,this),it,true)
+            setAdapter(binding.recycleScheduleAlarm,ScheduleAlarmListAdapter(this),it,true)
         }
 
         mainViewmodel.startScheduleAcceptFragment.observe(this){
