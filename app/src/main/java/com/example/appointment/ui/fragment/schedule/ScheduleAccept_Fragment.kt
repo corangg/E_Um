@@ -42,7 +42,7 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
             selectTransportActivate(transportView,it)
         }
 
-        mainViewmodel.publicTransportCheck.observe(viewLifecycleOwner){
+        mainViewmodel.transportCheck.observe(viewLifecycleOwner){
             ToastMessage.transportCheck(it,requireContext())
         }
 

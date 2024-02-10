@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
 import com.example.appointment.R
 
 import com.example.appointment.StartEvent
@@ -19,7 +18,6 @@ import com.example.appointment.apiservice.TMapCarRoute
 import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.apiservice.TMapWalkRoute
 import com.example.appointment.data.RequestCode
-import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
@@ -620,7 +618,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     var publicTransportTime :MutableLiveData<String> = MutableLiveData("")
     var carTime :MutableLiveData<String> = MutableLiveData("")
     var walkTime : MutableLiveData<String> = MutableLiveData("")
-    var publicTransportCheck : MutableLiveData<Int> = MutableLiveData(-1)
+    var transportCheck : MutableLiveData<Int> = MutableLiveData(-1)
     var carCheck : MutableLiveData<Int> = MutableLiveData(-1)
     var walkCheck : MutableLiveData<Int> = MutableLiveData(-1)
     var startX:MutableLiveData<String> = MutableLiveData("")
@@ -765,7 +763,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     }
     fun fnPublicTransportTimeSet(){
        if(meetingPlaceAddress.value==""){
-            publicTransportCheck.value = 3
+            transportCheck.value = 3
         }else{
             val retrofit = Retrofit.Builder()
                 .baseUrl(APIData.TMAP_BASE_URL)
@@ -785,14 +783,14 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
            utils.getRetrofitData(call){
                if(it !=null){
                    if(it.metaData == null){
-                       publicTransportCheck.value = 5
+                       transportCheck.value = 5
                    }else{
                        publicTransportTime.value = utils.fnTimeToString(it.metaData.plan.itineraries[0].totalTime)
                        transportTime.value = it.metaData.plan.itineraries[0].totalTime
                        selectTransport.value = 1
                    }
                }else{
-                   publicTransportCheck.value = 4
+                   transportCheck.value = 4
                }
            }
         }
@@ -859,55 +857,57 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     }
 
     fun fnAppointmentRequest(){
-        val userEmailReplace = userEmail.replace(".","_")
-        val friendEmail = selectFriendProfile.value!!.email
-        val friendEmailReplace = friendEmail.replace(".","_")
-        val childName = userEmailReplace+"||"+friendEmailReplace
-        val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
-        val alarmTimeSet = fnAlarmTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
-        val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
-        val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
-
-        if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
-            StartEvent(meetingTimeOver)
+        if(selectTransport.value == 0){
+            transportCheck.value = 6
         }else{
+            val userEmailReplace = userEmail.replace(".","_")
+            val friendEmail = selectFriendProfile.value!!.email
+            val friendEmailReplace = friendEmail.replace(".","_")
+            val childName = userEmailReplace+"||"+friendEmailReplace
+            val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+            val alarmTimeSet = fnAlarmTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+            val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
+            val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
 
-            val dataMap = mapOf(
-                "email1" to userEmail,
-                "email2" to friendEmail,
-                "nickname1" to profileNickname.value,
-                "nickname2" to selectFriendProfile.value!!.nickname,
-                "meetingPlace" to meetingPlaceAddress.value,
-                "meetingPlaceName" to kewordName.value,
-                "meetingplaceX" to endX.value,
-                "meetingplaceY" to endY.value,
-                "meetingTime" to fnDttmSet(),
-                "email1Status" to "consent",
-                "email2Status" to "wait",
-                "email1ProfileImgURl" to profileImgURL.value,
-                "email2ProfileImgURl" to selectFriendProfile.value!!.imgURL,
-                "email1Transport" to selectTransport.value,
-                "email2Transport" to "",
-                "email1Alarm" to alarmTime,
-                "email1StartX" to startX.value,
-                "email1StartY" to startY.value,
-                "email2StartX" to "",
-                "email2StartY" to "",
-                "email1TransportTime" to transportTime.value,
-                "email2TransportTime" to "",
-                "email1StartCheck" to "not",
-                "email2StartCheck" to "not",
-            )
+            if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
+                StartEvent(meetingTimeOver)
+            }else{
 
-            val reference = database.getReference("appointment").child(childName)
-            reference.setValue(dataMap).addOnSuccessListener{
-                scheduleEmailPath.value = childName
-                if(alarmTime != "0000"){
-                    StartEvent(alarmSet)
+                val dataMap = mapOf(
+                    "email1" to userEmail,
+                    "email2" to friendEmail,
+                    "nickname1" to profileNickname.value,
+                    "nickname2" to selectFriendProfile.value!!.nickname,
+                    "meetingPlace" to meetingPlaceAddress.value,
+                    "meetingPlaceName" to kewordName.value,
+                    "meetingplaceX" to endX.value,
+                    "meetingplaceY" to endY.value,
+                    "meetingTime" to fnDttmSet(),
+                    "email1Status" to "consent",
+                    "email2Status" to "wait",
+                    "email1ProfileImgURl" to profileImgURL.value,
+                    "email2ProfileImgURl" to selectFriendProfile.value!!.imgURL,
+                    "email1Transport" to selectTransport.value,
+                    "email2Transport" to "",
+                    "email1Alarm" to alarmTime,
+                    "email1StartX" to startX.value,
+                    "email1StartY" to startY.value,
+                    "email2StartX" to "",
+                    "email2StartY" to "",
+                    "email1TransportTime" to transportTime.value,
+                    "email2TransportTime" to "",
+                    "email1StartCheck" to "not",
+                    "email2StartCheck" to "not",
+                )
+
+                val reference = database.getReference("appointment").child(childName)
+                reference.setValue(dataMap).addOnSuccessListener{
+                    scheduleEmailPath.value = childName
+                    if(alarmTime != "0000"){
+                        StartEvent(alarmSet)
+                    }
+                    StartEvent(appointmentRequestSuccess)
                 }
-                StartEvent(appointmentRequestSuccess)
-
-                fnScheduleSetDataReset()
             }
         }
     }
@@ -929,6 +929,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
         publicTransportTime.value = ""
         carTime.value = ""
         walkTime.value = ""
+        transportCheck.value = 0
     }
 
 
@@ -1217,34 +1218,38 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
             meetingTimeOver.value = true
             meetingTimeOver.value = false
         }else{
-            val emailPath = scheduleEmailPath.value
-            val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
-            val reference = database.getReference("appointment").child(emailPath!!)
-            if(fnFRDPathSplit(emailPath!!) == 1){
-                reference.child("email1Alarm").setValue(alarmTime)
-                reference.child("email1Transport").setValue(selectTransport.value)
-                reference.child("email1StartX").setValue(startX.value)
-                reference.child("email1StartY").setValue(startY.value)
-                reference.child("email1TransportTime").setValue(transportTime.value)
-                reference.child("email1Status").setValue("consent").addOnSuccessListener {
-                    if(alarmTime != "0000"){
-                        StartEvent(alarmSet)
+            if(selectTransport.value == 0){
+                transportCheck.value = 6
+            }else{
+                val emailPath = scheduleEmailPath.value
+                val alarmTime = utils.fnTimeSet(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
+                val reference = database.getReference("appointment").child(emailPath!!)
+                if(fnFRDPathSplit(emailPath!!) == 1){
+                    reference.child("email1Alarm").setValue(alarmTime)
+                    reference.child("email1Transport").setValue(selectTransport.value)
+                    reference.child("email1StartX").setValue(startX.value)
+                    reference.child("email1StartY").setValue(startY.value)
+                    reference.child("email1TransportTime").setValue(transportTime.value)
+                    reference.child("email1Status").setValue("consent").addOnSuccessListener {
+                        if(alarmTime != "0000"){
+                            StartEvent(alarmSet)
+                        }
+                        StartEvent(scheduleAcceptSucess)
+                        fnScheduleListData()
                     }
-                    StartEvent(scheduleAcceptSucess)
-                    fnScheduleListData()
-                }
-            }else if(fnFRDPathSplit(emailPath!!) == 2){
-                reference.child("email2Alarm").setValue(alarmTime)
-                reference.child("email2Transport").setValue(selectTransport.value)
-                reference.child("email2StartX").setValue(startX.value)
-                reference.child("email2StartY").setValue(startY.value)
-                reference.child("email2TransportTime").setValue(transportTime.value)
-                reference.child("email2Status").setValue("consent").addOnSuccessListener {
-                    if(alarmTime != "0000"){
-                        StartEvent(alarmSet)
+                }else if(fnFRDPathSplit(emailPath!!) == 2){
+                    reference.child("email2Alarm").setValue(alarmTime)
+                    reference.child("email2Transport").setValue(selectTransport.value)
+                    reference.child("email2StartX").setValue(startX.value)
+                    reference.child("email2StartY").setValue(startY.value)
+                    reference.child("email2TransportTime").setValue(transportTime.value)
+                    reference.child("email2Status").setValue("consent").addOnSuccessListener {
+                        if(alarmTime != "0000"){
+                            StartEvent(alarmSet)
+                        }
+                        StartEvent(scheduleAcceptSucess)
+                        fnScheduleListData()
                     }
-                    StartEvent(scheduleAcceptSucess)
-                    fnScheduleListData()
                 }
             }
         }

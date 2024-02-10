@@ -41,7 +41,7 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
             selectTransportActivate(transportView,it)
         }
 
-        mainViewmodel.publicTransportCheck.observe(viewLifecycleOwner){
+        mainViewmodel.transportCheck.observe(viewLifecycleOwner){
             ToastMessage.transportCheck(it,requireContext())
         }
 
