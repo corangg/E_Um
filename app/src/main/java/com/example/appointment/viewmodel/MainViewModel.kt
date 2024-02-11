@@ -18,6 +18,7 @@ import com.example.appointment.apiservice.TMapCarRoute
 import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.apiservice.TMapWalkRoute
 import com.example.appointment.data.RequestCode
+import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
@@ -29,6 +30,7 @@ import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.repository.ProfileRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -36,12 +38,14 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-//@HiltViewModel
-class MainViewModel /*@Inject constructor*/ (application: Application) : BaseViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(application: Application, val profileRepository: ProfileRepository) : BaseViewModel(application) {
 
     var selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
@@ -61,9 +65,11 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
     val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
 
+    //private val profileRepository = ProfileRepository(utils)
+
     init {
-        fnGetPrivacyData()
-        fnGetProfileData()
+        fetchPrivacyData()
+        fetchProfileData()
         fnFriendRequestAlarm()
         fnFriendList()
     }
@@ -141,6 +147,7 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
 
 
     //profile
+
     fun fnProfileAddressEdit(data: MutableLiveData<Boolean>){
         StartEvent(data)
     }
@@ -160,26 +167,23 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
 
     fun fnLogout(){
         auth.signOut()
-
         logOutSuccess.value = true
     }
 
     fun fnProfileEditMode(uri: Uri?) {
         if(editProfileData.value == true){
-            fnProfileImageUpdate(uri)
-            fnProfileEdit()
-            fnPrivacyEdit()
+            profileRepository.setProfileImage(uri)
+            profileRepository.setProfileData(profileNickname.value, profileStatusMessage.value)
+            profileRepository.setPrivacyData(profileAddress.value, profileNickname.value)
         }
         editProfileData.value = editProfileData.value?.not() ?: true
     }
 
-    fun fnGetPrivacyData() {
-        val docRef = firestore.collection("Privacy").document(userEmail)
-
+    fun fetchPrivacyData() {
         viewModelScope.launch {
             try {
-                val dataMap = utils.readDataFirebase(docRef)
-                if (dataMap != null){
+                val dataMap = profileRepository.getPrivacyData()
+                if (dataMap != null) {
                     profileEmail.value = dataMap?.get("email") as? String
                     profileName.value = dataMap?.get("name") as? String
                     profileNickname.value = dataMap?.get("nickname") as? String
@@ -187,67 +191,26 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
                     profilePassword.value = dataMap?.get("password") as? String
                     profileAddress.value = dataMap?.get("zonecode") as? String + "," + dataMap?.get("address") as? String
                 }
-            }catch (e: Exception) {
-                Log.e("Coroutine", "Error fetching friend list", e)
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching privacy data", e)
             }
         }
     }
 
-    fun fnGetProfileData(){
-        val docRef = firestore.collection("Profile").document(userEmail)
-
+    fun fetchProfileData(){
         viewModelScope.launch {
             try {
-                val dataMap = utils.readDataFirebase(docRef)
-                if (dataMap != null){
+                val dataMap = profileRepository.getProfileData()
+                if (dataMap != null) {
                     profileImgURL.value = dataMap?.get("imgURL") as? String
                     profileStatusMessage.value = dataMap?.get("statusmessage") as? String
                     imageUpload.value = true
                 }
-            }catch (e: Exception) {
-                Log.e("Coroutine", "Error fetching friend list", e)
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "Error fetching privacy data", e)
             }
         }
     }
-
-    fun fnProfileEdit(){
-        val docRef = firestore.collection("Profile").document(userEmail)
-
-        utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
-        utils.updataDataFireBase(docRef,"statusmessage",profileStatusMessage.value)
-
-    }
-
-    fun fnPrivacyEdit(){
-        val splitAddress = profileAddress.value?.split(",")
-        val userEmail = auth.currentUser!!.email
-        val docRef = firestore.collection("Privacy").document(userEmail!!)
-
-        utils.updataDataFireBase(docRef,"zonecode",splitAddress!![0])
-        utils.updataDataFireBase(docRef,"nickname",profileNickname.value)
-        utils.updataDataFireBase(docRef,"address",splitAddress!![1])
-    }
-
-    fun fnProfileImageUpdate(photoUri: Uri?){
-        if(photoUri!=null){
-            var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-            var storagePath = storage.reference.child("userProfile").child(auth.currentUser?.email.toString()).child("profileimg")
-
-            val userEmail = auth.currentUser!!.email
-            val docRef = firestore.collection("Profile").document(userEmail!!)
-
-
-            storagePath.putFile(photoUri!!).continueWithTask{
-                return@continueWithTask storagePath.downloadUrl
-            }.addOnCompleteListener{downloadUrl->
-                viewModelScope.launch {
-                    utils.updataDataFireBase(docRef,"imgURL",downloadUrl.result.toString())
-                    utils.updataDataFireBase(docRef,"timestamp",timestamp)
-                }
-            }
-        }
-    }
-
 
     //friend_fragment
 
@@ -260,7 +223,6 @@ class MainViewModel /*@Inject constructor*/ (application: Application) : BaseVie
     val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun fnFriendRequestAlarm() {
-        //val emailReplace = userEmail.replace(".", "_")
         val reference = database.getReference(userEmailReplace).child("friendRequest")
 
         reference.addListenerForSingleValueEvent(object :
