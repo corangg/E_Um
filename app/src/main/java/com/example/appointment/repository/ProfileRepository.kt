@@ -16,19 +16,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 class ProfileRepository (private val utils: Utils) {
-    private val userEmail = auth.currentUser?.email
-
     suspend fun getPrivacyData(): Map<String, Any>? {
+        val userEmail = auth.currentUser?.email
         val docRef = firestore.collection("Privacy").document(userEmail!!)
         return utils.readDataFirebase(docRef)
     }
 
     suspend fun getProfileData(): Map<String, Any>? {
+        val userEmail = auth.currentUser?.email
         val docRef = firestore.collection("Profile").document(userEmail!!)
         return utils.readDataFirebase(docRef)
     }
 
     fun setProfileData(profileNickname: String?, profileStatusMessage: String?){
+        val userEmail = auth.currentUser?.email
         val docRef = firestore.collection("Profile").document(userEmail!!)
 
         utils.updataDataFireBase(docRef,"nickname",profileNickname)
@@ -36,6 +37,7 @@ class ProfileRepository (private val utils: Utils) {
     }
 
     fun setPrivacyData(profileAddress:String?, profileNickname: String?){
+        val userEmail = auth.currentUser?.email
         val splitAddress = profileAddress?.split(",")
         val docRef = firestore.collection("Privacy").document(userEmail!!)
 
@@ -46,10 +48,9 @@ class ProfileRepository (private val utils: Utils) {
 
     fun setProfileImage(photoUri: Uri?){
         if(photoUri!=null){
+            val userEmail = auth.currentUser?.email
             var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             var storagePath = Utils.storage.reference.child("userProfile").child(userEmail!!).child("profileimg")
-
-            val userEmail = auth.currentUser!!.email
             val docRef = firestore.collection("Profile").document(userEmail!!)
 
             storagePath.putFile(photoUri).continueWithTask{
