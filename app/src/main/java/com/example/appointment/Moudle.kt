@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.example.appointment.data.Utils
+import com.example.appointment.repository.FriendFragmnetRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,4 +24,12 @@ object Moudle {
     fun provideProfileRepository(): ProfileRepository {
         return ProfileRepository(Utils())
     }
+
+    @Singleton
+    @Provides
+    fun providerFriendFragmentRepository(): FriendFragmnetRepository{
+        return FriendFragmnetRepository(Utils())
+    }
+
+
 }

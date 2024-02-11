@@ -30,6 +30,7 @@ import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.ProfileRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,7 +46,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(application: Application, val profileRepository: ProfileRepository) : BaseViewModel(application) {
+class MainViewModel @Inject constructor(
+    application: Application,
+    private val profileRepository: ProfileRepository,
+    private val friendFragmnetRepository: FriendFragmnetRepository) : BaseViewModel(application) {
 
     var selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
@@ -70,7 +74,10 @@ class MainViewModel @Inject constructor(application: Application, val profileRep
     init {
         fetchPrivacyData()
         fetchProfileData()
-        fnFriendRequestAlarm()
+        //fnFriendRequestAlarm()
+        fetchFriendRequestAlarm()
+
+
         fnFriendList()
     }
 
@@ -119,7 +126,8 @@ class MainViewModel @Inject constructor(application: Application, val profileRep
             RequestCode.ACCEPT_FRIEND_REQUEST_CODE->{
                 if(resultCode == Activity.RESULT_OK){
                     data?.let {
-                        fnFriendRequestAlarm()
+                        //fnFriendRequestAlarm()
+                        fetchFriendRequestAlarm()
                         fnFriendList()
                     }
                 }
@@ -222,73 +230,24 @@ class MainViewModel @Inject constructor(application: Application, val profileRep
     val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun fnFriendRequestAlarm() {
-        val reference = database.getReference(userEmailReplace).child("friendRequest")
-
-        reference.addListenerForSingleValueEvent(object :
-            ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    friendRequestAlarmStatus.value = true
-
-                } else {
-                    friendRequestAlarmStatus.value = false
-                }
+    fun fetchFriendRequestAlarm(){
+        friendFragmnetRepository.getFriendRequestAlarmData{
+            if(it.exists()){
+                friendRequestAlarmStatus.value = true
+            }else{
+                friendRequestAlarmStatus.value = false
             }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        }
     }
 
     fun fnFriendList(){
         viewModelScope.launch {
             val docRef = firestore.collection("Friend").document(userEmail)
 
-            val friendEmails = fetchFriendList(docRef)
-            val friendsProfileListReturn = fetchFriendProfiles(friendEmails)
+            val friendEmails = friendFragmnetRepository.getFriendListData(docRef)
+            val friendsProfileListReturn = friendFragmnetRepository.getFriendProfileData(friendEmails)
             friendsProfileList.value = friendsProfileListReturn
         }
-    }
-
-    suspend fun fetchFriendList(docRef : DocumentReference): List<String> {
-        val friendList = mutableListOf<String>()
-
-        try {
-            val dataMap = utils.readDataFirebase(docRef)
-            if (dataMap != null) {
-                for ((_, value) in dataMap) {
-                    friendList.add(value.toString())
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("Coroutine", "Error fetching friend list", e)
-        }
-
-        return friendList
-    }
-
-    suspend fun fetchFriendProfiles(friendEmails: List<String>): MutableList<ProfileDataModel> {
-        val profileList = mutableListOf<ProfileDataModel>()
-
-        for (friendEmail in friendEmails) {
-            val docRef = firestore.collection("Profile").document(friendEmail)
-            try {
-                val dataMap = utils.readDataFirebase(docRef)
-                if (dataMap != null) {
-                    val profileData = ProfileDataModel(
-                        dataMap["email"] as String,
-                        dataMap["nickname"] as String,
-                        dataMap["statusmessage"] as String,
-                        "",
-                        dataMap["imgURL"] as String
-                    )
-                    profileList.add(profileData)
-                }
-            } catch (e: Exception) {
-                Log.e("Coroutine", "Error fetching friend profile", e)
-            }
-        }
-        return profileList
     }
 
     fun fnSelectFriendAddItem(){
