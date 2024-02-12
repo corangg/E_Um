@@ -18,7 +18,6 @@ import com.example.appointment.apiservice.TMapCarRoute
 import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.apiservice.TMapWalkRoute
 import com.example.appointment.data.RequestCode
-import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
@@ -26,11 +25,14 @@ import com.example.appointment.data.Utils.Companion.storage
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.CarRouteRequest
 import com.example.appointment.model.ChatRoomData
+import com.example.appointment.model.EmailNicknameData
 import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.repository.ChatFragmentRepository
 import com.example.appointment.repository.FriendFragmnetRepository
+import com.example.appointment.repository.FriendProfileFagmentRepository
 import com.example.appointment.repository.ProfileRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -49,7 +51,10 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     application: Application,
     private val profileRepository: ProfileRepository,
-    private val friendFragmnetRepository: FriendFragmnetRepository) : BaseViewModel(application) {
+    private val friendFragmnetRepository: FriendFragmnetRepository,
+    private val friendProfileFagmentRepository: FriendProfileFagmentRepository,
+    private val chatFragmentRepository: ChatFragmentRepository,
+) : BaseViewModel(application) {
 
     var selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
@@ -59,25 +64,39 @@ class MainViewModel @Inject constructor(
     val profileEmail: MutableLiveData<String> = MutableLiveData("")
     val profilePassword: MutableLiveData<String> = MutableLiveData("")
     val profileAddress: MutableLiveData<String> = MutableLiveData("")
-    val profileImgURL :MutableLiveData<String> = MutableLiveData("")
+    val profileImgURL : MutableLiveData<String> = MutableLiveData("")
+    var chatRoomName:MutableLiveData<String?> = MutableLiveData("")
 
-    val editProfileData :MutableLiveData<Boolean> = MutableLiveData(false)
-    val openGallery :MutableLiveData<Boolean> = MutableLiveData(false)
-    val nickNameEditActivityStart:MutableLiveData<Boolean> = MutableLiveData(false)
-    val passwordEdit :MutableLiveData<Boolean> = MutableLiveData(false)
-    val addressEditActivityStart :MutableLiveData<Boolean> = MutableLiveData(false)
-    val logOutSuccess :MutableLiveData<Boolean> = MutableLiveData(false)
-    val imageUpload :MutableLiveData<Boolean> = MutableLiveData(false)
+    val editProfileData : MutableLiveData<Boolean> = MutableLiveData(false)
+    val openGallery : MutableLiveData<Boolean> = MutableLiveData(false)
+    val nickNameEditActivityStart : MutableLiveData<Boolean> = MutableLiveData(false)
+    val passwordEdit : MutableLiveData<Boolean> = MutableLiveData(false)
+    val addressEditActivityStart : MutableLiveData<Boolean> = MutableLiveData(false)
+    val logOutSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageUpload : MutableLiveData<Boolean> = MutableLiveData(false)
+    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
+    val startFriendAddActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    var startChatActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    var startScheduleCalendarFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    var friendDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
 
-    //private val profileRepository = ProfileRepository(utils)
+    var chatCount : MutableLiveData<Int?> = MutableLiveData(0)
+
+    val selectFriendProfile : MutableLiveData<ProfileDataModel> = MutableLiveData()
+
+    val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
+
+
+
+
 
     init {
         fetchPrivacyData()
         fetchProfileData()
         //fnFriendRequestAlarm()
         fetchFriendRequestAlarm()
-
-
         fnFriendList()
     }
 
@@ -104,7 +123,6 @@ class MainViewModel @Inject constructor(
         }
         return false
     }
-
 
     fun fnHandleActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         when (requestCode) {
@@ -152,7 +170,6 @@ class MainViewModel @Inject constructor(
 
         }
     }
-
 
     //profile
 
@@ -221,17 +238,8 @@ class MainViewModel @Inject constructor(
     }
 
     //friend_fragment
-
-    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
-    val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
-    val selectFriendProfile : MutableLiveData<ProfileDataModel> = MutableLiveData()
-
-    val startFriendAddActivity : MutableLiveData<Boolean> = MutableLiveData(false)
-    val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
-    val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
-
     fun fetchFriendRequestAlarm(){
-        friendFragmnetRepository.getFriendRequestAlarmData{
+        friendFragmnetRepository.getFriendRequestAlarmData{//알람 이상함
             if(it.exists()){
                 friendRequestAlarmStatus.value = true
             }else{
@@ -243,7 +251,6 @@ class MainViewModel @Inject constructor(
     fun fnFriendList(){
         viewModelScope.launch {
             val docRef = firestore.collection("Friend").document(userEmail)
-
             val friendEmails = friendFragmnetRepository.getFriendListData(docRef)
             val friendsProfileListReturn = friendFragmnetRepository.getFriendProfileData(friendEmails)
             friendsProfileList.value = friendsProfileListReturn
@@ -263,60 +270,14 @@ class MainViewModel @Inject constructor(
         StartEvent(startFriendProfileFragment)
     }
 
-
     //friendProfile
-    var chatCount : MutableLiveData<Int?> = MutableLiveData(0)
-    var chatRoomName:MutableLiveData<String?> = MutableLiveData("")
-    var startChatActivity:MutableLiveData<Boolean> = MutableLiveData(false)
-    var startScheduleCalendarFragment : MutableLiveData<Boolean> = MutableLiveData(false)
-    var friendDeleteSuccess:MutableLiveData<Boolean> = MutableLiveData(false)
-
     fun fnChatStart(friendEmail: String?){
-        val friendEmailReplace = friendEmail!!.replace(".", "_")
-        val reference = database.getReference("chat")
-        val chatName = userEmailReplace + "||" + friendEmailReplace
-        val reversedchatName = utils.reverseString(chatName,"||")
-
-        reference.child(chatName).addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    chatCount.value = snapshot.childrenCount.toInt()
-                    chatRoomName.value=chatName
-                    StartEvent(startChatActivity)
-                } else {
-                    reference.child(reversedchatName).addListenerForSingleValueEvent(object :ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()) {
-                                chatCount.value = snapshot.childrenCount.toInt()
-                                chatRoomName.value = reversedchatName
-                                StartEvent(startChatActivity)
-                            } else {
-                                val chatPath = reference.child(reversedchatName).child(utils.fnGetCurrentTimeString())
-                                val dataMap = mapOf(
-                                    "email1" to userEmail,
-                                    "email2" to friendEmail,
-                                    "nickname1" to profileNickname.value,
-                                    "nickname2" to selectFriendProfile.value!!.nickname,
-                                    "email1MessageCheck" to "0",
-                                    "email2MessageCheck" to "0"
-                                )
-                                chatPath.setValue(dataMap).addOnSuccessListener {
-                                    chatCount.value = snapshot.childrenCount.toInt()
-                                    chatRoomName.value = reversedchatName
-                                    StartEvent(startChatActivity)
-                                }
-                            }
-                        }
-                        override fun onCancelled(error: DatabaseError) {
-                            Log.d("ChatStartError","error",error.toException())
-                        }
-                    })
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("ChatStartError","error",error.toException())
-            }
-        })
+        viewModelScope.launch {
+            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,selectFriendProfile.value!!.nickname,profileNickname.value)
+            chatCount.value = chatInfo?.chatCount
+            chatRoomName.value = chatInfo?.chatRoomName
+            StartEvent(startChatActivity)
+        }
     }
 
     fun fnStartFragmentScheduleSet(data: MutableLiveData<Boolean>){
@@ -324,28 +285,15 @@ class MainViewModel @Inject constructor(
     }
 
     fun fnFriendDelete(){
-        val docRef = firestore.collection("Friend")
-        val updates = HashMap<String, Any>()
-        val friendEmail = selectFriendProfile.value!!.email
-        val friendEmailReplace = friendEmail!!.replace(".", "_")
-        val chatName : String = userEmailReplace + "||" + friendEmailReplace
-        val reversedchatName = utils.reverseString(chatName,"||")
-        val chatReference = database.getReference("chat")
-        val appointmentReference = database.getReference("appointment")
+        val friendEmail = selectFriendProfile.value?.email
+        val deleteData = EmailNicknameData(
+            userEmail,
+            friendEmail,
+            profileNickname.value,
+            selectFriendProfile.value!!.nickname
+        )
 
-        updates[selectFriendProfile.value!!.nickname] = FieldValue.delete()
-        docRef.document(userEmail).update(updates)
-
-        updates[profileNickname.value!!] = FieldValue.delete()
-        docRef.document(friendEmail).update(updates)
-
-        chatReference.child(chatName).removeValue().addOnSuccessListener {
-            appointmentReference.child(chatName).removeValue()
-        }
-        chatReference.child(reversedchatName).removeValue().addOnSuccessListener {
-            appointmentReference.child(reversedchatName).removeValue().addOnSuccessListener {
-            }
-        }
+        friendProfileFagmentRepository.friendDataDelete(deleteData)
         fnFriendList()
         StartEvent(friendDeleteSuccess)
     }

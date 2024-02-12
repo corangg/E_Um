@@ -30,40 +30,17 @@ data class ProfileDataModel(
     var imgURL: String
 )
 
-/*data class ChatStartData(
-    val friendNickName:String?,
-    val chatRoomName : String?,
-    val friendProfileImg : String?,
-    val chatCount : Int?
-): Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt()
-    )
+data class ChatInfo(
+    val chatCount : Int,
+    val chatRoomName : String,
+)
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(friendNickName)
-        parcel.writeString(chatRoomName)
-        parcel.writeString(friendProfileImg)
-        parcel.writeInt(chatCount!!)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ChatStartData> {
-        override fun createFromParcel(parcel: Parcel): ChatStartData {
-            return ChatStartData(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ChatStartData?> {
-            return arrayOfNulls(size)
-        }
-    }
-}*/
+data class EmailNicknameData(
+    val email1: String?,
+    val email2: String?,
+    val nickname1: String?,
+    val nickname2: String?,
+)
 
 data class ChatDataModel(
     var email:String,
@@ -71,6 +48,7 @@ data class ChatDataModel(
     var message:String,
     var messageCount:Int? = 0
 )
+
 data class ChatCreateData(
     val profileURL:String,
     val friendNickname:String
@@ -103,7 +81,6 @@ data class ScheduleSet(
     val transportTime : String,
     val myTransport : String,
     val myAlarmTime : String
-
 )
 
 data class AlarmTime(
@@ -125,7 +102,6 @@ data class FriendRequestAlarmData(
     val nickname: String,
 )
 
-
 //NaverKeWord
 data class KeyWordResponse(
     @SerializedName("items")
@@ -139,7 +115,6 @@ data class PlaceItem(
     @SerializedName("mapx") val x: Double,
     @SerializedName("mapy") val y: Double,
 )
-
 
 data class SelectTransport(
     val imgBus : ImageView,
@@ -213,9 +188,6 @@ data class TMapAddressInfo(
     val buildingName : String
 
 )
-
-
-
 
 //TMapTransit
 data class TransitRouteRequest(
