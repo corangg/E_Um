@@ -30,6 +30,7 @@ import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.model.ScheduleSet
 import com.example.appointment.model.TransitRouteRequest
 import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.repository.ChatFragmentRepository
 import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
 import com.example.appointment.repository.ProfileRepository
@@ -51,7 +52,8 @@ class MainViewModel @Inject constructor(
     application: Application,
     private val profileRepository: ProfileRepository,
     private val friendFragmnetRepository: FriendFragmnetRepository,
-    private val friendProfileFagmentRepository: FriendProfileFagmentRepository
+    private val friendProfileFagmentRepository: FriendProfileFagmentRepository,
+    private val chatFragmentRepository: ChatFragmentRepository,
 ) : BaseViewModel(application) {
 
     var selectFragment : MutableLiveData<String> = MutableLiveData("")
