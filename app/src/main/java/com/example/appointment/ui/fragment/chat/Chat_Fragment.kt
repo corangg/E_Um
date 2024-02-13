@@ -49,10 +49,10 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
                 val intent: Intent = Intent(requireContext(), ChatActivity::class.java)
 
                 intent.putExtra("friendnickname",mainViewmodel.chatRoomFriendNickName.value)
-                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)
+                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)//
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
                 intent.putExtra("friendProfileURL",mainViewmodel.chatFriendImg.value)
-                intent.putExtra("chatCount",mainViewmodel.chatCount.value)
+                intent.putExtra("chatCount",mainViewmodel.chatCount.value)//
 
                 startActivityForResult(intent, RequestCode.CHAT_REQUEST_CODE)
             }

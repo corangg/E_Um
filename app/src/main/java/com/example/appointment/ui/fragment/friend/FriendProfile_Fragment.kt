@@ -33,10 +33,10 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
                 val intent:Intent = Intent(requireContext(), ChatActivity::class.java)
 
                 intent.putExtra("friendnickname",mainViewmodel.selectFriendProfile.value!!.nickname)
-                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)
+                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)//rb@dlwp
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
                 intent.putExtra("friendProfileURL",mainViewmodel.selectFriendProfile.value!!.imgURL)
-                intent.putExtra("chatCount",mainViewmodel.chatCount.value)
+                intent.putExtra("chatCount",mainViewmodel.chatCount.value)//13
 
                 startActivity(intent)
             }

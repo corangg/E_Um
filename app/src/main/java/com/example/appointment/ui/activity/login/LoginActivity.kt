@@ -16,7 +16,6 @@ import com.example.appointment.ui.activity.signup.SignupActivity
 import com.example.appointment.viewmodel.logIn.Login_Viewmodel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
-import dagger.hilt.android.AndroidEntryPoint
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     val loginViewModel: Login_Viewmodel by viewModels()

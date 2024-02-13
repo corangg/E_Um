@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appointment.R
@@ -304,10 +305,19 @@ class MainViewModel @Inject constructor(
     var chatRoomData = mutableListOf<ChatRoomData>()
     val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
     val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
+    //val chatRoomProfileList: LiveData<MutableList<ChatRoomData>> = chatFragmentRepository.chatRoomProfileList
+
+
+    /*fun fnChatRoomList(){
+        chatFragmentRepository.fetchChatRoomList(userEmail, friendsProfileList)
+    }*/
+
+
 
     fun fnChatRoomList(){
         val reference = database.getReference("chat")
         var chatRoomSize : Int = 0
+        //chatFragmentRepository.fetchChatRoomList(friendsProfileList.value!!)
 
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -322,12 +332,12 @@ class MainViewModel @Inject constructor(
                             chatRoomProfileList.value = mutableListOf()
                         }//원래는 밑이었는데 밑이면 아예 의미가 없을꺼 같은데? 이상하면 확인해 보자
 
-                        if(userEmail == splitArray[0]){
-                            chatProfile(emailPath,totalChatCount)
+                        if(userEmail == splitArray[0]){//여기에서 쳇룸 네임
+                            fnLastChatSet(emailPath,totalChatCount)
                             chatRoomSize = chatRoomSize + 1
 
                         }else if(userEmail == splitArray[1]){
-                            chatProfile(emailPath,totalChatCount)
+                            fnLastChatSet(emailPath,totalChatCount)
                             chatRoomSize = chatRoomSize + 1
                         }
                     }
@@ -340,32 +350,10 @@ class MainViewModel @Inject constructor(
         })
     }
 
-    fun chatProfile(emailPath:String?,totalChatCount:Int){
+    fun fnLastChatSet(emailPath:String?,totalChatCount:Int){
         val reference = database.getReference("chat").child(emailPath!!)
         chatRoomData = mutableListOf()
 
-        /*var a:Int =  0
-        utils.readDataFRDAddChildEventListener(reference){
-            a = a+1
-
-            if(a>totalChatCount){
-                asf(reference,a)
-
-
-                *//*val at = it.child("message").value.toString()
-
-
-                at*//*
-            }
-
-            true
-        }*/
-        //채팅 오면 바로 리셋되게 하고 싶은데 어떻게 해야될지 고민임 폰이 하나라 확인이 어려움 쳇엑티 처럼 하면 되나?
-
-        fnLastChatSet(reference,totalChatCount)
-    }
-
-    fun fnLastChatSet(reference:DatabaseReference,totalChatCount:Int){
         reference.limitToFirst(1).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -436,7 +424,15 @@ class MainViewModel @Inject constructor(
     fun fnSelectChat(position: Int){
         chatRoomFriendNickName.value = chatRoomProfileList.value!![position].nickname
         chatFriendImg.value = chatRoomProfileList.value!![position].imgURL//chatProfileList.value!![position]
-        fnChatStart(chatRoomProfileList.value!![position].email)
+        val friendEmail = chatRoomProfileList.value!![position].email
+        //friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName.value,profileNickname.value)
+        //불러와야함
+        viewModelScope.launch {
+            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName.value,profileNickname.value)
+            chatCount.value = chatInfo?.chatCount
+            chatRoomName.value = chatInfo?.chatRoomName
+            StartEvent(startChatActivity)
+        }
     }
 
     //ScheduleCalenderFragment
