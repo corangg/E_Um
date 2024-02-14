@@ -69,7 +69,7 @@ class ChatFragmentRepository(private val utils: Utils) {
                     if(firstemail == userEmail){
                         reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                val notCheckChatCount = totalChatCount - emil2CheckCount - 1
+                                val notCheckChatCount = totalChatCount - emil1CheckCount - 1
 
                                 fnChatRoomDataAdd(snapshot,notCheckChatCount,secondeemail,secondenickname,friendsProfileList)
                             }
@@ -78,7 +78,7 @@ class ChatFragmentRepository(private val utils: Utils) {
                     }else{
                         reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                val notCheckChatCount : Int = totalChatCount - emil1CheckCount - 1
+                                val notCheckChatCount : Int = totalChatCount - emil2CheckCount - 1
 
                                 fnChatRoomDataAdd(snapshot,notCheckChatCount,firstemail,firstnickname,friendsProfileList)
                             }

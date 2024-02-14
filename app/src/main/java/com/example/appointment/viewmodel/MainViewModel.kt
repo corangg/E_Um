@@ -3,11 +3,9 @@ package com.example.appointment.viewmodel
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import android.view.MenuItem
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appointment.R
@@ -22,7 +20,6 @@ import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
-import com.example.appointment.data.Utils.Companion.storage
 import com.example.appointment.model.AlarmTime
 import com.example.appointment.model.CarRouteRequest
 import com.example.appointment.model.ChatRoomData
@@ -37,10 +34,7 @@ import com.example.appointment.repository.FriendProfileFagmentRepository
 import com.example.appointment.repository.ProfileRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -67,6 +61,8 @@ class MainViewModel @Inject constructor(
     val profileAddress: MutableLiveData<String> = MutableLiveData("")
     val profileImgURL : MutableLiveData<String> = MutableLiveData("")
     var chatRoomName:MutableLiveData<String?> = MutableLiveData("")
+    val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
+    val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
 
     val editProfileData : MutableLiveData<Boolean> = MutableLiveData(false)
     val openGallery : MutableLiveData<Boolean> = MutableLiveData(false)
@@ -88,20 +84,18 @@ class MainViewModel @Inject constructor(
     val selectFriendProfile : MutableLiveData<ProfileDataModel> = MutableLiveData()
 
     val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
+    val chatRoomProfileList: MutableLiveData<MutableList<ChatRoomData>> = chatFragmentRepository.chatRoomProfileList
 
-
-
-
+    var chatRoomData = mutableListOf<ChatRoomData>()
 
     init {
         fetchPrivacyData()
         fetchProfileData()
-        //fnFriendRequestAlarm()
         fetchFriendRequestAlarm()
         fnFriendList()
     }
 
-    fun fnBottomNavigationItemSelected(item : MenuItem):Boolean{
+    fun bottomNavigationItemSelected(item : MenuItem):Boolean{
 
         when(item.itemId){
             R.id.navigation_profile->{
@@ -299,134 +293,16 @@ class MainViewModel @Inject constructor(
         StartEvent(friendDeleteSuccess)
     }
 
-
     //chatFragment
-    val chatRoomProfileList:MutableLiveData<MutableList<ChatRoomData>> = MutableLiveData()
-    var chatRoomData = mutableListOf<ChatRoomData>()
-    val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
-    val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
-    //val chatRoomProfileList: LiveData<MutableList<ChatRoomData>> = chatFragmentRepository.chatRoomProfileList
-
-
-    /*fun fnChatRoomList(){
-        chatFragmentRepository.fetchChatRoomList(userEmail, friendsProfileList)
-    }*/
-
-
 
     fun fnChatRoomList(){
-        val reference = database.getReference("chat")
-        var chatRoomSize : Int = 0
-        //chatFragmentRepository.fetchChatRoomList(friendsProfileList.value!!)
-
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    utils.readDataFRDAddChildEventListener(reference){
-                        val emailPath = it.key?: ""
-                        val replaceEmailPath = emailPath.replace("_",".")
-                        val splitArray = replaceEmailPath.split("||")
-                        val totalChatCount = it.childrenCount.toInt()
-
-                        if(chatRoomSize == 0){
-                            chatRoomProfileList.value = mutableListOf()
-                        }//원래는 밑이었는데 밑이면 아예 의미가 없을꺼 같은데? 이상하면 확인해 보자
-
-                        if(userEmail == splitArray[0]){//여기에서 쳇룸 네임
-                            fnLastChatSet(emailPath,totalChatCount)
-                            chatRoomSize = chatRoomSize + 1
-
-                        }else if(userEmail == splitArray[1]){
-                            fnLastChatSet(emailPath,totalChatCount)
-                            chatRoomSize = chatRoomSize + 1
-                        }
-                    }
-                } else {
-                    chatRoomProfileList.value = mutableListOf()
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-    }
-
-    fun fnLastChatSet(emailPath:String?,totalChatCount:Int){
-        val reference = database.getReference("chat").child(emailPath!!)
-        chatRoomData = mutableListOf()
-
-        reference.limitToFirst(1).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-
-                    val firstemail = snapshot.children.first().child("email1").value.toString()
-                    val secondeemail = snapshot.children.first().child("email2").value.toString()
-                    val firstnickname = snapshot.children.first().child("nickname1").value.toString()
-                    val secondenickname = snapshot.children.first().child("nickname2").value.toString()
-                    val emil1CheckCount = snapshot.children.first().child("email1MessageCheck").value.toString().toInt()
-                    val emil2CheckCount = snapshot.children.first().child("email2MessageCheck").value.toString().toInt()
-
-                    if(firstemail == userEmail){
-                        reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val notCheckChatCount = totalChatCount - emil2CheckCount - 1
-
-                                fnChatRoomDataAdd(snapshot,notCheckChatCount,secondeemail,secondenickname)
-                            }
-                            override fun onCancelled(error: DatabaseError) {}
-                        })
-                    }else{
-                        reference.limitToLast(1).addListenerForSingleValueEvent(object: ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val notCheckChatCount : Int = totalChatCount - emil1CheckCount - 1
-
-                                fnChatRoomDataAdd(snapshot,notCheckChatCount,firstemail,firstnickname)
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {}
-                        })
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    fun fnChatRoomDataAdd(snapshot: DataSnapshot, notCheckChatCount: Int, email: String, nickname: String){
-        val lastChatTime = snapshot.children.last().key?.toLong()
-        val lastMessage = snapshot.children.last().child("message").value.toString()
-
-        var imgURL :String = ""
-
-        for (i in 0..friendsProfileList.value!!.size-1)
-        {
-            if(nickname==friendsProfileList.value!![i].nickname){
-                imgURL = friendsProfileList.value!![i].imgURL
-            }
-        }
-
-        val chatRoomProfile = ChatRoomData(
-            email,
-            nickname,
-            lastMessage,
-            lastChatTime,
-            notCheckChatCount,
-            imgURL
-        )
-        chatRoomData.add(chatRoomProfile)
-        fnChatProfileArray()
-    }
-
-    fun fnChatProfileArray(){
-        val sortedList = chatRoomData.sortedByDescending { it.time }
-        chatRoomProfileList.value = sortedList.toMutableList()
+        chatFragmentRepository.fetchChatRoomList(friendsProfileList.value!!)
     }
 
     fun fnSelectChat(position: Int){
         chatRoomFriendNickName.value = chatRoomProfileList.value!![position].nickname
         chatFriendImg.value = chatRoomProfileList.value!![position].imgURL//chatProfileList.value!![position]
         val friendEmail = chatRoomProfileList.value!![position].email
-        //friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName.value,profileNickname.value)
-        //불러와야함
         viewModelScope.launch {
             val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName.value,profileNickname.value)
             chatCount.value = chatInfo?.chatCount
@@ -434,6 +310,12 @@ class MainViewModel @Inject constructor(
             StartEvent(startChatActivity)
         }
     }
+
+
+
+
+
+
 
     //ScheduleCalenderFragment
 

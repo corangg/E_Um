@@ -45,7 +45,7 @@
                 app:itemIconTint="@color/navigation_ic_color"
                 app:itemTextColor="@color/navigation_ic_color"
                 app:menu="@menu/navigation_menu"
-                app:onNavigationItemSelectedListener="@{(item)->viewmodel.fnBottomNavigationItemSelected(item)}"/>
+                app:onNavigationItemSelectedListener="@{(item)->viewmodel.bottomNavigationItemSelected(item)}"/>
         </RelativeLayout>
 
     </LinearLayout>
