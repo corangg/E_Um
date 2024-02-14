@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import com.example.appointment.R
@@ -35,10 +36,21 @@ class Schedule_Fragment : AdapterFragment<FragmentScheduleBinding>(), ScheduleLi
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
         mainViewmodel.startingPointGet()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if(binding.layoutRefuseCheck.visibility == View.VISIBLE){
+                binding.layoutRefuseCheck.visibility = View.GONE
+            }else if(binding.layoutLongClickAction.visibility == View.VISIBLE){
+                binding.layoutLongClickAction.visibility = View.GONE
+            }else{
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
     }
 
     override fun onResume() {
-        mainViewmodel.fnScheduleListData()
+        mainViewmodel.updateScheduleList()
         super.onResume()
     }
 
@@ -49,18 +61,18 @@ class Schedule_Fragment : AdapterFragment<FragmentScheduleBinding>(), ScheduleLi
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_schedule_alarm->{
-            mainViewmodel.fnSelectScheduleAlarmItem()
+            mainViewmodel.selectScheduleAlarmItem()
             true
         }
         else-> super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(position: Int, status: String) {
-        mainViewmodel.fnScheduleClick(position, status)
+        mainViewmodel.scheduleClick(position, status)
     }
 
     override fun onItemLongClick(position: Int) {
-        mainViewmodel.fnScheduleLongClick(position)
+        mainViewmodel.scheduleLongClick(position)
     }
 
     override fun setObserve(){

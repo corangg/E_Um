@@ -2,7 +2,7 @@ package com.example.appointment.data
 
 import android.icu.text.SimpleDateFormat
 import android.util.Log
-import com.example.appointment.model.AlarmTime
+import com.example.appointment.model.YYYYMMDDhhmm
 import com.example.appointment.model.ScheduleTime
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -10,14 +10,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.checkerframework.checker.units.qual.mm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -107,7 +105,7 @@ class Utils {
         return time
     }//시간하고 분 스트링으로 붙이기
 
-    fun fnAlarmYYYYMMDDhhmm(alarmTime: AlarmTime):String{
+    fun fnAlarmYYYYMMDDhhmm(alarmTime: YYYYMMDDhhmm):String{
         var alarmYYYYMMDDhhmm : String = ""
 
         var YYYY = alarmTime.YYYY.toString()

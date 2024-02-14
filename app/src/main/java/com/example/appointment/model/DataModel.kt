@@ -1,7 +1,5 @@
 package com.example.appointment.model
 
-import android.os.Parcel
-import android.os.Parcelable
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.annotations.SerializedName
@@ -88,12 +86,24 @@ data class ScheduleTime(
     val MM : String,
 )
 
-data class AlarmTime(
-    val YYYY: Int,
-    val MM: Int,
-    val DD: Int,
-    val hh: Int,
-    val mm: Int,
+data class ScheduleDate(
+    val YYYY: String,
+    val MM: String,
+    val DD: String,
+)
+
+data class ScheduleDateTime(
+    val date : ScheduleDate,
+    val time : ScheduleTime,
+    val ampm : Boolean
+)
+
+data class YYYYMMDDhhmm(
+    val YYYY: Int = 0,
+    val MM: Int = 0,
+    val DD: Int = 0,
+    val hh: Int = 0,
+    val mm: Int = 0,
 )
 
 data class StartCheckAlarmData(
@@ -139,7 +149,6 @@ data class GeocodingRespone(
 data class AddressXY(
     val x: String,
     val y: String
-
 )
 
 //NaverReverseGeocode

@@ -5,10 +5,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
-import com.example.appointment.model.AlarmTime
+import com.example.appointment.model.YYYYMMDDhhmm
 
 object AlarmUtil {
-    fun settingAlarm(context: Context,intent: Intent, requestCode: Int, alarmTime: AlarmTime, checkAlarmTime:Int){
+    fun settingAlarm(context: Context, intent: Intent, requestCode: Int, alarmTime: YYYYMMDDhhmm, checkAlarmTime:Int){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)

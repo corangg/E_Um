@@ -83,7 +83,7 @@
                         android:text="확인"
                         android:textStyle="bold"
 
-                        android:onClick="@{()->viewmodel.fnScheduleRefuseOk(viewmodel.scheduleRefuseOkView)}"/>
+                        android:onClick="@{()->viewmodel.scheduleRefuseOk(viewmodel.scheduleRefuseOkView)}"/>
 
                 </LinearLayout>
 
@@ -123,7 +123,7 @@
                             android:layout_weight="1"
                             android:text="제거"
                             android:textStyle="bold"
-                            android:onClick="@{()->viewmodel.fnScheduleListDelete(true)}"/>
+                            android:onClick="@{()->viewmodel.scheduleDelete(true)}"/>
                         <androidx.appcompat.widget.AppCompatButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                             android:layout_weight="1"
                             android:text="취소"
                             android:textStyle="bold"
-                            android:onClick="@{()->viewmodel.fnScheduleListDelete(false)}"/>
+                            android:onClick="@{()->viewmodel.scheduleDelete(false)}"/>
                     </LinearLayout>
                 </LinearLayout>
 

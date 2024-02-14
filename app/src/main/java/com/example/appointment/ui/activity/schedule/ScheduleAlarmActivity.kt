@@ -24,12 +24,12 @@ class ScheduleAlarmActivity : AdapterActivity<ActivityScheduleAlarmBinding>(), O
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mainViewmodel.fnScheduleListData()
+        mainViewmodel.updateScheduleList()
     }
 
     override fun onItemClick(position: Int) {
 
-        mainViewmodel.fnScheduleAcceptClick(position,intent)
+        mainViewmodel.scheduleAcceptClick(position,intent)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {

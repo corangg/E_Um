@@ -368,7 +368,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/btn_theme"
             android:textColor="@color/themecolor"
-            android:onClick="@{()->viewmodel.fnScheduleEditSuccess()}" />
+            android:onClick="@{()->viewmodel.scheduleEditSuccess()}" />
 
     </LinearLayout>
 </layout>

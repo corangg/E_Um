@@ -1,27 +1,19 @@
 package com.example.appointment.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.StartEvent
-import com.example.appointment.apiservice.APIData
-import com.example.appointment.apiservice.NaverGeocode
-import com.example.appointment.apiservice.TMapPublicTransportRoute
 import com.example.appointment.data.Utils
-import com.example.appointment.model.AlarmTime
+import com.example.appointment.model.YYYYMMDDhhmm
+import com.example.appointment.model.ScheduleDate
 import com.example.appointment.model.ScheduleTime
-import com.example.appointment.model.TransitRouteRequest
 import com.google.firebase.database.DatabaseReference
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import kotlinx.coroutines.tasks.await
-import org.checkerframework.checker.units.qual.min
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ScheduleSetFragmentRepository(private val utils: Utils) {
 
     val scheduleDate : MutableLiveData<String> = MutableLiveData("")
-    val scheduleYYYYMMDD : MutableLiveData<String> = MutableLiveData("")
+    //val scheduleYYYYMMDD : MutableLiveData<String> = MutableLiveData("")
 
-    fun scheduleSet(date: CalendarDay){
+    fun scheduleSet(date: CalendarDay):ScheduleDate{
         val year = date.year
         val month = date.month
         val day = date.day
@@ -39,13 +31,13 @@ class ScheduleSetFragmentRepository(private val utils: Utils) {
         }else{
             dayString = day.toString()
         }
+        val scheduleDate = ScheduleDate(year.toString(), monthString, dayString)
 
-        scheduleDate.value = year.toString() + "년 "+ monthString + "월 " + dayString + "일"
-        scheduleYYYYMMDD.value = year.toString() + monthString + dayString
+        return scheduleDate
     }
 
 
-    fun dttmSet(ampm:Boolean?, scheduleTime: ScheduleTime):String{
+    fun dttmSet(ampm:Boolean?, scheduleTime: ScheduleTime, date : String):String{
         var hourint = 0
 
         if(ampm == true){
@@ -63,16 +55,16 @@ class ScheduleSetFragmentRepository(private val utils: Utils) {
         }
 
         val scheduleTimeData = ScheduleTime(hourint.toString(), scheduleTime.MM)
-        val Dttm :String= scheduleYYYYMMDD.value!! + utils.fnTimeSet(scheduleTimeData)
+        val Dttm :String = date + utils.fnTimeSet(scheduleTimeData)
         return Dttm
     }
 
-    fun alarmTimeSet(ampm:Boolean, scheduleTime: ScheduleTime, scheduleAlarmTime: ScheduleTime, transportTime:Int): AlarmTime {
-        var alarmTime : AlarmTime
+    fun alarmTimeSet(ampm:Boolean, scheduleTime: ScheduleTime, scheduleAlarmTime: ScheduleTime, transportTime:Int, date: String): YYYYMMDDhhmm {
+        var alarmTime : YYYYMMDDhhmm
 
-        var YYYY : Int = scheduleYYYYMMDD.value!!.substring(0,4).toInt()
-        var MM : Int = scheduleYYYYMMDD.value!!.substring(4,6).toInt()
-        var DD : Int = scheduleYYYYMMDD.value!!.substring(6,8).toInt()
+        var YYYY : Int = date.substring(0,4).toInt()
+        var MM : Int = date.substring(4,6).toInt()
+        var DD : Int = date.substring(6,8).toInt()
         var hh : Int = 0
         var mm : Int = 0
         val transportMin = transportTime.div(60)
@@ -135,26 +127,14 @@ class ScheduleSetFragmentRepository(private val utils: Utils) {
             YYYY = YYYY - 1
         }
 
-        alarmTime = AlarmTime(YYYY,MM,DD, hh, mm)
+        alarmTime = YYYYMMDDhhmm(YYYY, MM, DD, hh, mm)
 
         return alarmTime
     }
-
 
     fun sendScheduleRequest(dataMap:Map<String,*>,reference: DatabaseReference, onSuccess: (Boolean) -> Unit){
         reference.setValue(dataMap).addOnSuccessListener {
             onSuccess(true)
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 }
