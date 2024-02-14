@@ -8,8 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.appointment.ui.adapter.FriendListAdapter
 import com.example.appointment.R
@@ -19,7 +17,6 @@ import com.example.appointment.ui.activity.friend.FriendAlarmActivity
 import com.example.appointment.databinding.FragmentFriendBinding
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
-import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewModel
 
 class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickListener{
@@ -47,7 +44,7 @@ class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickLis
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mainViewmodel.fnHandleActivityResult(requestCode, resultCode, data)
+        mainViewmodel.handleActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -57,18 +54,18 @@ class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickLis
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =when(item.itemId){
         R.id.menu_friend_add->{
-            mainViewmodel.fnSelectFriendAddItem()
+            mainViewmodel.selectFriendAddItem()
             true
         }
         R.id.menu_friend_alarm->{
-            mainViewmodel.fnSelectFriendAlarmItem()
+            mainViewmodel.selectFriendAlarmItem()
             true
         }
         else-> super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(position: Int) {
-        mainViewmodel.fnSelectFriend(position)
+        mainViewmodel.selectFriend(position)
     }
 
     override fun setObserve(){

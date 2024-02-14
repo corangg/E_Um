@@ -68,7 +68,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/btn_round_gray"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnScheduleAmPmSet(true)}"/>
+                android:onClick="@{()->viewmodel.scheduleAmPmSet(true)}"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="60dp"
@@ -80,7 +80,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/btn_round_gray"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnScheduleAmPmSet(false)}"/>
+                android:onClick="@{()->viewmodel.scheduleAmPmSet(false)}"/>
          </LinearLayout>
 
 
@@ -191,7 +191,7 @@
                 android:textSize="20dp"
                 android:text="@={viewmodel.meetingPlaceAddress}"
                 android:textColor="@color/themecolor"
-                android:onClick="@{()->viewmodel.fnStartScheduleMapActivity(viewmodel.startScheduleMapActivity)}"/>
+                android:onClick="@{()->viewmodel.startScheduleMapActivity(viewmodel.startScheduleMapActivity)}"/>
          </com.google.android.material.textfield.TextInputLayout>
       </LinearLayout>
 
@@ -206,7 +206,7 @@
              android:layout_height="wrap_content"
              android:background="@drawable/btn_round"
              android:orientation="vertical"
-             android:onClick="@{()->viewmodel.fnPublicTransportTimeSet()}">
+             android:onClick="@{()->viewmodel.publicTransportTimeGet()}">
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -233,7 +233,7 @@
              android:layout_marginLeft="10dp"
              android:background="@drawable/btn_round"
              android:orientation="vertical"
-             android:onClick="@{()->viewmodel.fnCarTimeSet()}"
+             android:onClick="@{()->viewmodel.carTimeGet()}"
              >
             <ImageView
                 android:layout_width="40dp"
@@ -261,7 +261,7 @@
              android:layout_marginLeft="10dp"
              android:background="@drawable/btn_round"
              android:orientation="vertical"
-             android:onClick="@{()->viewmodel.fnWalkingTimeSet()}">
+             android:onClick="@{()->viewmodel.walkingTimeGet()}">
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -353,7 +353,7 @@
           android:layout_marginTop="40dp"
           android:background="@drawable/btn_theme"
           android:textColor="@color/themecolor"
-          android:onClick="@{()->viewmodel.fnAppointmentRequest()}"
+          android:onClick="@{()->viewmodel.setScheduleRequestData()}"
           />
    </LinearLayout>
 </layout>

@@ -8,5 +8,5 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
     val utils = Utils()
 
     val userEmail = Utils.auth.currentUser?.email ?: ""
-    val userEmailReplace = userEmail!!.replace(".", "_")
+    val userEmailReplace = userEmail.replace(".", "_")
 }

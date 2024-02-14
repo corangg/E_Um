@@ -3,17 +3,13 @@ package com.example.appointment.ui.fragment.chat
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
 import com.example.appointment.ui.adapter.ChatListAdapter
 import com.example.appointment.ui.activity.chat.ChatActivity
 import com.example.appointment.databinding.FragmentChatBinding
-import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
-import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewModel
 
 
@@ -31,11 +27,11 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
     }
 
     override fun onItemClick(position: Int) {
-        mainViewmodel.fnSelectChat(position)
+        mainViewmodel.selectChat(position)
     }
 
     override fun onResume() {
-        mainViewmodel.fnChatRoomList()
+        mainViewmodel.getChatRoomList()
         super.onResume()
     }
 
@@ -61,7 +57,7 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mainViewmodel.fnHandleActivityResult(requestCode, resultCode, data)
+        mainViewmodel.handleActivityResult(requestCode, resultCode, data)
     }
 
 }

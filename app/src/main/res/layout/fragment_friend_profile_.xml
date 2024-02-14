@@ -71,7 +71,7 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{()->viewmodel.fnChatStart(viewmodel.selectFriendProfile.email)}">
+                android:onClick="@{()->viewmodel.chatStart(viewmodel.selectFriendProfile.email)}">
 
                 <ImageView
                     android:id="@+id/ic_chat"
@@ -99,7 +99,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{()->viewmodel.fnStartFragmentScheduleSet(viewmodel.startScheduleCalendarFragment)}"
+                android:onClick="@{()->viewmodel.scheduleSetStart(viewmodel.startScheduleCalendarFragment)}"
                 android:orientation="vertical">
 
                 <ImageView
@@ -128,7 +128,7 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{()->viewmodel.fnFriendDelete()}">
+                android:onClick="@{()->viewmodel.friendDelete()}">
 
                 <ImageView
                     android:layout_width="20dp"

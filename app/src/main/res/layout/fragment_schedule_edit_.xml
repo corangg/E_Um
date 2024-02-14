@@ -211,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_round"
                 android:orientation="vertical"
-                android:onClick="@{()->viewmodel.fnPublicTransportTimeSet()}">
+                android:onClick="@{()->viewmodel.publicTransportTimeGet()}">
 
                 <ImageView
                     android:layout_width="40dp"
@@ -241,7 +241,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/btn_round"
                 android:orientation="vertical"
-                android:onClick="@{()->viewmodel.fnCarTimeSet()}">
+                android:onClick="@{()->viewmodel.carTimeGet()}">
 
                 <ImageView
                     android:layout_width="40dp"
@@ -271,7 +271,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/btn_round"
                 android:orientation="vertical"
-                android:onClick="@{()->viewmodel.fnWalkingTimeSet()}">
+                android:onClick="@{()->viewmodel.walkingTimeGet()}">
 
                 <ImageView
                     android:layout_width="40dp"

@@ -46,20 +46,13 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
             ToastMessage.transportCheck(it,requireContext())
         }
 
-        mainViewmodel.carCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
-
-        mainViewmodel.walkCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
         mainViewmodel.alarmSet.observe(viewLifecycleOwner){
             if (it){
                 val startCheckData = StartCheckAlarmData(
                     mainViewmodel.startX.value!!,
                     mainViewmodel.startY.value!!,
                     mainViewmodel.scheduleEmailPath.value!!)
-                setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
+                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)
             }
         }
 
@@ -68,7 +61,7 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
+                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.scheduleAlarmTime)
 
                 Toast.makeText(activity,"약속을 수락하셨습니다.",Toast.LENGTH_SHORT).show()
             }

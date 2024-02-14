@@ -19,7 +19,7 @@ class ScheduleCalendar_Fragment : BaseFragment<FragmentSchduleCalendarBinding>()
         binding.calendar.setOnClickListener {
 
         }
-        mainViewmodel.fnScheduleSetDataReset()
+        mainViewmodel.scheduleSetDataReset()
         binding.viewCalendar.setOnDateChangedListener { widget, date, selected ->
             mainViewmodel.fnScheduleDateSet(date)
         }

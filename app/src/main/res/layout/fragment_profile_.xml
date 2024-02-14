@@ -51,7 +51,7 @@
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_basic_profile"
                             android:id="@+id/img_Profile"
-                            android:onClick="@{()->viewmodel.fnOpenGallery(viewmodel.openGallery)}"/>
+                            android:onClick="@{()->viewmodel.profileImgEdit(viewmodel.openGallery)}"/>
                     </androidx.cardview.widget.CardView>
 
                     <RelativeLayout
@@ -84,7 +84,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="30dp"
                     android:paddingTop="40dp"
-                    android:onClick="@{()->viewmodel.fnNickNameEdit(viewmodel.nickNameEditActivityStart)}">
+                    android:onClick="@{()->viewmodel.nickNameEdit(viewmodel.nickNameEditActivityStart)}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -216,7 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/layout_password"
-                android:onClick="@{()->viewmodel.fnPasswordEdit(viewmodel.passwordEdit)}"
+                android:onClick="@{()->viewmodel.passwordEdit(viewmodel.passwordEdit)}"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/layout_address"
-                android:onClick="@{()->viewmodel.fnProfileAddressEdit(viewmodel.addressEditActivityStart)}">
+                android:onClick="@{()->viewmodel.profileAddressEdit(viewmodel.addressEditActivityStart)}">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -316,7 +316,7 @@
                 android:background="#00ff0000"
                 android:text="로그아웃"
                 android:textSize="16dp"
-                android:onClick="@{()->viewmodel.fnLogout()}"/>
+                android:onClick="@{()->viewmodel.logout()}"/>
 
 
             <!--<Button

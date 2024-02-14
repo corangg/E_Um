@@ -31,7 +31,7 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
         setMaxNumber(binding.editAlarmMM,59)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            mainViewmodel.fnScheduleSetDataReset()
+            mainViewmodel.scheduleSetDataReset()
             if (!isHandlingBackPressed()) {
                 isEnabled = false
                 requireActivity().onBackPressed()
@@ -45,7 +45,7 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mainViewmodel.fnHandleActivityResult(requestCode, resultCode, data)
+        mainViewmodel.handleActivityResult(requestCode, resultCode, data)
     }
 
     override fun setObserve(){
@@ -76,14 +76,6 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
             ToastMessage.transportCheck(it,requireContext())
         }
 
-        mainViewmodel.carCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
-
-        mainViewmodel.walkCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
-
         mainViewmodel.meetingTimeOver.observe(viewLifecycleOwner){
             if(it){
                 ToastMessage.overdue(requireContext())
@@ -95,14 +87,14 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
                     mainViewmodel.startX.value!!,
                     mainViewmodel.startY.value!!,
                     mainViewmodel.scheduleEmailPath.value!!)
-                setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
+                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)//출발인듯//고쳐두긴 했는데 이상하면 다른2개랑 같이 바꿔야할듯
             }
         }
 
         mainViewmodel.appointmentRequestSuccess.observe(viewLifecycleOwner){
             if(it){
                 fragmentClose()
-                setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
+                setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.scheduleAlarmTime)
                 Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.value!!.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()
             }
         }

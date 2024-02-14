@@ -3,6 +3,7 @@ package com.example.appointment.data
 import android.icu.text.SimpleDateFormat
 import android.util.Log
 import com.example.appointment.model.AlarmTime
+import com.example.appointment.model.ScheduleTime
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -16,6 +17,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.checkerframework.checker.units.qual.mm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,41 +69,39 @@ class Utils {
         return  HM
     }//이동시간 초를 시간 분 텍스트로
 
-    fun fnTimeSet(hh:String,mm:String):String{
+    fun fnTimeSet(/*hh:String,mm:String*/scheduleTime: ScheduleTime):String{
         var hour : String = ""
         var min : String = ""
         var time : String = ""
-        if(hh == "" && mm == ""){
+        if(scheduleTime.HH == "" && scheduleTime.MM == ""){
             hour = "00"
             min = "00"
-        }else if(hh == "" && mm != ""){
+        }else if(scheduleTime.HH == "" && scheduleTime.MM != ""){
             hour = "00"
-            if(mm.toInt()<10){
-                min = "0" + mm
+            if(scheduleTime.MM.toInt()<10){
+                min = "0" + scheduleTime.MM
             }else{
-                min = mm
+                min = scheduleTime.MM
             }
-        }else if(hh != "" && mm == ""){
-            if(hh.toInt()<10){
-                hour = "0" + hh.toInt().toString()
+        }else if(scheduleTime.HH != "" && scheduleTime.MM == ""){
+            if(scheduleTime.HH.toInt()<10){
+                hour = "0" + scheduleTime.HH.toInt().toString()
             }else{
-                hour = hh
+                hour = scheduleTime.HH
             }
             min = "00"
-        }else if(hh != "" && mm != ""){
-            if(hh.toInt()<10){
-                hour = "0" + hh.toInt().toString()
+        }else if(scheduleTime.HH != "" && scheduleTime.MM != ""){
+            if(scheduleTime.HH.toInt()<10){
+                hour = "0" + scheduleTime.HH.toInt().toString()
             }else{
-                hour = hh
+                hour = scheduleTime.HH
             }
-            if(mm.toInt()<10){
-                min = "0" + mm.toInt().toString()
+            if(scheduleTime.MM.toInt()<10){
+                min = "0" + scheduleTime.MM.toInt().toString()
             }else{
-                min = mm
+                min = scheduleTime.MM
             }
         }
-
-
 
         time = hour + min
         return time

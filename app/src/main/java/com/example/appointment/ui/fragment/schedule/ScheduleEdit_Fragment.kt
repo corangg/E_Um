@@ -45,14 +45,6 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
             ToastMessage.transportCheck(it,requireContext())
         }
 
-        mainViewmodel.carCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
-
-        mainViewmodel.walkCheck.observe(viewLifecycleOwner){
-            ToastMessage.transportCheck(it,requireContext())
-        }
-
         mainViewmodel.meetingTimeOver.observe(viewLifecycleOwner){
             if(it){
                 ToastMessage.overdue(requireContext())
@@ -65,13 +57,13 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
                     mainViewmodel.startX.value!!,
                     mainViewmodel.startY.value!!,
                     mainViewmodel.scheduleEmailPath.value!!)
-                setStartAlarm(startCheckData,mainViewmodel.fnAlarmTimeSet("0","0"))
+                setStartAlarm(startCheckData, mainViewmodel.scheduleStartAlarmTime)
             }
         }
 
         mainViewmodel.scheduleEditSuccess.observe(viewLifecycleOwner){
             if (it){
-                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.fnAlarmTimeSet(mainViewmodel.scheduleAlarmHH.value!!, mainViewmodel.scheduleAlarmMM.value!!))
+                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.scheduleAlarmTime)
 
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)

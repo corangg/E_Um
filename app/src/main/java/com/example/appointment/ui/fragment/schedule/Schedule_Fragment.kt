@@ -8,16 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ScheduleListAdapter
 import com.example.appointment.ui.activity.schedule.ScheduleAlarmActivity
 import com.example.appointment.databinding.FragmentScheduleBinding
-import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.ui.adapter.OnItemLongClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
-import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewModel
 
 
@@ -38,7 +34,7 @@ class Schedule_Fragment : AdapterFragment<FragmentScheduleBinding>(), ScheduleLi
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        mainViewmodel.fnStartingPointSet()
+        mainViewmodel.startingPointGet()
     }
 
     override fun onResume() {

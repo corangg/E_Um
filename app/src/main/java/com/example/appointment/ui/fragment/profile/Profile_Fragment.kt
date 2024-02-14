@@ -12,7 +12,6 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
@@ -21,11 +20,9 @@ import com.example.appointment.ui.activity.profile.AddressEditActivity
 import com.example.appointment.ui.activity.profile.NickNameActivity
 import com.example.appointment.ui.activity.profile.PasswordEditActivity
 import com.example.appointment.databinding.FragmentProfileBinding
-import com.example.appointment.repository.ProfileRepository
 import com.example.appointment.ui.activity.login.LoginActivity
 import com.example.appointment.ui.fragment.BaseFragment
 import com.example.appointment.viewmodel.MainViewModel
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -68,7 +65,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
 
         R.id.menu_profile_edit -> {
-            profileViewModel.fnProfileEditMode(photoUri)
+            profileViewModel.changeProfileEditMode(photoUri)
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -89,7 +86,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        profileViewModel.fnHandleActivityResult(requestCode, resultCode, data)
+        profileViewModel.handleActivityResult(requestCode, resultCode, data)
     }
 
     override fun setObserve(){

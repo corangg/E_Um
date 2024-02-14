@@ -83,6 +83,11 @@ data class ScheduleSet(
     val myAlarmTime : String
 )
 
+data class ScheduleTime(
+    val HH : String,
+    val MM : String,
+)
+
 data class AlarmTime(
     val YYYY: Int,
     val MM: Int,
