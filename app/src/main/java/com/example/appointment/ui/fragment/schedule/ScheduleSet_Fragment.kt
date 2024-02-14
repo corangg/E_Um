@@ -84,9 +84,9 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
         mainViewmodel.alarmSet.observe(viewLifecycleOwner){
             if (it){
                 val startCheckData = StartCheckAlarmData(
-                    mainViewmodel.startX.value!!,
-                    mainViewmodel.startY.value!!,
-                    mainViewmodel.scheduleEmailPath.value!!)
+                    mainViewmodel.startX,
+                    mainViewmodel.startY,
+                    mainViewmodel.scheduleEmailPath)
                 setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)//출발인듯//고쳐두긴 했는데 이상하면 다른2개랑 같이 바꿔야할듯
             }
         }
@@ -94,8 +94,8 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
         mainViewmodel.appointmentRequestSuccess.observe(viewLifecycleOwner){
             if(it){
                 fragmentClose()
-                setAlarm(mainViewmodel.selectFriendProfile.value!!.nickname,mainViewmodel.scheduleAlarmTime)
-                Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.value!!.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()
+                setAlarm(mainViewmodel.selectFriendProfile.nickname,mainViewmodel.scheduleAlarmTime)
+                Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()
             }
         }
     }

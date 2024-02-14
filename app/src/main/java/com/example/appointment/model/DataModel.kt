@@ -23,11 +23,11 @@ data class AddressData(
 )
 
 data class ProfileDataModel(
-    var email : String,
-    var nickname: String,
-    var statusmessage: String,
-    var phoneNumber: String,
-    var imgURL: String
+    var email : String = "",
+    var nickname: String = "",
+    var statusmessage: String = "",
+    var phoneNumber: String = "",
+    var imgURL: String = ""
 )
 
 data class ChatInfo(

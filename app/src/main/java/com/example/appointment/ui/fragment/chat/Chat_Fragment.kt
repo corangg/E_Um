@@ -35,6 +35,11 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
         super.onResume()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mainViewmodel.handleActivityResult(requestCode, resultCode, data)
+    }
+
     override fun setObserve(){
         mainViewmodel.chatRoomProfileList.observe(viewLifecycleOwner){
             setAdapter(binding.recycleChat,ChatListAdapter(this),it,true)
@@ -44,20 +49,14 @@ class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListene
             if(it){
                 val intent: Intent = Intent(requireContext(), ChatActivity::class.java)
 
-                intent.putExtra("friendnickname",mainViewmodel.chatRoomFriendNickName.value)
-                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)//
+                intent.putExtra("friendnickname",mainViewmodel.chatRoomFriendNickName)
+                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName)//
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
-                intent.putExtra("friendProfileURL",mainViewmodel.chatFriendImg.value)
-                intent.putExtra("chatCount",mainViewmodel.chatCount.value)//
+                intent.putExtra("friendProfileURL",mainViewmodel.chatFriendImg)
+                intent.putExtra("chatCount",mainViewmodel.chatCount)
 
                 startActivityForResult(intent, RequestCode.CHAT_REQUEST_CODE)
             }
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        mainViewmodel.handleActivityResult(requestCode, resultCode, data)
-    }
-
 }

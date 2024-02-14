@@ -21,8 +21,8 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
     override fun initializeUI() {
         binding.viewmodel = mainViewmodel
 
-        if(mainViewmodel.selectFriendProfile.value!!.imgURL != ""){
-            Glide.with(this).load(mainViewmodel.selectFriendProfile.value!!.imgURL).into(binding.imgProfile)
+        if(mainViewmodel.selectFriendProfile.imgURL != ""){
+            Glide.with(this).load(mainViewmodel.selectFriendProfile.imgURL).into(binding.imgProfile)
         }
     }
 
@@ -32,11 +32,11 @@ class FriendProfile_Fragment : BaseFragment<FragmentFriendProfileBinding>() {
             if(it){
                 val intent:Intent = Intent(requireContext(), ChatActivity::class.java)
 
-                intent.putExtra("friendnickname",mainViewmodel.selectFriendProfile.value!!.nickname)
-                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName.value)//rb@dlwp
+                intent.putExtra("friendnickname",mainViewmodel.selectFriendProfile.nickname)
+                intent.putExtra("chatRoomName",mainViewmodel.chatRoomName)
                 intent.putExtra("nickname",mainViewmodel.profileNickname.value)
-                intent.putExtra("friendProfileURL",mainViewmodel.selectFriendProfile.value!!.imgURL)
-                intent.putExtra("chatCount",mainViewmodel.chatCount.value)//13
+                intent.putExtra("friendProfileURL",mainViewmodel.selectFriendProfile.imgURL)
+                intent.putExtra("chatCount",mainViewmodel.chatCount)
 
                 startActivity(intent)
             }

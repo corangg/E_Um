@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
     private val scheduleSetFragmentRepository: ScheduleSetFragmentRepository,
 ) : BaseViewModel(application) {
 
-    var selectFragment : MutableLiveData<String> = MutableLiveData("")
+    val selectFragment : MutableLiveData<String> = MutableLiveData("")
     val profileNickname: MutableLiveData<String> = MutableLiveData("")
     val profileStatusMessage: MutableLiveData<String> = MutableLiveData("")
     val profileName: MutableLiveData<String> = MutableLiveData("")
@@ -63,37 +63,88 @@ class MainViewModel @Inject constructor(
     val profileEmail: MutableLiveData<String> = MutableLiveData("")
     val profilePassword: MutableLiveData<String> = MutableLiveData("")
     val profileAddress: MutableLiveData<String> = MutableLiveData("")
-    val profileImgURL : MutableLiveData<String> = MutableLiveData("")
-    var chatRoomName:MutableLiveData<String?> = MutableLiveData("")
-    val chatRoomFriendNickName: MutableLiveData<String> = MutableLiveData("")
-    val chatFriendImg: MutableLiveData<String> = MutableLiveData("")
+    val scheduleHH : MutableLiveData<String> = MutableLiveData("")
+    val scheduleMM : MutableLiveData<String> = MutableLiveData("")
+    val meetingPlaceAddress :MutableLiveData<String> = MutableLiveData("")
+    val publicTransportTime :MutableLiveData<String> = MutableLiveData("")
+    val carTime :MutableLiveData<String> = MutableLiveData("")
+    val walkTime : MutableLiveData<String> = MutableLiveData("")
+    val scheduleAlarmHH : MutableLiveData<String> = MutableLiveData("")
+    val scheduleAlarmMM : MutableLiveData<String> = MutableLiveData("")
+    val scheduleDate : MutableLiveData<String> = scheduleSetFragmentRepository.scheduleDate
 
     val editProfileData : MutableLiveData<Boolean> = MutableLiveData(false)
     val openGallery : MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageUpload : MutableLiveData<Boolean> = MutableLiveData(false)
     val nickNameEditActivityStart : MutableLiveData<Boolean> = MutableLiveData(false)
     val passwordEdit : MutableLiveData<Boolean> = MutableLiveData(false)
     val addressEditActivityStart : MutableLiveData<Boolean> = MutableLiveData(false)
     val logOutSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
-    val imageUpload : MutableLiveData<Boolean> = MutableLiveData(false)
     val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
     val startFriendAddActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
-    var startChatActivity : MutableLiveData<Boolean> = MutableLiveData(false)
-    var startScheduleCalendarFragment : MutableLiveData<Boolean> = MutableLiveData(false)
-    var friendDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startChatActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val startScheduleCalendarFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    val friendDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
     val startScheduleSetFragment : MutableLiveData<Boolean> = MutableLiveData(false)
+    val alarmSet : MutableLiveData<Boolean> = MutableLiveData(false)
+    val scheduleAmPmSet : MutableLiveData<Boolean> = MutableLiveData(true)
+    val startScheduleMapActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    val meetingTimeOver : MutableLiveData<Boolean> = MutableLiveData()
+    val appointmentRequestSuccess : MutableLiveData<Boolean> = MutableLiveData()
 
-    var chatCount : MutableLiveData<Int?> = MutableLiveData(0)
-
-    val selectFriendProfile : MutableLiveData<ProfileDataModel> = MutableLiveData()
+    val selectTransport : MutableLiveData<Int> = MutableLiveData(0)
+    val transportCheck : MutableLiveData<Int> = MutableLiveData(-1)
 
     val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
     val chatRoomProfileList: MutableLiveData<MutableList<ChatRoomData>> = chatFragmentRepository.chatRoomProfileList
-    val scheduleDate : MutableLiveData<String> = scheduleSetFragmentRepository.scheduleDate
-    val scheduleYYYYMMDD : MutableLiveData<String> = scheduleSetFragmentRepository.scheduleYYYYMMDD
 
+    var profileImgURL : String = ""
+    var chatRoomFriendNickName : String = ""
+    var chatRoomName : String = ""
+    var chatFriendImg : String = ""
+    var startX:String = ""
+    var startY:String = ""
+    var endX:String = ""
+    var endY:String = ""
+    var selectScheduleNickname : String = ""
+    var scheduleEmailPath : String =""
+    var kewordName : String = ""
+
+    var chatCount : Int = 0
+    var transportTime : Int = -1
+
+    var selectFriendProfile = ProfileDataModel()
     var chatRoomData = mutableListOf<ChatRoomData>()
+
+    var scheduleAlarmTime : AlarmTime = AlarmTime(0,0,0,0,0)
+    var scheduleStartAlarmTime : AlarmTime = AlarmTime(0,0,0,0,0)
+
+
+
+
+    val scheduleYYYYMMDD : MutableLiveData<String> = scheduleSetFragmentRepository.scheduleYYYYMMDD//이거 여기 안될거같은데?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -166,9 +217,9 @@ class MainViewModel @Inject constructor(
                 if(resultCode == Activity.RESULT_OK){
                     data?.let {
                         meetingPlaceAddress.value = it.getStringExtra("address")
-                        endX.value = it.getStringExtra("endX")
-                        endY.value = it.getStringExtra("endY")
-                        kewordName.value = it.getStringExtra("keywordName")
+                        endX = it.getStringExtra("endX")!!
+                        endY = it.getStringExtra("endY")!!
+                        kewordName = it.getStringExtra("keywordName")!!
                     }
                 }
             }
@@ -212,12 +263,12 @@ class MainViewModel @Inject constructor(
             try {
                 val dataMap = profileRepository.getPrivacyData()
                 if (dataMap != null) {
-                    profileEmail.value = dataMap?.get("email") as? String
-                    profileName.value = dataMap?.get("name") as? String
-                    profileNickname.value = dataMap?.get("nickname") as? String
-                    profilePhone.value = dataMap?.get("phoneNumber") as? String
-                    profilePassword.value = dataMap?.get("password") as? String
-                    profileAddress.value = dataMap?.get("zonecode") as? String + "," + dataMap?.get("address") as? String
+                    profileEmail.value = dataMap.get("email") as? String
+                    profileName.value = dataMap.get("name") as? String
+                    profileNickname.value = dataMap.get("nickname") as? String
+                    profilePhone.value = dataMap.get("phoneNumber") as? String
+                    profilePassword.value = dataMap.get("password") as? String
+                    profileAddress.value = dataMap.get("zonecode") as? String + "," + dataMap.get("address") as? String
                 }
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error fetching privacy data", e)
@@ -230,8 +281,8 @@ class MainViewModel @Inject constructor(
             try {
                 val dataMap = profileRepository.getProfileData()
                 if (dataMap != null) {
-                    profileImgURL.value = dataMap?.get("imgURL") as? String
-                    profileStatusMessage.value = dataMap?.get("statusmessage") as? String
+                    profileImgURL = dataMap.get("imgURL") as String
+                    profileStatusMessage.value = dataMap.get("statusmessage") as? String
                     imageUpload.value = true
                 }
             } catch (e: Exception) {
@@ -269,16 +320,16 @@ class MainViewModel @Inject constructor(
     }
 
     fun selectFriend(position:Int){
-        selectFriendProfile.value = friendsProfileList.value!![position]
+        selectFriendProfile = friendsProfileList.value!![position]
         StartEvent(startFriendProfileFragment)
     }
 
     //friendProfile
     fun chatStart(friendEmail: String?){
         viewModelScope.launch {
-            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,selectFriendProfile.value!!.nickname,profileNickname.value)
-            chatCount.value = chatInfo?.chatCount
-            chatRoomName.value = chatInfo?.chatRoomName
+            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,selectFriendProfile.nickname,profileNickname.value)
+            chatCount = chatInfo?.chatCount!!
+            chatRoomName = chatInfo.chatRoomName
             StartEvent(startChatActivity)
         }
     }
@@ -288,12 +339,12 @@ class MainViewModel @Inject constructor(
     }
 
     fun friendDelete(){
-        val friendEmail = selectFriendProfile.value?.email
+        val friendEmail = selectFriendProfile.email
         val deleteData = EmailNicknameData(
             userEmail,
             friendEmail,
             profileNickname.value,
-            selectFriendProfile.value!!.nickname
+            selectFriendProfile.nickname
         )
 
         friendProfileFagmentRepository.friendDataDelete(deleteData)
@@ -308,13 +359,13 @@ class MainViewModel @Inject constructor(
     }
 
     fun selectChat(position: Int){
-        chatRoomFriendNickName.value = chatRoomProfileList.value!![position].nickname
-        chatFriendImg.value = chatRoomProfileList.value!![position].imgURL//chatProfileList.value!![position]
+        chatRoomFriendNickName = chatRoomProfileList.value!![position].nickname
+        chatFriendImg = chatRoomProfileList.value!![position].imgURL//chatProfileList.value!![position]
         val friendEmail = chatRoomProfileList.value!![position].email
         viewModelScope.launch {
-            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName.value,profileNickname.value)
-            chatCount.value = chatInfo?.chatCount
-            chatRoomName.value = chatInfo?.chatRoomName
+            val chatInfo = friendProfileFagmentRepository.getChatRoomData(friendEmail,chatRoomFriendNickName,profileNickname.value)
+            chatCount = chatInfo?.chatCount!!
+            chatRoomName = chatInfo.chatRoomName
             StartEvent(startChatActivity)
         }
     }
@@ -331,35 +382,7 @@ class MainViewModel @Inject constructor(
 
 
     //ScheduleSetFragment
-    var startX:MutableLiveData<String> = MutableLiveData("")
-    var startY:MutableLiveData<String> = MutableLiveData("")
 
-
-    val alarmSet : MutableLiveData<Boolean> = MutableLiveData(false)
-    val scheduleAmPmSet : MutableLiveData<Boolean> = MutableLiveData(true)
-    var scheduleHH : MutableLiveData<String> = MutableLiveData("")
-    var scheduleMM : MutableLiveData<String> = MutableLiveData("")
-    var scheduleAlarmHH : MutableLiveData<String> = MutableLiveData("")
-    var scheduleAlarmMM : MutableLiveData<String> = MutableLiveData("")
-    var meetingPlaceAddress :MutableLiveData<String> = MutableLiveData("")
-    var startScheduleMapActivity : MutableLiveData<Boolean> = MutableLiveData(false)
-    var publicTransportTime :MutableLiveData<String> = MutableLiveData("")
-    var carTime :MutableLiveData<String> = MutableLiveData("")
-    var walkTime : MutableLiveData<String> = MutableLiveData("")
-    var transportCheck : MutableLiveData<Int> = MutableLiveData(-1)
-
-    var endX:MutableLiveData<String> = MutableLiveData("")
-    var endY:MutableLiveData<String> = MutableLiveData("")
-    var transportTime : MutableLiveData<Int> = MutableLiveData()
-    var appointmentRequestSuccess : MutableLiveData<Boolean> = MutableLiveData()
-    var selectTransport : MutableLiveData<Int> = MutableLiveData(0)
-    var selectScheduleNickname : MutableLiveData<String> = MutableLiveData()
-    var scheduleEmailPath : MutableLiveData<String> = MutableLiveData()
-    var meetingTimeOver : MutableLiveData<Boolean> = MutableLiveData()
-    var kewordName : MutableLiveData<String?> = MutableLiveData("")
-
-    var scheduleAlarmTime : AlarmTime = AlarmTime(0,0,0,0,0)
-    var scheduleStartAlarmTime : AlarmTime = AlarmTime(0,0,0,0,0)
 
     fun scheduleAmPmSet(bool : Boolean){
         scheduleAmPmSet.value = bool
@@ -386,8 +409,8 @@ class MainViewModel @Inject constructor(
         utils.getRetrofitData(call){
             if(it !=null){
                 if(it.addresses.size != 0){
-                    startX.value = it.addresses[0].x
-                    startY.value = it.addresses[0].y
+                    startX = it.addresses[0].x
+                    startY = it.addresses[0].y
                 }
             }
         }
@@ -405,10 +428,10 @@ class MainViewModel @Inject constructor(
 
             val TMapTransitApiService = retrofit.create(TMapPublicTransportRoute::class.java)
             val startEndPoint = TransitRouteRequest(
-                startX.value!!,
-                startY.value!!,
-                endX.value!!,
-                endY.value!!,
+                startX,
+                startY,
+                endX,
+                endY,
                 scheduleSetFragmentRepository.dttmSet(scheduleAmPmSet.value,ScheduleTime(scheduleHH.value!!,scheduleMM.value!!)))
 
             val call = TMapTransitApiService.getPublicTransportRoute(APIData.TMAP_API_KEY,startEndPoint)
@@ -419,7 +442,7 @@ class MainViewModel @Inject constructor(
                         transportCheck.value = 5
                     }else{
                         publicTransportTime.value = utils.fnTimeToString(it.metaData.plan.itineraries[0].totalTime)
-                        transportTime.value = it.metaData.plan.itineraries[0].totalTime
+                        transportTime = it.metaData.plan.itineraries[0].totalTime
                         selectTransport.value = 1
                     }
                 }else{
@@ -439,10 +462,10 @@ class MainViewModel @Inject constructor(
                 .build()
 
             val TMapCarApiService = retrofit.create(TMapCarRoute::class.java)
-            val startEndPoint = CarRouteRequest(startX.value!!.toDouble(),
-                startY.value!!.toDouble(),
-                endX.value!!.toDouble(),
-                endY.value!!.toDouble(),
+            val startEndPoint = CarRouteRequest(startX.toDouble(),
+                startY.toDouble(),
+                endX.toDouble(),
+                endY.toDouble(),
                 scheduleSetFragmentRepository.dttmSet(scheduleAmPmSet.value,ScheduleTime(scheduleHH.value!!,scheduleMM.value!!))+"00")
 
             val call = TMapCarApiService.getCarRoute(APIData.TMAP_API_KEY,"1","CarRouteResponse",startEndPoint)
@@ -450,7 +473,7 @@ class MainViewModel @Inject constructor(
             utils.getRetrofitData(call){
                 if(it !=null){
                     carTime.value = utils.fnTimeToString(it.features[0].properties.totalTime)
-                    transportTime.value = it.features[0].properties.totalTime
+                    transportTime = it.features[0].properties.totalTime
                     selectTransport.value = 2
                 }else{
                     transportCheck.value = 4
@@ -469,10 +492,10 @@ class MainViewModel @Inject constructor(
                 .build()
 
             val TMapWalkApiService = retrofit.create(TMapWalkRoute::class.java)
-            val startEndPoint = WalkRouteRequest(startX.value!!.toDouble(),
-                startY.value!!.toDouble(),
-                endX.value!!.toDouble(),
-                endY.value!!.toDouble(),
+            val startEndPoint = WalkRouteRequest(startX.toDouble(),
+                startY.toDouble(),
+                endX.toDouble(),
+                endY.toDouble(),
                 "출발점",
                 "도착점")
             val call = TMapWalkApiService.getWalkRoute(APIData.TMAP_API_KEY,"1","WalkRouteResponse",startEndPoint)
@@ -480,7 +503,7 @@ class MainViewModel @Inject constructor(
             utils.getRetrofitData(call){
                 if(it != null){
                     walkTime.value = utils.fnTimeToString(it.features[0].properties.totalTime)
-                    transportTime.value = it.features[0].properties.totalTime
+                    transportTime = it.features[0].properties.totalTime
                     selectTransport.value = 3
                 }else {
                     transportCheck.value = 4
@@ -493,18 +516,18 @@ class MainViewModel @Inject constructor(
         if(selectTransport.value == 0){
             transportCheck.value = 6
         }else{
-            val friendEmail = selectFriendProfile.value!!.email
+            val friendEmail = selectFriendProfile.email
             val childName = userEmailReplace + "||" + friendEmail.replace(".","_")
 
             val scheduleAlarmTimeData = ScheduleTime(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
             val scheduleTimeData = ScheduleTime(scheduleHH.value!!,scheduleMM.value!!)
             val alarmTime = utils.fnTimeSet(scheduleAlarmTimeData)
-            val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime.value!!)
+            val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime)
             val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
             val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
 
             scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData,
-                ScheduleTime("00","00"), transportTime.value!!)
+                ScheduleTime("00","00"), transportTime)
             scheduleAlarmTime = alarmTimeSet
 
             if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
@@ -515,24 +538,24 @@ class MainViewModel @Inject constructor(
                     "email1" to userEmail,
                     "email2" to friendEmail,
                     "nickname1" to profileNickname.value,
-                    "nickname2" to selectFriendProfile.value!!.nickname,
+                    "nickname2" to selectFriendProfile.nickname,
                     "meetingPlace" to meetingPlaceAddress.value,
-                    "meetingPlaceName" to kewordName.value,
-                    "meetingplaceX" to endX.value,
-                    "meetingplaceY" to endY.value,
+                    "meetingPlaceName" to kewordName,
+                    "meetingplaceX" to endX,
+                    "meetingplaceY" to endY,
                     "meetingTime" to scheduleSetFragmentRepository.dttmSet(scheduleAmPmSet.value, scheduleTimeData),
                     "email1Status" to "consent",
                     "email2Status" to "wait",
-                    "email1ProfileImgURl" to profileImgURL.value,
-                    "email2ProfileImgURl" to selectFriendProfile.value!!.imgURL,
+                    "email1ProfileImgURl" to profileImgURL,
+                    "email2ProfileImgURl" to selectFriendProfile.imgURL,
                     "email1Transport" to selectTransport.value,
                     "email2Transport" to "",
                     "email1Alarm" to alarmTime,
-                    "email1StartX" to startX.value,
-                    "email1StartY" to startY.value,
+                    "email1StartX" to startX,
+                    "email1StartY" to startY,
                     "email2StartX" to "",
                     "email2StartY" to "",
-                    "email1TransportTime" to transportTime.value,
+                    "email1TransportTime" to transportTime,
                     "email2TransportTime" to "",
                     "email1StartCheck" to "not",
                     "email2StartCheck" to "not",
@@ -540,7 +563,7 @@ class MainViewModel @Inject constructor(
                 val reference = database.getReference("appointment").child(childName)
                 scheduleSetFragmentRepository.sendScheduleRequest(dataMap,reference){
                     if(it){
-                        scheduleEmailPath.value = childName
+                        scheduleEmailPath = childName
                         if(alarmTime != "0000"){
                             StartEvent(alarmSet)
                         }
@@ -559,12 +582,12 @@ class MainViewModel @Inject constructor(
         scheduleAlarmHH.value = ""
         scheduleAlarmMM.value = ""
         selectTransport.value = 0
-        transportTime.value = 0
+        transportTime = 0
         meetingPlaceAddress.value = ""
-        endX.value = ""
-        endY.value = ""
-        selectScheduleNickname.value = ""
-        scheduleEmailPath.value = ""
+        endX = ""
+        endY = ""
+        selectScheduleNickname = ""
+        scheduleEmailPath = ""
         publicTransportTime.value = ""
         carTime.value = ""
         walkTime.value = ""
@@ -776,11 +799,11 @@ class MainViewModel @Inject constructor(
 
         fnScheduleTimeSplit(notSplitTime)//문제있음//고친건가?
         meetingPlaceAddress.value = meetingAddress
-        endX.value = endpointX
-        endY.value = endpointY
-        scheduleEmailPath.value = emailPath
+        endX = endpointX
+        endY = endpointY
+        scheduleEmailPath = emailPath
         selectTransport.value = transport.toInt()
-        selectScheduleNickname.value = scheduleDataList.value!![position].nickname
+        selectScheduleNickname = scheduleDataList.value!![position].nickname
         scheduleAlarmHH.value = alarm.substring(0,2).toInt().toString()
         scheduleAlarmMM.value = alarm.substring(2,4).toInt().toString()
 
@@ -801,23 +824,22 @@ class MainViewModel @Inject constructor(
     fun fnScheduleEditSuccess(){
         val scheduleAlarmTimeData = ScheduleTime(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
         val scheduleTimeData = ScheduleTime(scheduleHH.value!!,scheduleMM.value!!)
-        val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime.value!!)
+        val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime)
         val currentTime = utils.fnGetCurrentTimeString().substring(0,12)
         val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
-        scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime.value!!)
+        scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime)
         scheduleAlarmTime = alarmTimeSet
 
         if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
             StartEvent(meetingTimeOver)
         }else{
-            val emailPath = scheduleEmailPath.value
             val alarmTime = utils.fnTimeSet(scheduleAlarmTimeData)
-            val reference = database.getReference("appointment").child(emailPath!!)
-            if(fnFRDPathSplit(emailPath!!) == 1){
+            val reference = database.getReference("appointment").child(scheduleEmailPath)
+            if(fnFRDPathSplit(scheduleEmailPath) == 1){
                 reference.child("email1Alarm").setValue(alarmTime)
-                reference.child("email1StartX").setValue(startX.value)
-                reference.child("email1StartY").setValue(startY.value)
-                reference.child("email1TransportTime").setValue(transportTime.value)
+                reference.child("email1StartX").setValue(startX)
+                reference.child("email1StartY").setValue(startY)
+                reference.child("email1TransportTime").setValue(transportTime)
                 reference.child("email1Transport").setValue(selectTransport.value).addOnSuccessListener {
                     if(alarmTime != "0000"){
                         StartEvent(alarmSet)
@@ -825,11 +847,11 @@ class MainViewModel @Inject constructor(
                     StartEvent(scheduleEditSuccess)
                     scheduleSetDataReset()
                 }
-            }else if(fnFRDPathSplit(emailPath!!) == 2){
+            }else if(fnFRDPathSplit(scheduleEmailPath) == 2){
                 reference.child("email2Alarm").setValue(alarmTime)
-                reference.child("email2StartX").setValue(startX.value)
-                reference.child("email2StartY").setValue(startY.value)
-                reference.child("email2TransportTime").setValue(transportTime.value)
+                reference.child("email2StartX").setValue(startX)
+                reference.child("email2StartY").setValue(startY)
+                reference.child("email2TransportTime").setValue(transportTime)
                 reference.child("email2Transport").setValue(selectTransport.value)
                 if(alarmTime != "0000"){
                     StartEvent(alarmSet)
@@ -856,10 +878,10 @@ class MainViewModel @Inject constructor(
         fnScheduleTimeSplit(notSplitTime)
         profileAddress.value = address!!
         meetingPlaceAddress.value = meetingAddress
-        endX.value = endpointX
-        endY.value = endpointY
-        scheduleEmailPath.value = emailPath
-        selectScheduleNickname.value = scheduleAlarmDataList.value!![position].nickname//내 닉네임 아님?
+        endX = endpointX
+        endY = endpointY
+        scheduleEmailPath = emailPath
+        selectScheduleNickname = scheduleAlarmDataList.value!![position].nickname//내 닉네임 아님?
         startingPointGet()
         StartEvent(startScheduleAcceptFragment)
     }
@@ -874,10 +896,10 @@ class MainViewModel @Inject constructor(
 
         val scheduleAlarmTimeData = ScheduleTime(scheduleAlarmHH.value!!,scheduleAlarmMM.value!!)
         val scheduleTimeData = ScheduleTime(scheduleHH.value!!,scheduleMM.value!!)
-        val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime.value!!)
+        val alarmTimeSet = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!,scheduleTimeData,scheduleAlarmTimeData,transportTime)
         val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
         scheduleAlarmTime = alarmTimeSet
-        scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime.value!!)
+        scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime)
 
         if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
             meetingTimeOver.value = true
@@ -886,15 +908,14 @@ class MainViewModel @Inject constructor(
             if(selectTransport.value == 0){
                 transportCheck.value = 6
             }else{
-                val emailPath = scheduleEmailPath.value
                 val alarmTime = utils.fnTimeSet(scheduleAlarmTimeData)
-                val reference = database.getReference("appointment").child(emailPath!!)
-                if(fnFRDPathSplit(emailPath!!) == 1){
+                val reference = database.getReference("appointment").child(scheduleEmailPath)
+                if(fnFRDPathSplit(scheduleEmailPath) == 1){
                     reference.child("email1Alarm").setValue(alarmTime)
                     reference.child("email1Transport").setValue(selectTransport.value)
-                    reference.child("email1StartX").setValue(startX.value)
-                    reference.child("email1StartY").setValue(startY.value)
-                    reference.child("email1TransportTime").setValue(transportTime.value)
+                    reference.child("email1StartX").setValue(startX)
+                    reference.child("email1StartY").setValue(startY)
+                    reference.child("email1TransportTime").setValue(transportTime)
                     reference.child("email1Status").setValue("consent").addOnSuccessListener {
                         if(alarmTime != "0000"){
                             StartEvent(alarmSet)
@@ -902,12 +923,12 @@ class MainViewModel @Inject constructor(
                         StartEvent(scheduleAcceptSucess)
                         fnScheduleListData()
                     }
-                }else if(fnFRDPathSplit(emailPath!!) == 2){
+                }else if(fnFRDPathSplit(scheduleEmailPath) == 2){
                     reference.child("email2Alarm").setValue(alarmTime)
                     reference.child("email2Transport").setValue(selectTransport.value)
-                    reference.child("email2StartX").setValue(startX.value)
-                    reference.child("email2StartY").setValue(startY.value)
-                    reference.child("email2TransportTime").setValue(transportTime.value)
+                    reference.child("email2StartX").setValue(startX)
+                    reference.child("email2StartY").setValue(startY)
+                    reference.child("email2TransportTime").setValue(transportTime)
                     reference.child("email2Status").setValue("consent").addOnSuccessListener {
                         if(alarmTime != "0000"){
                             StartEvent(alarmSet)
@@ -922,14 +943,13 @@ class MainViewModel @Inject constructor(
 
     fun fnScheduleRefuse(){
 
-        val emailPath = scheduleEmailPath.value
-        val reference = database.getReference("appointment").child(emailPath!!)
-        if(fnFRDPathSplit(emailPath!!) == 1){
+        val reference = database.getReference("appointment").child(scheduleEmailPath)
+        if(fnFRDPathSplit(scheduleEmailPath) == 1){
             reference.child("email1Status").setValue("refuse").addOnSuccessListener {
                 StartEvent(scheduleRefuse)
                 fnScheduleListData()
             }
-        }else if(fnFRDPathSplit(emailPath!!) == 2){
+        }else if(fnFRDPathSplit(scheduleEmailPath) == 2){
             reference.child("email2Status").setValue("refuse").addOnSuccessListener {
                 StartEvent(scheduleRefuse)
                 fnScheduleListData()

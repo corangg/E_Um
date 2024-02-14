@@ -37,8 +37,8 @@ class Friend_Fragment : AdapterFragment<FragmentFriendBinding>(), OnItemClickLis
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        if(mainViewmodel.profileImgURL.value != ""){
-            Glide.with(this).load(mainViewmodel.profileImgURL.value).into(binding.imgProfile)
+        if(mainViewmodel.profileImgURL != ""){
+            Glide.with(this).load(mainViewmodel.profileImgURL).into(binding.imgProfile)
         }
     }
 

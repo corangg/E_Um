@@ -136,10 +136,6 @@
                     >
                 </FrameLayout>
             </RelativeLayout>
-
-
         </ScrollView>
     </LinearLayout>
-
-
 </layout>

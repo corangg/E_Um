@@ -317,14 +317,6 @@
                 android:text="로그아웃"
                 android:textSize="16dp"
                 android:onClick="@{()->viewmodel.logout()}"/>
-
-
-            <!--<Button
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:id="@+id/logout"
-                android:background="#ff00ff"/>-->
-
         </LinearLayout>
     </ScrollView>
 

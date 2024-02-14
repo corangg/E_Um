@@ -90,54 +90,6 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
     }
 
     override fun setObserve(){
-        profileViewModel.addressEditActivityStart.observe(viewLifecycleOwner){
-            if(it){
-                val intent: Intent = Intent(requireActivity(), AddressEditActivity::class.java)
-                intent.putExtra("mainaddress",profileViewModel. profileAddress.value)
-
-                startActivityForResult(intent, ADDRESS_REQUEST_CODE)
-            }
-        }
-
-        profileViewModel.passwordEdit.observe(viewLifecycleOwner){
-            if(it){
-                val intent: Intent = Intent(requireActivity(), PasswordEditActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        profileViewModel.logOutSuccess.observe(viewLifecycleOwner){
-            if(it){
-                mActivity.finish()
-                val intent: Intent = Intent(requireActivity(), LoginActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        profileViewModel.openGallery.observe(viewLifecycleOwner){
-            if(it){
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                intent.type = "image/*"
-                photoResult.launch(intent)
-            }
-        }
-
-        profileViewModel.imageUpload.observe(viewLifecycleOwner){
-            if(it){
-                if(profileViewModel.profileImgURL.value != ""){
-                    Glide.with(this).load(profileViewModel.profileImgURL.value).into(binding.imgProfile)
-                }
-            }
-        }
-
-        profileViewModel.nickNameEditActivityStart.observe(viewLifecycleOwner){
-            if(it){
-                val intent: Intent = Intent(requireActivity(), NickNameActivity::class.java)
-                intent.putExtra("nickname",profileViewModel.profileNickname.value)
-                intent.putExtra("statusmessage",profileViewModel. profileStatusMessage.value)
-                startActivityForResult(intent, NICKNAME_REQUEST_CODE)
-            }
-        }
         profileViewModel.editProfileData.observe(viewLifecycleOwner){
             val menuItem = binding.toolbar.menu.findItem(R.id.menu_profile_edit)
             if(it){
@@ -163,6 +115,55 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
                 binding.imgProfile.isEnabled = false
                 binding.layoutPassword.isEnabled = false
                 binding.layoutAddress.isEnabled = false
+            }
+        }
+
+        profileViewModel.openGallery.observe(viewLifecycleOwner){
+            if(it){
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                intent.type = "image/*"
+                photoResult.launch(intent)
+            }
+        }
+
+        profileViewModel.imageUpload.observe(viewLifecycleOwner){
+            if(it){
+                if(profileViewModel.profileImgURL != ""){
+                    Glide.with(this).load(profileViewModel.profileImgURL).into(binding.imgProfile)
+                }
+            }
+        }
+
+        profileViewModel.nickNameEditActivityStart.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent = Intent(requireActivity(), NickNameActivity::class.java)
+                intent.putExtra("nickname",profileViewModel.profileNickname.value)
+                intent.putExtra("statusmessage",profileViewModel. profileStatusMessage.value)
+                startActivityForResult(intent, NICKNAME_REQUEST_CODE)
+            }
+        }
+
+        profileViewModel.passwordEdit.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent = Intent(requireActivity(), PasswordEditActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        profileViewModel.addressEditActivityStart.observe(viewLifecycleOwner){
+            if(it){
+                val intent: Intent = Intent(requireActivity(), AddressEditActivity::class.java)
+                intent.putExtra("mainaddress",profileViewModel. profileAddress.value)
+
+                startActivityForResult(intent, ADDRESS_REQUEST_CODE)
+            }
+        }
+
+        profileViewModel.logOutSuccess.observe(viewLifecycleOwner){
+            if(it){
+                mActivity.finish()
+                val intent: Intent = Intent(requireActivity(), LoginActivity::class.java)
+                startActivity(intent)
             }
         }
     }

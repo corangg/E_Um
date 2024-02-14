@@ -54,16 +54,16 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
         mainViewmodel.alarmSet.observe(viewLifecycleOwner){
             if (it){
                 val startCheckData = StartCheckAlarmData(
-                    mainViewmodel.startX.value!!,
-                    mainViewmodel.startY.value!!,
-                    mainViewmodel.scheduleEmailPath.value!!)
+                    mainViewmodel.startX,
+                    mainViewmodel.startY,
+                    mainViewmodel.scheduleEmailPath)
                 setStartAlarm(startCheckData, mainViewmodel.scheduleStartAlarmTime)
             }
         }
 
         mainViewmodel.scheduleEditSuccess.observe(viewLifecycleOwner){
             if (it){
-                setAlarm(mainViewmodel.selectScheduleNickname.value!!,mainViewmodel.scheduleAlarmTime)
+                setAlarm(mainViewmodel.selectScheduleNickname,mainViewmodel.scheduleAlarmTime)
 
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
