@@ -10,6 +10,7 @@ import javax.inject.Singleton
 import com.example.appointment.data.Utils
 import com.example.appointment.repository.ChatFragmentRepository
 import com.example.appointment.repository.FriendAddRepository
+import com.example.appointment.repository.FriendAlarmRepository
 import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
 import com.example.appointment.repository.PasswordEditRepository
@@ -70,7 +71,13 @@ object Moudle {
     @Singleton
     @Provides
     fun providerFriendAddRepository(): FriendAddRepository {
-        return FriendAddRepository(Utils())
+        return FriendAddRepository()
+    }
+
+    @Singleton
+    @Provides
+    fun providerFriendAlarmRepository(): FriendAlarmRepository {
+        return FriendAlarmRepository(Utils())
     }
 
 

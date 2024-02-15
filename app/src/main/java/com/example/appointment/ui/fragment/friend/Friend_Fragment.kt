@@ -39,6 +39,7 @@ class Friend_Fragment @Inject constructor(): AdapterFragment<FragmentFriendBindi
 
         val toolbar: androidx.appcompat.widget.Toolbar = binding.toolbar
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        mainViewmodel.fetchFriendRequestAlarm()
 
         if(mainViewmodel.profileImgURL != ""){
             Glide.with(this).load(mainViewmodel.profileImgURL).into(binding.imgProfile)
@@ -83,7 +84,6 @@ class Friend_Fragment @Inject constructor(): AdapterFragment<FragmentFriendBindi
 
         mainViewmodel.friendsProfileList.observe(viewLifecycleOwner){
             setAdapter(binding.recycleFriends,FriendListAdapter(this),it,true)
-
         }
 
         mainViewmodel.startFriendAddActivity.observe(viewLifecycleOwner){

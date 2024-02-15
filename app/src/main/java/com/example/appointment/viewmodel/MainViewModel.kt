@@ -78,7 +78,6 @@ class MainViewModel @Inject constructor(
     val passwordEdit : MutableLiveData<Boolean> = MutableLiveData(false)
     val addressEditActivityStart : MutableLiveData<Boolean> = MutableLiveData(false)
     val logOutSuccess : MutableLiveData<Boolean> = MutableLiveData(false)
-    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
     val startFriendAddActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     val startFriendAlarmActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     val startFriendProfileFragment : MutableLiveData<Boolean> = MutableLiveData(false)
@@ -106,6 +105,7 @@ class MainViewModel @Inject constructor(
     val transportCheck : MutableLiveData<Int> = MutableLiveData(-1)
 
     val friendsProfileList: MutableLiveData<MutableList<ProfileDataModel>> = MutableLiveData()
+    val friendRequestAlarmStatus : MutableLiveData<Boolean> = friendFragmnetRepository.friendRequestAlarmStatus
     val chatRoomProfileList: MutableLiveData<MutableList<ChatRoomData>> = chatFragmentRepository.chatRoomProfileList
     val scheduleDataList : MutableLiveData<MutableList<ScheduleSet>> = scheduleFragmentRepository.scheduleDataList
     val scheduleAlarmDataList : MutableLiveData<MutableList<ScheduleSet>> = scheduleFragmentRepository.scheduleAlarmDataList
@@ -138,7 +138,6 @@ class MainViewModel @Inject constructor(
     init {
         fetchPrivacyData()
         fetchProfileData()
-        fetchFriendRequestAlarm()
         setFriendList()
     }
 
@@ -279,13 +278,7 @@ class MainViewModel @Inject constructor(
 
     //friend_fragment
     fun fetchFriendRequestAlarm(){
-        friendFragmnetRepository.getFriendRequestAlarmData{//알람 이상함
-            if(it.exists()){
-                friendRequestAlarmStatus.value = true
-            }else{
-                friendRequestAlarmStatus.value = false
-            }
-        }
+        friendFragmnetRepository.getFriendRequestAlarmData()
     }
 
     fun setFriendList(){

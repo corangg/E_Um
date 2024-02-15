@@ -1,6 +1,7 @@
 package com.example.appointment.repository
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
 import com.example.appointment.model.ProfileDataModel
 import com.google.firebase.database.DataSnapshot
@@ -12,14 +13,17 @@ import javax.security.auth.callback.Callback
 class FriendFragmnetRepository(private val utils: Utils) {
     private val userEmail = Utils.auth.currentUser?.email
     val userEmailReplace = userEmail!!.replace(".", "_")
+    val friendRequestAlarmStatus : MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getFriendRequestAlarmData(onChildAddedAction: (DataSnapshot) -> Unit) {
+    fun getFriendRequestAlarmData() {
         val reference = Utils.database.getReference(userEmailReplace).child("friendRequest")
         reference.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    onChildAddedAction(dataSnapshot)
+                    friendRequestAlarmStatus.value = true
+                }else{
+                    friendRequestAlarmStatus.value = false
                 }
             }
             override fun onCancelled(error: DatabaseError) {

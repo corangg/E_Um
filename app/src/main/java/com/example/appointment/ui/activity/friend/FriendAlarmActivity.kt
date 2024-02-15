@@ -8,7 +8,9 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityFriendAlarmBinding
 import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.viewmodel.friend.FriendAlarmViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FriendAlarmActivity : AdapterActivity<ActivityFriendAlarmBinding>() ,FriendRequestAlarmAdapter.OnItemClickListener{
 
     val viewmodel : FriendAlarmViewModel by viewModels()
@@ -29,7 +31,7 @@ class FriendAlarmActivity : AdapterActivity<ActivityFriendAlarmBinding>() ,Frien
     }
 
     override fun onItemClickAccept(email: String, nickName: String) {
-        viewmodel.fnFriendRequestAccept(
+        viewmodel.friendRequestAccept(
             email,
             nickName,
             intent.getStringExtra("nickname")!!
@@ -39,7 +41,7 @@ class FriendAlarmActivity : AdapterActivity<ActivityFriendAlarmBinding>() ,Frien
     }
 
     override fun onItemClickRefuse(email: String, nickName: String) {
-        viewmodel.fnFriendRequestRefuse(nickName, email)
+        viewmodel.friendRequestRefuse(nickName, email)
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)
     }

@@ -1,78 +1,36 @@
 package com.example.appointment.viewmodel.friend
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
-import com.example.appointment.data.Utils.Companion.firestore
-import com.example.appointment.model.ChatDataModel
 import com.example.appointment.model.FriendRequestAlarmData
+import com.example.appointment.repository.FriendAlarmRepository
 import com.example.appointment.viewmodel.BaseViewModel
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class FriendAlarmViewModel(application: Application) : BaseViewModel(application) {
+@HiltViewModel
+class FriendAlarmViewModel @Inject constructor(
+    application: Application,
+    private val friendAlarmRepository: FriendAlarmRepository) : BaseViewModel(application) {
     init {
-        fnFriendRequestedList()
+        friendRequestedList()
     }
-    val friendRequestAlarmDataList : MutableLiveData<MutableList<FriendRequestAlarmData>> = MutableLiveData()
+    val friendRequestAlarmDataList : MutableLiveData<MutableList<FriendRequestAlarmData>> = friendAlarmRepository.friendRequestAlarmDataList
 
-    fun fnFriendRequestedList() {
-        val userEmail = auth.currentUser?.email!!
-        val alarmRequestList = mutableListOf<FriendRequestAlarmData>()
-        val emailReplace = userEmail.replace(".", "_")
-        val reference = database.getReference(emailReplace).child("friendRequest")
-
-        reference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    utils.readDataFRDAddChildEventListener(reference) {
-                        val sendernickname = it.key
-                        val senderEmail = it.getValue(String::class.java)
-
-                        val friendRequestData = FriendRequestAlarmData(
-                            senderEmail!!,
-                            sendernickname!!
-                        )
-                        alarmRequestList.add(friendRequestData)
-                        friendRequestAlarmDataList.value = alarmRequestList
-                    }
-
-                } else {
-                    friendRequestAlarmDataList.value = alarmRequestList
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+    fun friendRequestedList() {
+        friendAlarmRepository.getFriendRequestList()
     }
 
-    fun fnFriendRequestAccept(friendEmail:String, friendNickname: String,nickname: String){
+    fun friendRequestAccept(friendEmail:String, friendNickname: String, nickname: String){
         val userEmail = auth.currentUser?.email!!
         val reference = database.getReference(userEmail.replace(".","_")).child("friendRequest").child(friendNickname)
-        val docRef =  firestore.collection("Friend")
-
-        reference.removeValue()
-
-        docRef.document(userEmail).update(friendNickname,friendEmail).addOnSuccessListener {
-            fnFriendRequestedList()
-        }
-        docRef.document(friendEmail).update(nickname,userEmail)
+        friendAlarmRepository.updateFriendData(reference, friendEmail, friendNickname, nickname)
     }
 
-    fun fnFriendRequestRefuse(nickname: String?,email: String?){
+    fun friendRequestRefuse(nickname: String?, email: String?){
         val reference = database.getReference(auth.currentUser?.email.toString().replace(".","_")).child("friendRequest").child(nickname!!)
-
-        reference.removeValue().addOnSuccessListener {
-            fnFriendRequestedList()
-        }
+        friendAlarmRepository.friendRequestDelete(reference)
     }
 }
