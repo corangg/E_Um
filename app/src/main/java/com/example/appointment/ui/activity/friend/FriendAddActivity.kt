@@ -10,9 +10,10 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityFriendAddBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.friend.FriendAddViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
-
     val viewmodel: FriendAddViewModel by viewModels()
 
     override fun layoutResId(): Int {
@@ -55,7 +56,7 @@ class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
         viewmodel.searchFriend.observe(this){
             if(it){
                 binding.layoutFriendCheck.visibility = View.VISIBLE
-                Glide.with(this).load(viewmodel.searchFriendImgURL.value).into(binding.imgProfile)
+                Glide.with(this).load(viewmodel.searchFriendImgURL).into(binding.imgProfile)
             }else{
                 Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
             }

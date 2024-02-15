@@ -71,7 +71,7 @@
             android:name=".ui.activity.profile.AddAdressActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.profile.AddressEditActivity"
+            android:name=".ui.activity.profile.EditAddressActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.profile.AdressSearchActivity"

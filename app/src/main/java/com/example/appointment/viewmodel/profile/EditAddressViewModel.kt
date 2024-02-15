@@ -12,8 +12,11 @@ import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
 import com.example.appointment.model.AddressData
 import com.example.appointment.viewmodel.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class EditAddressViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class EditAddressViewModel @Inject constructor(application: Application): AndroidViewModel(application) {
 
     val titleAddress : MutableLiveData<String> = MutableLiveData("")
 

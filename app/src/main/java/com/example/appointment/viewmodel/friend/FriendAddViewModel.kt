@@ -11,34 +11,37 @@ import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
+import com.example.appointment.repository.FriendAddRepository
 import com.example.appointment.viewmodel.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FriendAddViewModel (application: Application) : BaseViewModel(application){
+@HiltViewModel
+class FriendAddViewModel @Inject constructor(
+    application: Application,
+    private val friendAddRepository: FriendAddRepository) : BaseViewModel(application){
     val searchFriendEmail : MutableLiveData<String?> = MutableLiveData("")
     val searchFriendNickName :MutableLiveData<String?> = MutableLiveData("")
     val searchFriendStatusMessage :MutableLiveData<String?> = MutableLiveData("")
-    var searchFriendImgURL :MutableLiveData<String?> = MutableLiveData("")
 
-    var searchFriend :MutableLiveData<Boolean> = MutableLiveData()
-    var friendRequestCheck : MutableLiveData<Int> = MutableLiveData(0)
+    val searchFriend :MutableLiveData<Boolean> = MutableLiveData()
+    val friendRequestCheck : MutableLiveData<Int> = MutableLiveData(0)
+
+    var searchFriendImgURL : String = ""
 
     fun fnSearchFriend(){
         if(searchFriendEmail.value != ""){
             viewModelScope.launch {
                 val docRef = firestore.collection("Profile").document(searchFriendEmail.value!!)
-                try {
-                    val dataMap = utils.readDataFirebase(docRef)
-                    if(dataMap != null){
-                        searchFriendImgURL.value = dataMap?.get("imgURL") as? String
-                        searchFriendNickName.value = dataMap?.get("nickname") as? String
-                        searchFriendStatusMessage.value = dataMap?.get("statusmessage") as? String
-                        searchFriend.value = true
-                    }else {
-                        searchFriend.value = false
-                    }
-                }catch (e: Exception) {
-                    Log.e("Coroutine", "Error fetching friend list", e)
+                val dataMap = utils.readDataFirebase(docRef)
+                if(dataMap != null){
+                    searchFriendImgURL = dataMap.get("imgURL") as String
+                    searchFriendNickName.value = dataMap.get("nickname") as? String
+                    searchFriendStatusMessage.value = dataMap.get("statusmessage") as? String
+                    searchFriend.value = true
+                }else {
+                    searchFriend.value = false
                 }
             }
         }else{
@@ -52,10 +55,11 @@ class FriendAddViewModel (application: Application) : BaseViewModel(application)
             if(searchFriendEmail.value == userEmail){
                 friendRequestCheck.value = 2
             }else if(searchFriend.value == true){
+
                 val emailReplace = searchFriendEmail.value!!.replace(".","_")
-                val reference = database.getReference(emailReplace)
-                reference.child("friendRequest").child(nickname!!).setValue(userEmail).addOnCompleteListener { task->
-                    if(task.isSuccessful){
+                val reference = database.getReference(emailReplace).child("friendRequest").child(nickname!!)
+                viewModelScope.launch {
+                    if(friendAddRepository.selectFriendRequestItem(reference)){
                         friendRequestCheck.value = 1
                     }else{
                         friendRequestCheck.value = 4

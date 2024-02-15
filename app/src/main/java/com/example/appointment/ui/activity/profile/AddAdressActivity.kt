@@ -14,7 +14,6 @@ import com.example.appointment.viewmodel.profile.AddAddressViewModel
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
 
 class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
-
     val viewModel: AddAddressViewModel by viewModels()
 
     override fun layoutResId(): Int {
@@ -48,7 +47,7 @@ class AddAdressActivity : BaseActivity<ActivityAddAdressBinding>() {
 
         viewModel.editAddress.observe(this){
             if(it){
-                val fullAddress = viewModel.addressData.value + viewModel.detailAddress.value
+                val fullAddress = viewModel.addressData + viewModel.detailAddress.value
                 val email = intent.getStringExtra("email")
 
                 val db = AddressDBHelper(this,email).writableDatabase

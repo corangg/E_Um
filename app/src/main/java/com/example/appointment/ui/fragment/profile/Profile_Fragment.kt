@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
 import com.example.appointment.data.RequestCode.Companion.NICKNAME_REQUEST_CODE
-import com.example.appointment.ui.activity.profile.AddressEditActivity
+import com.example.appointment.ui.activity.profile.EditAddressActivity
 import com.example.appointment.ui.activity.profile.NickNameActivity
 import com.example.appointment.ui.activity.profile.PasswordEditActivity
 import com.example.appointment.databinding.FragmentProfileBinding
@@ -152,7 +152,7 @@ class Profile_Fragment @Inject constructor(): BaseFragment<FragmentProfileBindin
 
         profileViewModel.addressEditActivityStart.observe(viewLifecycleOwner){
             if(it){
-                val intent: Intent = Intent(requireActivity(), AddressEditActivity::class.java)
+                val intent: Intent = Intent(requireActivity(), EditAddressActivity::class.java)
                 intent.putExtra("mainaddress",profileViewModel. profileAddress.value)
 
                 startActivityForResult(intent, ADDRESS_REQUEST_CODE)

@@ -4,13 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <!--<variable
-            name="mainviewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />-->
-        <variable
+         <variable
             name="viewmodel"
             type="com.example.appointment.viewmodel.profile.AddAddressViewModel" />
-
     </data>
 
     <LinearLayout
@@ -76,8 +72,6 @@
                 android:textColor="@color/themecolor"
                 android:textStyle="bold"
                 android:onClick="@{()->viewmodel.searchAddress(viewmodel.searchAddress)}" />
-
-
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout

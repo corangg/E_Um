@@ -2,27 +2,23 @@ package com.example.appointment.ui.activity.profile
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
-import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.databinding.ActivityProfileAddressBinding
-import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.adapter.AddressListAdapter
 import com.example.appointment.viewmodel.profile.EditAddressViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class AddressEditActivity : BaseActivity<ActivityProfileAddressBinding>(), AddressListAdapter.OnItemClickListener {
+@AndroidEntryPoint
+class EditAddressActivity : BaseActivity<ActivityProfileAddressBinding>(), AddressListAdapter.OnItemClickListener {
 
     val viewmodel : EditAddressViewModel by viewModels()
     lateinit var adapter: AddressListAdapter
