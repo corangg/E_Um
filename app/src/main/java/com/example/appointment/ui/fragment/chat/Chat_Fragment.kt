@@ -11,9 +11,11 @@ import com.example.appointment.databinding.FragmentChatBinding
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class Chat_Fragment : AdapterFragment<FragmentChatBinding>(), OnItemClickListener {
+@AndroidEntryPoint
+class Chat_Fragment @Inject constructor(): AdapterFragment<FragmentChatBinding>(), OnItemClickListener {
     private val mainViewmodel: MainViewModel by activityViewModels()
 
     override fun layoutResId(): Int {

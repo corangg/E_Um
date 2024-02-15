@@ -6,7 +6,9 @@ import com.example.appointment.R
 import com.example.appointment.databinding.ActivityPasswordEditBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.profile.PasswordEditViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PasswordEditActivity : BaseActivity<ActivityPasswordEditBinding>() {
 
     val passwordEditViewModel : PasswordEditViewModel by viewModels()

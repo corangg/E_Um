@@ -10,7 +10,7 @@ class NickNameEditViewModel(application: Application): AndroidViewModel(applicat
     val nickName : MutableLiveData<String> = MutableLiveData("")
     val statusMessage : MutableLiveData<String> = MutableLiveData("")
 
-    var nickNameEditSave : MutableLiveData<Unit> = MutableLiveData()
+    val nickNameEditSave : MutableLiveData<Unit> = MutableLiveData()
 
     fun nickNameSave(){
         nickNameEditSave.value = Unit

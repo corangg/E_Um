@@ -11,6 +11,7 @@ import com.example.appointment.data.Utils
 import com.example.appointment.repository.ChatFragmentRepository
 import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
+import com.example.appointment.repository.PasswordEditRepository
 import com.example.appointment.repository.ScheduleFragmentRepository
 import com.example.appointment.repository.ScheduleSetFragmentRepository
 
@@ -59,5 +60,9 @@ object Moudle {
         return ScheduleFragmentRepository(Utils())
     }
 
-
+    @Singleton
+    @Provides
+    fun providerPasswordEditRepository(): PasswordEditRepository {
+        return PasswordEditRepository(Utils())
+    }
 }

@@ -16,9 +16,11 @@ import com.example.appointment.databinding.FragmentScheduleBinding
 import com.example.appointment.ui.adapter.OnItemLongClickListener
 import com.example.appointment.ui.fragment.AdapterFragment
 import com.example.appointment.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class Schedule_Fragment : AdapterFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
+@AndroidEntryPoint
+class Schedule_Fragment @Inject constructor(): AdapterFragment<FragmentScheduleBinding>(), ScheduleListAdapter.OnItemClickListener, OnItemLongClickListener{
     private val mainViewmodel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -16,6 +16,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     val mainViewmodel : MainViewModel by viewModels()
 
     @Inject lateinit var profileFragment: Profile_Fragment
+    @Inject lateinit var friendFragment: Friend_Fragment
+    @Inject lateinit var chatFragment: Chat_Fragment
+    @Inject lateinit var scheduleFragment: Schedule_Fragment
 
     override fun layoutResId(): Int {
         return R.layout.activity_main
@@ -33,19 +36,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mainViewmodel.selectFragment.observe(this){
             when(it.toString()){
                 "profile"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, profileFragment/*Profile_Fragment()*/).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, profileFragment).commit()
                 }
                 "friends"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Friend_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, friendFragment).commit()
                 }
                 "chat"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Chat_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, chatFragment).commit()
                 }
                 "schedule"->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Schedule_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, scheduleFragment).commit()
                 }
                 else->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, Profile_Fragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_main, profileFragment).commit()
                 }
             }
         }
