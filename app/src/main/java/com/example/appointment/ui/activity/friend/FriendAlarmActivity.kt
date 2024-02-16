@@ -41,7 +41,7 @@ class FriendAlarmActivity : AdapterActivity<ActivityFriendAlarmBinding>() ,Frien
     }
 
     override fun onItemClickRefuse(email: String, nickName: String) {
-        viewmodel.friendRequestRefuse(nickName, email)
+        viewmodel.friendRequestRefuse(nickName)
         val intent = Intent()
         setResult(Activity.RESULT_OK, intent)
     }

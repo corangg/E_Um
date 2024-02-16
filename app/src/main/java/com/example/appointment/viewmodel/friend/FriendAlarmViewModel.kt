@@ -29,8 +29,8 @@ class FriendAlarmViewModel @Inject constructor(
         friendAlarmRepository.updateFriendData(reference, friendEmail, friendNickname, nickname)
     }
 
-    fun friendRequestRefuse(nickname: String?, email: String?){
-        val reference = database.getReference(auth.currentUser?.email.toString().replace(".","_")).child("friendRequest").child(nickname!!)
+    fun friendRequestRefuse(nickname: String){
+        val reference = database.getReference(auth.currentUser?.email.toString().replace(".","_")).child("friendRequest").child(nickname)
         friendAlarmRepository.friendRequestDelete(reference)
     }
 }

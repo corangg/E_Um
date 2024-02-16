@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.example.appointment.data.Utils
 import com.example.appointment.repository.ChatFragmentRepository
+import com.example.appointment.repository.ChatRepository
 import com.example.appointment.repository.FriendAddRepository
 import com.example.appointment.repository.FriendAlarmRepository
 import com.example.appointment.repository.FriendFragmnetRepository
@@ -85,6 +86,12 @@ object Moudle {
     @Provides
     fun providerScheduleMapRepository(): ScheduleMapRepository {
         return ScheduleMapRepository()
+    }
+
+    @Singleton
+    @Provides
+    fun providerChatRepository(): ChatRepository {
+        return ChatRepository(Utils())
     }
 
 

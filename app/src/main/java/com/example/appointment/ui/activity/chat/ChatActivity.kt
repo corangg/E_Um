@@ -12,7 +12,9 @@ import com.example.appointment.model.ChatDataModel
 import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.chat.ChatViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChatActivity : AdapterActivity<ActivityChatBinding>() {
     val viewModel: ChatViewModel by viewModels()
 
@@ -32,7 +34,7 @@ class ChatActivity : AdapterActivity<ActivityChatBinding>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         chatCreateData = ChatCreateData(intent.getStringExtra("friendProfileURL")!!,intent.getStringExtra("friendnickname")!!)
 
-        viewModel.fnChatMessageSet(chatRoomName, chatCount)
+        viewModel.fnChatMessageSet(chatRoomName!!, chatCount)
     }
 
     override fun setObserve(){
