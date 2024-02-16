@@ -1,8 +1,12 @@
 package com.example.appointment.ui.activity.signup
 
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
 import com.example.appointment.R
@@ -12,7 +16,9 @@ import com.example.appointment.databinding.ActivitySignupBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.activity.login.LoginActivity
 import com.example.appointment.viewmodel.signup.Signup_Viewmodel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignupActivity : BaseActivity<ActivitySignupBinding>() {
     val signupViewModel : Signup_Viewmodel by viewModels()
 
@@ -25,7 +31,6 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -60,10 +65,10 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
                 }
             }
         }
-        signupViewModel.titleAddress.observe(this){
-            val db = AddressDBHelper(this,signupViewModel.signUpEmail.value).writableDatabase
+        /*signupViewModel.titleAddress.observe(this){
+            val db = AddressDBHelper(this,signupViewModel.signUpEmail.value).writableDatabase//signupViewModel.signUpEmail.value가 비어서 그럼
             db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf("집",signupViewModel.titleAddress.value))
             db.close()
-        }
+        }*/
     }
 }

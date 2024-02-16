@@ -2,14 +2,22 @@ package com.example.appointment.viewmodel.logIn
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.data.Utils
+import androidx.lifecycle.viewModelScope
+import com.example.appointment.StartEvent
 import com.example.appointment.data.Utils.Companion.auth
+import com.example.appointment.repository.LoginRepository
 import com.example.appointment.viewmodel.BaseViewModel
 import com.google.firebase.auth.FirebaseAuthException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class Login_Viewmodel(application: Application): BaseViewModel(application) {
+@HiltViewModel
+class Login_Viewmodel @Inject constructor(
+    application: Application,
+    private val loginRepository: LoginRepository): BaseViewModel(application) {
 
-    val showSignup_Fragment:MutableLiveData<Boolean> = MutableLiveData(false)
+    val showSignupActivity:MutableLiveData<Boolean> = MutableLiveData(false)
     val showMainActivity:MutableLiveData<Boolean> = MutableLiveData(false)
     val checkLogin:MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -22,34 +30,21 @@ class Login_Viewmodel(application: Application): BaseViewModel(application) {
         checkAuth()
     }
     fun changeSignup(){
-        showSignup_Fragment.value = true
+        StartEvent(showSignupActivity)
     }
 
     fun login(){
         if (loginEmail.value.toString().isNullOrEmpty() || loginPassword.value.toString().isNullOrEmpty()){
             loginfail.value = 0
         }else{
-            auth.signInWithEmailAndPassword(loginEmail.value.toString(),loginPassword.value.toString()).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    if (it.result.user?.isEmailVerified == true) {
-                        showMainActivity.value = true
-                    } else {
-                        loginfail.value = 1
-                    }
-                } else {
-                    val errorCode = (it.exception as FirebaseAuthException).errorCode
-
-                    when(errorCode){
-                        "ERROR_INVALID_EMAIL" -> loginfail.value = 2
-                        "ERROR_INVALID_CREDENTIAL" -> loginfail.value = 3
-                    }
-                }
+            viewModelScope.launch {
+                loginfail.value = loginRepository.login(loginEmail.value!!,loginPassword.value!!)
             }
         }
     }
 
     fun checkAuth(){
-        val currentUser = auth.currentUser//FirebaseCertified.firebaseAuth.currentUser
+        val currentUser = auth.currentUser
         currentUser?.let {
             if(currentUser.isEmailVerified){
                 checkLogin.value=true

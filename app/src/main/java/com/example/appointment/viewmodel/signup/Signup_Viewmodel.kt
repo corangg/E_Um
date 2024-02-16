@@ -15,9 +15,11 @@ import com.example.appointment.model.ProfileDataModel
 import com.example.appointment.viewmodel.BaseViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class Signup_Viewmodel(application: Application) : BaseViewModel(application){
+@HiltViewModel
+class Signup_Viewmodel @Inject constructor(application: Application) : BaseViewModel(application){
     var signUpEmail : MutableLiveData<String> = MutableLiveData("")
     var signUpPassword : MutableLiveData<String> = MutableLiveData("")
     var signUpPasswordCheck : MutableLiveData<String> = MutableLiveData("")
@@ -35,7 +37,6 @@ class Signup_Viewmodel(application: Application) : BaseViewModel(application){
     var signupIdCheck :MutableLiveData<Boolean> = MutableLiveData(true)
     var searchAddress :MutableLiveData<Boolean> = MutableLiveData(false)
 
-    //var context = getApplication<Application>().applicationContext
 
     fun signUp(){
         if(signUpPassword.value.toString()==signUpPasswordCheck.value.toString()){

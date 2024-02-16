@@ -1,22 +1,17 @@
 package com.example.appointment.ui.activity.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat.startActivity
-import androidx.databinding.DataBindingUtil
 import com.example.appointment.R
 import com.example.appointment.databinding.ActivityLoginBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.activity.MainActivity
 import com.example.appointment.ui.activity.signup.SignupActivity
 import com.example.appointment.viewmodel.logIn.Login_Viewmodel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     val loginViewModel: Login_Viewmodel by viewModels()
 
@@ -29,7 +24,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     }
 
     override fun setObserve(){
-        loginViewModel.showSignup_Fragment.observe(this){
+        loginViewModel.showSignupActivity.observe(this){
             if(it){
                 startActivity(Intent(this, SignupActivity::class.java))
             }

@@ -14,6 +14,7 @@ import com.example.appointment.repository.FriendAddRepository
 import com.example.appointment.repository.FriendAlarmRepository
 import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
+import com.example.appointment.repository.LoginRepository
 import com.example.appointment.repository.PasswordEditRepository
 import com.example.appointment.repository.ScheduleFragmentRepository
 import com.example.appointment.repository.ScheduleMapRepository
@@ -92,6 +93,12 @@ object Moudle {
     @Provides
     fun providerChatRepository(): ChatRepository {
         return ChatRepository(Utils())
+    }
+
+    @Singleton
+    @Provides
+    fun providerLoginRepository(): LoginRepository {
+        return LoginRepository()
     }
 
 
