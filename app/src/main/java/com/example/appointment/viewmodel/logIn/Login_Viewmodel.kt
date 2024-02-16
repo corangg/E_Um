@@ -34,7 +34,7 @@ class Login_Viewmodel @Inject constructor(
     }
 
     fun login(){
-        if (loginEmail.value.toString().isNullOrEmpty() || loginPassword.value.toString().isNullOrEmpty()){
+        if (loginEmail.value!! == "" || loginPassword.value!! == ""){
             loginfail.value = 0
         }else{
             viewModelScope.launch {

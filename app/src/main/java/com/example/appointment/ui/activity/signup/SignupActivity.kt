@@ -1,12 +1,8 @@
 package com.example.appointment.ui.activity.signup
 
 import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import com.example.appointment.AddressDBHelper
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
 import com.example.appointment.R
@@ -39,7 +35,7 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        signupViewModel.fnHandleActivityResult(requestCode, resultCode, data)
+        signupViewModel.handleActivityResult(requestCode, resultCode, data)
     }
 
     override fun setObserve(){
@@ -54,7 +50,7 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
             }
         }
         signupViewModel.signupIdCheck.observe(this){
-            if(!it){
+            if(it){
                 Toast.makeText(this,"동일한 계정이 있습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -65,10 +61,12 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
                 }
             }
         }
-        /*signupViewModel.titleAddress.observe(this){
-            val db = AddressDBHelper(this,signupViewModel.signUpEmail.value).writableDatabase//signupViewModel.signUpEmail.value가 비어서 그럼
-            db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf("집",signupViewModel.titleAddress.value))
-            db.close()
-        }*/
+        signupViewModel.writeAddressDB.observe(this){
+            if(it){
+                val db = AddressDBHelper(this,signupViewModel.signUpEmail.value).writableDatabase//signupViewModel.signUpEmail.value가 비어서 그럼
+                db.execSQL("insert into ADDRESS_TB(name,address) values(?,?)", arrayOf("집",signupViewModel.titleAddress.value))
+                db.close()
+            }
+        }
     }
 }

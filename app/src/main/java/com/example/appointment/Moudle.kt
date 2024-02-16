@@ -19,6 +19,7 @@ import com.example.appointment.repository.PasswordEditRepository
 import com.example.appointment.repository.ScheduleFragmentRepository
 import com.example.appointment.repository.ScheduleMapRepository
 import com.example.appointment.repository.ScheduleSetFragmentRepository
+import com.example.appointment.repository.SignUpRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -99,6 +100,12 @@ object Moudle {
     @Provides
     fun providerLoginRepository(): LoginRepository {
         return LoginRepository()
+    }
+
+    @Singleton
+    @Provides
+    fun providerSignUpRepository(): SignUpRepository {
+        return SignUpRepository()
     }
 
 

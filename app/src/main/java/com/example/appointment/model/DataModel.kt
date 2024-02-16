@@ -4,14 +4,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.annotations.SerializedName
 
+data class SignUpDataModel(
+    val privacy : PrivacyDataModel,
+    val profile : ProfileDataModel
+
+)
+
 data class PrivacyDataModel(
-    var email:String,
-    var password:String,
-    var name:String,
-    var nickname:String,
-    var phoneNumber:String,
-    var zonecode:String,
-    var address:String
+    var email : String = "",
+    var password:String = "",
+    var name : String = "",
+    var nickname : String = "",
+    var phoneNumber : String = "",
+    var zonecode : String = "",
+    var address : String = ""
 )
 
 data class AddressData(
