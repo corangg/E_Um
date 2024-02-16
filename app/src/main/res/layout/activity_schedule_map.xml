@@ -68,7 +68,7 @@
                     android:background="@drawable/btn_white"
                     android:textColor="@color/themecolor"
                     android:textStyle="bold"
-                    android:onClick="@{()->viewmodel.fnSearchKeyword(viewmodel.searchKewordAndAddress)}"
+                    android:onClick="@{()->viewmodel.searchKeyword(viewmodel.searchKewordAndAddress)}"
                     />
 
             </LinearLayout>
@@ -165,7 +165,7 @@
                     android:background="@drawable/btn_white"
                     android:textColor="@color/themecolor"
                     android:textStyle="bold"
-                    android:onClick="@{()->viewmodel.fnEndMapActivity()}"
+                    android:onClick="@{()->viewmodel.endMapActivity()}"
                     />
 
 

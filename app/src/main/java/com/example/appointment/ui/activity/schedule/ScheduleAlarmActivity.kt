@@ -9,8 +9,10 @@ import com.example.appointment.ui.activity.AdapterActivity
 import com.example.appointment.ui.adapter.OnItemClickListener
 import com.example.appointment.ui.fragment.schedule.ScheduleAccept_Fragment
 import com.example.appointment.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
-
+@AndroidEntryPoint
 class ScheduleAlarmActivity : AdapterActivity<ActivityScheduleAlarmBinding>(), OnItemClickListener {
     private val mainViewmodel: MainViewModel by viewModels()
 

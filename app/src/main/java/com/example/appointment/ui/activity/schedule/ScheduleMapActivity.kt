@@ -31,8 +31,9 @@ import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 
 import com.naver.maps.map.overlay.Marker
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapReadyCallback, OnItemClickListener{
     lateinit var adapter : MapSearchResultsAdapter
     lateinit var locationSource: FusedLocationSource
@@ -88,7 +89,7 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
     }
 
     override fun onItemClick(position: Int) {
-        viewmodel.fnClickItem(position)
+        viewmodel.onClickItem(position)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -124,7 +125,7 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
             val coords: String = longitude.toString()+","+latitude.toString()
             naverMap.moveCamera(CameraUpdate.scrollTo(latLng))
             fnMarkerSet(naverMap,latLng)
-            viewmodel.fnClickMap(latitude,longitude,coords)
+            viewmodel.onClickMap(latitude,longitude,coords)
         }
 
         viewmodel.showSelectMarker.observe(this){
@@ -133,8 +134,8 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
 
                     val currentLocation = locationSource.lastLocation
                     if (currentLocation != null) {
-                        viewmodel.endX.value = viewmodel.searchCoordinate.value!!.longitude.toString()
-                        viewmodel.endY.value = viewmodel.searchCoordinate.value!!.latitude.toString()
+                        viewmodel.endX = viewmodel.searchCoordinate.value!!.longitude.toString()
+                        viewmodel.endY = viewmodel.searchCoordinate.value!!.latitude.toString()
                     }
 
                     binding.recycleSearch.visibility = View.GONE
@@ -182,7 +183,7 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
     }
 
     override fun setObserve(){
-        viewmodel.showKeywordList.observe(this){//왜 이거 이럼?보이는거에 따라? 리스트변경에 따르는게 더 좋지 않을까?
+        viewmodel.showKeywordList.observe(this){
             if(it){
                 binding.recycleSearch.visibility = View.VISIBLE
 
@@ -200,8 +201,8 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
 
         viewmodel.mapActivityEnd.observe(this){
             val intent = Intent()
-            intent.putExtra("endX", viewmodel.endX.value)
-            intent.putExtra("endY", viewmodel.endY.value)
+            intent.putExtra("endX", viewmodel.endX)
+            intent.putExtra("endY", viewmodel.endY)
             intent.putExtra("address", viewmodel.selectAddress.value)
             intent.putExtra("keywordName",viewmodel.kewordName.value)
             setResult(Activity.RESULT_OK, intent)

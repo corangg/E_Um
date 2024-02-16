@@ -15,6 +15,7 @@ import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
 import com.example.appointment.repository.PasswordEditRepository
 import com.example.appointment.repository.ScheduleFragmentRepository
+import com.example.appointment.repository.ScheduleMapRepository
 import com.example.appointment.repository.ScheduleSetFragmentRepository
 
 @Module
@@ -78,6 +79,12 @@ object Moudle {
     @Provides
     fun providerFriendAlarmRepository(): FriendAlarmRepository {
         return FriendAlarmRepository(Utils())
+    }
+
+    @Singleton
+    @Provides
+    fun providerScheduleMapRepository(): ScheduleMapRepository {
+        return ScheduleMapRepository()
     }
 
 

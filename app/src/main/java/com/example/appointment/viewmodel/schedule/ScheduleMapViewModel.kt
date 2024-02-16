@@ -1,48 +1,57 @@
 package com.example.appointment.viewmodel.schedule
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.apiservice.APIData
 import com.example.appointment.apiservice.NaverKeWord
 import com.example.appointment.apiservice.NaverReverseGeocode
-import com.example.appointment.data.Utils
 import com.example.appointment.model.KeyWordResponse
 import com.example.appointment.model.PlaceItem
 import com.example.appointment.model.ReverseGeocodingResponse
+import com.example.appointment.repository.ScheduleMapRepository
 import com.example.appointment.viewmodel.BaseViewModel
 import com.naver.maps.geometry.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class ScheduleMapViewModel(application: Application) : BaseViewModel(application){
-    var searchKewordAndAddress : MutableLiveData<String?> = MutableLiveData("")
-    var showKeywordList : MutableLiveData<Boolean> = MutableLiveData(false)
-    var searchKewordList : MutableLiveData<MutableList<PlaceItem>> = MutableLiveData()
-    var kewordName : MutableLiveData<String?> = MutableLiveData("")
-    var selectAddress : MutableLiveData<String?> = MutableLiveData("")
-    var selectRoadAddress : MutableLiveData<String?> = MutableLiveData("")
-    var mapActivityEnd : MutableLiveData<Unit> = MutableLiveData()
-    var searchCoordinate : MutableLiveData<LatLng> = MutableLiveData(null)
-    var showSelectMarker : MutableLiveData<Boolean> = MutableLiveData(false)
-    var showSelectKeywordTab : MutableLiveData<Boolean> = MutableLiveData(false)
-    var endX:MutableLiveData<String> = MutableLiveData("")
-    var endY:MutableLiveData<String> = MutableLiveData("")
+@HiltViewModel
+class ScheduleMapViewModel @Inject constructor(
+    application: Application,
+    private val scheduleMapRepository: ScheduleMapRepository) : BaseViewModel(application){
+    val searchKewordAndAddress : MutableLiveData<String> = MutableLiveData("")
+    val kewordName : MutableLiveData<String> = MutableLiveData("")
+    val selectAddress : MutableLiveData<String> = MutableLiveData("")
+    val selectRoadAddress : MutableLiveData<String> = MutableLiveData("")
 
-    fun fnClickMap(latitude: Double, longitude: Double, coords: String){
-        endX.value = longitude.toString()
-        endY.value = latitude.toString()
+    val showKeywordList : MutableLiveData<Boolean> = MutableLiveData(false)
+    val showSelectMarker : MutableLiveData<Boolean> = MutableLiveData(false)
+    val showSelectKeywordTab : MutableLiveData<Boolean> = MutableLiveData(false)
 
-        fnReverseGeo(coords)
+    val searchCoordinate : MutableLiveData<LatLng> = MutableLiveData(null)
+    val searchKewordList : MutableLiveData<MutableList<PlaceItem>> = MutableLiveData()
+    val mapActivityEnd : MutableLiveData<Unit> = MutableLiveData()
+
+    var endX : String = ""
+    var endY : String = ""
+
+    fun onClickMap(latitude: Double, longitude: Double, coords: String){
+        endX = longitude.toString()
+        endY = latitude.toString()
+
+        reverseGeo(coords)
     }
 
-    fun fnClickItem(position:Int){
-        val latLng = com.naver.maps.geometry.LatLng(searchKewordList.value!![position].y*0.0000001,searchKewordList.value!![position].x*0.0000001)
-        val searchName : String = searchKewordList.value!![position].title.replace("<b>","").replace("</b>","")
-        fnSelectKewordTabDataSet(latLng,searchName,searchKewordList.value!![position].roadAddress,searchKewordList.value!![position].address)
+    fun onClickItem(position:Int){
+        val latLng = scheduleMapRepository.setLatLng(searchKewordList.value!![position])
+        val searchName = scheduleMapRepository.setSearchName(searchKewordList.value!![position])
+        val roadAddress = searchKewordList.value!![position].roadAddress
+        val address = searchKewordList.value!![position].address
+        selectKewordTabDataSet(latLng,searchName,roadAddress,address)
     }
 
-    fun fnSelectKewordTabDataSet(mapPoint: LatLng, name: String, roadAddress:String, address:String){
+    fun selectKewordTabDataSet(mapPoint: LatLng, name: String, roadAddress:String, address:String){
         searchCoordinate.value = mapPoint
         kewordName.value = name
         selectAddress.value = address
@@ -53,7 +62,7 @@ class ScheduleMapViewModel(application: Application) : BaseViewModel(application
         showSelectKeywordTab.value = true
     }
 
-    fun fnSearchKeyword(keyword: String){
+    fun searchKeyword(keyword: String){
         val retrofit = Retrofit.Builder()
             .baseUrl(APIData.KEWORD_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -65,29 +74,21 @@ class ScheduleMapViewModel(application: Application) : BaseViewModel(application
 
         utils.getRetrofitData(call){
             if(it!=null){
-                fnSearchKewordList(it)
+                searchKewordList(it)
                 showKeywordList.value = true
             }
         }
     }
 
-    fun fnSearchKewordList(searchResult: KeyWordResponse?){
-        val searchList : MutableList<PlaceItem> = mutableListOf()
-        for (document in searchResult!!.items) {
-            searchList.add(document)
-        }
-        searchKewordList.value = searchList
+    fun searchKewordList(searchResult: KeyWordResponse?){
+        searchKewordList.value = scheduleMapRepository.searchKewordListSet(searchResult)
     }
 
-    fun fnEndMapActivity(){
+    fun endMapActivity(){
         mapActivityEnd.value = Unit
     }
 
-
-
-
-
-    fun fnReverseGeo(coords:String){
+    fun reverseGeo(coords:String){
         val retrofit = Retrofit.Builder()
             .baseUrl(APIData.NAVER_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -101,38 +102,17 @@ class ScheduleMapViewModel(application: Application) : BaseViewModel(application
             if(it!=null){
                 fnReverseGeoAddressSet(it)
                 fnReverseGeoRoadAddressSet(it)
-
-                kewordName.value =""//addition0.value값이 안들어옴 나중에 확인 해보자
+                kewordName.value =""
                 showSelectKeywordTab.value = true
             }
         }
     }
 
     fun fnReverseGeoAddressSet(body: ReverseGeocodingResponse?){
-        var address : String = ""
-        if(body!!.results[0] != null){
-            if (body.results[0].land.number2==""){
-                address = body.results[0].region.area1.name+body.results[0].region.area2.name+body.results[0].region.area3.name+body.results[0].land.number1
-            }else{
-                address = body.results[0].region.area1.name+body.results[0].region.area2.name+body.results[0].region.area3.name+body.results[0].land.number1+"-"+body.results[0].land.number2
-            }
-        }
-
-        selectAddress.value = address
+        selectAddress.value = scheduleMapRepository.reverseGeoAddressSet(body)
     }
 
     fun fnReverseGeoRoadAddressSet(body: ReverseGeocodingResponse?){
-        var roadAddress : String = ""
-
-        if(body!!.results.size == 1){
-
-        }else if(body!!.results.size == 2){
-            if(body!!.results[1] != null){
-                roadAddress = body.results[1].region.area1.name+body.results[1].region.area2.name+body.results[1].land.name+body.results[1].land.number1
-            }
-        }
-
-        selectRoadAddress.value = roadAddress
+        selectRoadAddress.value = scheduleMapRepository.reverseGeoRoadAddressSet(body)
     }
-
 }
