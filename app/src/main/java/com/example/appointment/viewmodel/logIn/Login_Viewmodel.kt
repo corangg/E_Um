@@ -38,7 +38,11 @@ class Login_Viewmodel @Inject constructor(
             loginfail.value = 0
         }else{
             viewModelScope.launch {
-                loginfail.value = loginRepository.login(loginEmail.value!!,loginPassword.value!!)
+                if(loginRepository.login(loginEmail.value!!,loginPassword.value!!) == 0){
+                    StartEvent(showMainActivity)
+                }else{
+                    loginfail.value = loginRepository.login(loginEmail.value!!,loginPassword.value!!)
+                }
             }
         }
     }
