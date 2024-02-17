@@ -87,7 +87,7 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
                     mainViewmodel.startX,
                     mainViewmodel.startY,
                     mainViewmodel.scheduleEmailPath)
-                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)//출발인듯//고쳐두긴 했는데 이상하면 다른2개랑 같이 바꿔야할듯
+                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)
             }
         }
 
@@ -95,7 +95,7 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
             if(it){
                 fragmentClose()
                 setAlarm(mainViewmodel.selectFriendProfile.nickname,mainViewmodel.scheduleAlarmTime)
-                Toast.makeText(activity,"${mainViewmodel.selectFriendProfile.nickname}님에게 약속 요청을 보냈습니다.",Toast.LENGTH_SHORT).show()
+                toast("${mainViewmodel.selectFriendProfile.nickname}님에게 약속 요청을 보냈습니다.")
             }
         }
     }

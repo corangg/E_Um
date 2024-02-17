@@ -1,5 +1,6 @@
 package com.example.appointment.ui.activity.friend
 
+import android.app.ProgressDialog.show
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -58,7 +59,7 @@ class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
                 binding.layoutFriendCheck.visibility = View.VISIBLE
                 Glide.with(this).load(viewmodel.searchFriendImgURL).into(binding.imgProfile)
             }else{
-                Toast.makeText(this,"이메일을 확인해 주세요.",Toast.LENGTH_SHORT).show()
+                toast("이메일을 확인해 주세요.")
             }
         }
 
@@ -66,11 +67,11 @@ class FriendAddActivity : BaseActivity<ActivityFriendAddBinding>() {
             when(it){
                 1 -> {
                     finish()
-                    Toast.makeText(this,"친구 신청 완료.",Toast.LENGTH_SHORT).show()
+                    toast("친구 신청 완료.")
                 }
-                2 -> Toast.makeText(this,"본인 계정 입니다.",Toast.LENGTH_SHORT).show()
-                3 -> Toast.makeText(this,"검색된 계정이 없습니다.",Toast.LENGTH_SHORT).show()
-                4 -> Toast.makeText(this,"친구 신청 실패.",Toast.LENGTH_SHORT).show()
+                2 -> toast("본인 계정 입니다.")
+                3 -> toast("검색된 계정이 없습니다.")
+                4 -> toast("친구 신청 실패.")
             }
         }
     }

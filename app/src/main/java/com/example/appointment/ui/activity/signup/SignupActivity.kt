@@ -46,12 +46,12 @@ class SignupActivity : BaseActivity<ActivitySignupBinding>() {
             if(it){
                 finish()
                 startActivity(Intent(this, LoginActivity::class.java))
-                Toast.makeText(this,"회원가입 성공",Toast.LENGTH_SHORT).show()
+                toast("회원가입 성공")
             }
         }
         signupViewModel.signupIdCheck.observe(this){
             if(it){
-                Toast.makeText(this,"동일한 계정이 있습니다.", Toast.LENGTH_SHORT).show()
+                toast("동일한 계정이 있습니다.")
             }
         }
         signupViewModel.searchAddress.observe(this){

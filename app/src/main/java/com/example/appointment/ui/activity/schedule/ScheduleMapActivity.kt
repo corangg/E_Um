@@ -97,7 +97,7 @@ class ScheduleMapActivity : AdapterActivity<ActivityScheduleMapBinding>(),OnMapR
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mapView.getMapAsync(this)
             } else {
-                Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                toast("위치 권한이 필요합니다.")
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

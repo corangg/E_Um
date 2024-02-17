@@ -1,5 +1,6 @@
 package com.example.appointment.ui.activity.profile
 
+import android.app.ProgressDialog.show
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.appointment.R
@@ -31,15 +32,15 @@ class PasswordEditActivity : BaseActivity<ActivityPasswordEditBinding>() {
     override fun setObserve(){
         passwordEditViewModel.passwordUpdate.observe(this){
             when(it){
-                0-> Toast.makeText(this,"비밀번호 확인 완료",Toast.LENGTH_SHORT).show()
-                1-> Toast.makeText(this,"비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show()
-                2-> Toast.makeText(this,"기존 비밀번호 확인이 필요합니다.",Toast.LENGTH_SHORT).show()
-                3-> Toast.makeText(this, "새 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                0-> toast("비밀번호 확인 완료")
+                1-> toast("비밀번호가 틀립니다.")
+                2-> toast("기존 비밀번호 확인이 필요합니다.")
+                3-> toast( "새 비밀번호가 일치하지 않습니다.")
                 4->{
-                    Toast.makeText(this,"비밀번호 변경 완료",Toast.LENGTH_SHORT).show()
+                    toast("비밀번호 변경 완료")
                     finish()
                 }
-                5-> Toast.makeText(this,"비밀번호 변경에 실패했습니다.",Toast.LENGTH_SHORT).show()
+                5-> toast("비밀번호 변경에 실패했습니다.")
             }
         }
     }

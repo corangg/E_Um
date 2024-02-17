@@ -63,7 +63,7 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
 
                 setAlarm(mainViewmodel.selectScheduleNickname,mainViewmodel.scheduleAlarmTime)
 
-                Toast.makeText(activity,"약속을 수락하셨습니다.",Toast.LENGTH_SHORT).show()
+                toast("약속을 수락하셨습니다.")
             }
         }
         mainViewmodel.meetingTimeOver.observe(viewLifecycleOwner){
@@ -76,7 +76,7 @@ class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBi
             if(it){
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                Toast.makeText(activity,"약속을 거절하셨습니다.",Toast.LENGTH_SHORT).show()
+                toast("약속을 거절하셨습니다.")
             }
         }
     }
