@@ -20,6 +20,10 @@
         android:theme="@style/Theme.Appointment"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activity.AlarmActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.MeetingStartService"
             android:enabled="true"
