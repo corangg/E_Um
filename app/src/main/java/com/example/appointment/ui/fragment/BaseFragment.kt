@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.viewbinding.ViewBinding
+import com.example.appointment.R
 import javax.security.auth.callback.Callback
 
 abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
@@ -45,6 +48,17 @@ abstract class BaseFragment<B : ViewDataBinding>: Fragment() {
         val fragmentManager = requireActivity().supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         return transaction
+    }
+
+    fun toast(message : String){
+        val inflater = LayoutInflater.from(requireContext())
+        val layout = inflater.inflate(R.layout.toast_layout, null)
+        val text = layout.findViewById<TextView>(R.id.text)
+        text.text = message
+        val toast = Toast(requireContext())
+        toast.view = layout
+        toast.duration = Toast.LENGTH_SHORT
+        toast.show()
     }
 
 }
