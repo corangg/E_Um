@@ -2,9 +2,9 @@ package com.example.appointment.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
-import com.example.appointment.model.YYYYMMDDhhmm
-import com.example.appointment.model.ScheduleDate
-import com.example.appointment.model.ScheduleTime
+import com.example.appointment.data.YYYYMMDDhhmm
+import com.example.appointment.data.ScheduleDate
+import com.example.appointment.data.ScheduleTime
 import com.google.firebase.database.DatabaseReference
 import com.prolificinteractive.materialcalendarview.CalendarDay
 
@@ -13,7 +13,7 @@ class ScheduleSetFragmentRepository(private val utils: Utils) {
     val scheduleDate : MutableLiveData<String> = MutableLiveData("")
     //val scheduleYYYYMMDD : MutableLiveData<String> = MutableLiveData("")
 
-    fun scheduleSet(date: CalendarDay):ScheduleDate{
+    fun scheduleSet(date: CalendarDay): ScheduleDate {
         val year = date.year
         val month = date.month
         val day = date.day

@@ -5,11 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.StartEvent
+import com.example.appointment.data.StartEvent
 import com.example.appointment.data.RequestCode
-import com.example.appointment.data.Utils
-import com.example.appointment.ui.activity.profile.AdressSearchActivity
-import com.example.appointment.viewmodel.BaseViewModel
 
 class AddAddressViewModel(application: Application): AndroidViewModel(application) {
     val zoneCode : MutableLiveData<String> = MutableLiveData("")

@@ -1,4 +1,4 @@
-package com.example.appointment
+package com.example.appointment.data
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData

@@ -3,14 +3,11 @@ package com.example.appointment.ui.activity.chat
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appointment.R
 import com.example.appointment.ui.adapter.ChatAdapter
 import com.example.appointment.databinding.ActivityChatBinding
-import com.example.appointment.model.ChatCreateData
-import com.example.appointment.model.ChatDataModel
+import com.example.appointment.data.ChatCreateData
 import com.example.appointment.ui.activity.AdapterActivity
-import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.viewmodel.chat.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

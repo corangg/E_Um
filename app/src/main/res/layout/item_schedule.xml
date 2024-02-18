@@ -5,7 +5,7 @@
     <data>
         <variable
             name="scheduleset"
-            type="com.example.appointment.model.ScheduleSet" />
+            type="com.example.appointment.data.ScheduleSet" />
     </data>
 
     <RelativeLayout

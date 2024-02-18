@@ -2,8 +2,6 @@ package com.example.appointment.data
 
 import android.icu.text.SimpleDateFormat
 import android.util.Log
-import com.example.appointment.model.YYYYMMDDhhmm
-import com.example.appointment.model.ScheduleTime
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -23,7 +21,6 @@ import java.util.Date
 import java.util.Locale
 
 class Utils {
-
     companion object{
         val auth = FirebaseAuth.getInstance()
         val firestore = FirebaseFirestore.getInstance()

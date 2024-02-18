@@ -1,4 +1,4 @@
-package com.example.appointment
+package com.example.appointment.DB
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

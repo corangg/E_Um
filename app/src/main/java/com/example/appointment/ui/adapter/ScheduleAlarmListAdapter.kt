@@ -3,7 +3,7 @@ package com.example.appointment.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.appointment.databinding.ItemScheduleAlarmBinding
-import com.example.appointment.model.ScheduleSet
+import com.example.appointment.data.ScheduleSet
 
 class ScheduleAlarmListViewHolder(binding: ItemScheduleAlarmBinding): BaseViewHolder<ItemScheduleAlarmBinding>(binding){
     fun bindScheduleAlarmList(

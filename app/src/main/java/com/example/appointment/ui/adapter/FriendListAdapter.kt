@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemFriendListBinding
-import com.example.appointment.model.ProfileDataModel
+import com.example.appointment.data.ProfileDataModel
 
 class FriendListViewHolder(binding: ItemFriendListBinding): BaseViewHolder<ItemFriendListBinding>(binding){
     fun bindFfiendListItem(

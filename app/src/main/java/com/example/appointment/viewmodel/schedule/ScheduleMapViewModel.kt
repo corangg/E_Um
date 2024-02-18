@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.appointment.apiservice.APIData
 import com.example.appointment.apiservice.NaverKeWord
 import com.example.appointment.apiservice.NaverReverseGeocode
-import com.example.appointment.model.KeyWordResponse
-import com.example.appointment.model.PlaceItem
-import com.example.appointment.model.ReverseGeocodingResponse
+import com.example.appointment.data.KeyWordResponse
+import com.example.appointment.data.PlaceItem
+import com.example.appointment.data.ReverseGeocodingResponse
 import com.example.appointment.repository.ScheduleMapRepository
 import com.example.appointment.viewmodel.BaseViewModel
 import com.naver.maps.geometry.LatLng

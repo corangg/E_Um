@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemChatListBinding
-import com.example.appointment.model.ChatRoomData
+import com.example.appointment.data.ChatRoomData
 
 class ChatListViewHolder(binding: ItemChatListBinding):BaseViewHolder<ItemChatListBinding>(binding){
 

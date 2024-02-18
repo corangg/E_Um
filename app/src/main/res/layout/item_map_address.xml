@@ -4,7 +4,7 @@
     <data>
         <variable
             name="placeitem"
-            type="com.example.appointment.model.PlaceItem" />
+            type="com.example.appointment.data.PlaceItem" />
     </data>
 
     <LinearLayout

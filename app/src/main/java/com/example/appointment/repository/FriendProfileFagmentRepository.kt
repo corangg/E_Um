@@ -2,8 +2,8 @@ package com.example.appointment.repository
 
 import android.util.Log
 import com.example.appointment.data.Utils
-import com.example.appointment.model.ChatInfo
-import com.example.appointment.model.EmailNicknameData
+import com.example.appointment.data.ChatInfo
+import com.example.appointment.data.EmailNicknameData
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.tasks.await

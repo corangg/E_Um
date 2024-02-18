@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appointment.R
 import com.example.appointment.databinding.ItemAddressBinding
-import com.example.appointment.model.AddressData
-import com.google.firebase.firestore.model.mutation.ArrayTransformOperation
+import com.example.appointment.data.AddressData
 
 class AddressListViewHolder(val binding: ItemAddressBinding): RecyclerView.ViewHolder(binding.root)
 

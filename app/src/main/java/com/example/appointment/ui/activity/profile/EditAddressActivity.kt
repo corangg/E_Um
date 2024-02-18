@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.appointment.AddressDBHelper
+import com.example.appointment.DB.AddressDBHelper
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils.Companion.auth

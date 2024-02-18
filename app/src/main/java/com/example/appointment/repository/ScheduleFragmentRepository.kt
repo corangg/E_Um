@@ -3,10 +3,10 @@ package com.example.appointment.repository
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
-import com.example.appointment.model.ScheduleDate
-import com.example.appointment.model.ScheduleDateTime
-import com.example.appointment.model.ScheduleSet
-import com.example.appointment.model.ScheduleTime
+import com.example.appointment.data.ScheduleDate
+import com.example.appointment.data.ScheduleDateTime
+import com.example.appointment.data.ScheduleSet
+import com.example.appointment.data.ScheduleTime
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

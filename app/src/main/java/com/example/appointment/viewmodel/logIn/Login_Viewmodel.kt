@@ -3,11 +3,10 @@ package com.example.appointment.viewmodel.logIn
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.appointment.StartEvent
+import com.example.appointment.data.StartEvent
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.repository.LoginRepository
 import com.example.appointment.viewmodel.BaseViewModel
-import com.google.firebase.auth.FirebaseAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

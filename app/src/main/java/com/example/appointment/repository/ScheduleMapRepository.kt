@@ -1,8 +1,8 @@
 package com.example.appointment.repository
 
-import com.example.appointment.model.KeyWordResponse
-import com.example.appointment.model.PlaceItem
-import com.example.appointment.model.ReverseGeocodingResponse
+import com.example.appointment.data.KeyWordResponse
+import com.example.appointment.data.PlaceItem
+import com.example.appointment.data.ReverseGeocodingResponse
 import com.naver.maps.geometry.LatLng
 
 class ScheduleMapRepository {

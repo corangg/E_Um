@@ -13,17 +13,12 @@ import com.example.appointment.apiservice.TMapDistanceRoute
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
-import com.example.appointment.model.DistanceRouteResponse
-import com.example.appointment.receiver.StartCheckAlarmReceiver
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

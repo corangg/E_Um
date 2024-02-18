@@ -3,7 +3,7 @@ package com.example.appointment.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.appointment.databinding.ItemMapAddressBinding
-import com.example.appointment.model.PlaceItem
+import com.example.appointment.data.PlaceItem
 
 class MapSearchResultsViewHolder(binding: ItemMapAddressBinding): BaseViewHolder<ItemMapAddressBinding>(binding){
     fun bindMapSearchResults(

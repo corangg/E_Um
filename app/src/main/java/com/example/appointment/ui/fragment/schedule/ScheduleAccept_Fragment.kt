@@ -1,14 +1,13 @@
 package com.example.appointment.ui.fragment.schedule
 
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.example.appointment.R
-import com.example.appointment.data.ToastMessage
+import com.example.appointment.`object`.ToastMessage
 import com.example.appointment.databinding.FragmentScheduleAcceptBinding
-import com.example.appointment.model.AlarmData
-import com.example.appointment.model.SelectTransport
-import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.data.AlarmData
+import com.example.appointment.data.SelectTransport
+import com.example.appointment.data.StartCheckAlarmData
 import com.example.appointment.viewmodel.MainViewModel
 
 class ScheduleAccept_Fragment : BaseSceduleSet_Fragment<FragmentScheduleAcceptBinding>() {

@@ -3,7 +3,7 @@ package com.example.appointment.repository
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
-import com.example.appointment.model.FriendRequestAlarmData
+import com.example.appointment.data.FriendRequestAlarmData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

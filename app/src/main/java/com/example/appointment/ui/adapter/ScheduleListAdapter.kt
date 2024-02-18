@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.appointment.databinding.ItemScheduleBinding
-import com.example.appointment.model.ScheduleSet
+import com.example.appointment.data.ScheduleSet
 
 class ScheduleListViewHolder(binding: ItemScheduleBinding): BaseViewHolder<ItemScheduleBinding>(binding){
     fun bindScheduleItem(

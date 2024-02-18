@@ -1,11 +1,11 @@
-package com.example.appointment
+package com.example.appointment.`object`
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
-import com.example.appointment.model.YYYYMMDDhhmm
+import com.example.appointment.data.YYYYMMDDhhmm
 
 object AlarmUtil {
     fun settingAlarm(context: Context, intent: Intent, requestCode: Int, alarmTime: YYYYMMDDhhmm, checkAlarmTime:Int){

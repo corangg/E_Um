@@ -5,7 +5,7 @@
     <data>
         <variable
             name="chatroom"
-            type="com.example.appointment.model.ChatRoomData" />
+            type="com.example.appointment.data.ChatRoomData" />
     </data>
 
     <RelativeLayout

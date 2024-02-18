@@ -1,4 +1,4 @@
-package com.example.appointment
+package com.example.appointment.`object`
 
 import com.example.appointment.repository.ProfileRepository
 import com.google.firebase.firestore.FirebaseFirestore

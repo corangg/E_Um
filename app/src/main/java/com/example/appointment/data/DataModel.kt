@@ -1,4 +1,4 @@
-package com.example.appointment.model
+package com.example.appointment.data
 
 import android.widget.ImageView
 import android.widget.TextView

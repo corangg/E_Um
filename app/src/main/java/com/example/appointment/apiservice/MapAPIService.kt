@@ -1,16 +1,16 @@
 package com.example.appointment.apiservice
 
 
-import com.example.appointment.model.CarRouteRequest
-import com.example.appointment.model.CarRouteResponse
-import com.example.appointment.model.DistanceRouteResponse
-import com.example.appointment.model.KeyWordResponse
-import com.example.appointment.model.GeocodingRespone
-import com.example.appointment.model.ReverseGeocodingResponse
-import com.example.appointment.model.TransitRouteRequest
-import com.example.appointment.model.PublicTransportRouteResponse
-import com.example.appointment.model.WalkRouteRequest
-import com.example.appointment.model.WalkRouteResponse
+import com.example.appointment.data.CarRouteRequest
+import com.example.appointment.data.CarRouteResponse
+import com.example.appointment.data.DistanceRouteResponse
+import com.example.appointment.data.KeyWordResponse
+import com.example.appointment.data.GeocodingRespone
+import com.example.appointment.data.ReverseGeocodingResponse
+import com.example.appointment.data.TransitRouteRequest
+import com.example.appointment.data.PublicTransportRouteResponse
+import com.example.appointment.data.WalkRouteRequest
+import com.example.appointment.data.WalkRouteResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

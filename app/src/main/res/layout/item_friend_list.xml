@@ -5,7 +5,7 @@
     <data>
         <variable
             name="profiledata"
-            type="com.example.appointment.model.ProfileDataModel" />
+            type="com.example.appointment.data.ProfileDataModel" />
     </data>
 
     <LinearLayout

@@ -6,12 +6,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.AddressDBHelper
-import com.example.appointment.StartEvent
+import com.example.appointment.DB.AddressDBHelper
+import com.example.appointment.data.StartEvent
 import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils
-import com.example.appointment.model.AddressData
-import com.example.appointment.viewmodel.BaseViewModel
+import com.example.appointment.data.AddressData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

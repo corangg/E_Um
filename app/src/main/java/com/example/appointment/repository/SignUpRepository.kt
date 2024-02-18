@@ -2,9 +2,7 @@ package com.example.appointment.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
-import com.example.appointment.model.PrivacyDataModel
-import com.example.appointment.model.ProfileDataModel
-import com.example.appointment.model.SignUpDataModel
+import com.example.appointment.data.SignUpDataModel
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

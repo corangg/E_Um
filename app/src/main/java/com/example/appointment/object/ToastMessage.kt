@@ -1,4 +1,4 @@
-package com.example.appointment.data
+package com.example.appointment.`object`
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.widget.Toast
 import com.example.appointment.R
 
 object ToastMessage {
-
     fun transportCheck(it:Int,context: Context){
         when(it){
             1-> toast(context,"AmPm을 설정해 주세요.")

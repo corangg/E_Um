@@ -2,11 +2,9 @@ package com.example.appointment.viewmodel
 
 import android.app.Activity
 import android.app.Application
-import android.app.NotificationManager
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import com.example.appointment.StartEvent
+import com.example.appointment.data.StartEvent
 import com.example.appointment.repository.AlarmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

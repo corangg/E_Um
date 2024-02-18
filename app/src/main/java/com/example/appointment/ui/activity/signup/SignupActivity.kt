@@ -1,13 +1,12 @@
 package com.example.appointment.ui.activity.signup
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.appointment.AddressDBHelper
+import com.example.appointment.DB.AddressDBHelper
 import com.example.appointment.ui.activity.profile.AdressSearchActivity
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.ADDRESS_REQUEST_CODE
-import com.example.appointment.data.ToastMessage
+import com.example.appointment.`object`.ToastMessage
 import com.example.appointment.databinding.ActivitySignupBinding
 import com.example.appointment.ui.activity.BaseActivity
 import com.example.appointment.ui.activity.login.LoginActivity

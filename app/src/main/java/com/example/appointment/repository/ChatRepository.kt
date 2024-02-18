@@ -3,7 +3,7 @@ package com.example.appointment.repository
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils
 import com.example.appointment.data.Utils.Companion.auth
-import com.example.appointment.model.ChatDataModel
+import com.example.appointment.data.ChatDataModel
 import com.google.firebase.database.DatabaseReference
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

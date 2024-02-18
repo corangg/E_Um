@@ -2,14 +2,13 @@ package com.example.appointment.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appointment.data.Utils
 import com.example.appointment.databinding.ItemMessageGetBinding
 import com.example.appointment.databinding.ItemMessageGetProfileBinding
 import com.example.appointment.databinding.ItemMessageSendBinding
-import com.example.appointment.model.ChatCreateData
-import com.example.appointment.model.ChatDataModel
+import com.example.appointment.data.ChatCreateData
+import com.example.appointment.data.ChatDataModel
 
 class ChatSendViewHolder(binding: ItemMessageSendBinding): BaseViewHolder<ItemMessageSendBinding>(binding){
     fun sendMessage(chatDataModel: ChatDataModel){
@@ -33,7 +32,8 @@ class ChatGetViewHolder(binding: ItemMessageGetBinding): BaseViewHolder<ItemMess
 
 class ChatAdapter(
     private val chatMessage:MutableList<ChatDataModel>,
-    private val chatCreateData: ChatCreateData)
+    private val chatCreateData: ChatCreateData
+)
     : BaseAdapter<ChatDataModel,BaseViewHolder<*>>(){
 
     private val TYPE_SEND = 1

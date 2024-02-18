@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.appointment.R
 
-import com.example.appointment.StartEvent
+import com.example.appointment.data.StartEvent
 import com.example.appointment.apiservice.APIData
 import com.example.appointment.apiservice.NaverGeocode
 import com.example.appointment.apiservice.TMapCarRoute
@@ -20,15 +20,15 @@ import com.example.appointment.data.RequestCode
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
 import com.example.appointment.data.Utils.Companion.firestore
-import com.example.appointment.model.YYYYMMDDhhmm
-import com.example.appointment.model.CarRouteRequest
-import com.example.appointment.model.ChatRoomData
-import com.example.appointment.model.EmailNicknameData
-import com.example.appointment.model.ProfileDataModel
-import com.example.appointment.model.ScheduleSet
-import com.example.appointment.model.ScheduleTime
-import com.example.appointment.model.TransitRouteRequest
-import com.example.appointment.model.WalkRouteRequest
+import com.example.appointment.data.YYYYMMDDhhmm
+import com.example.appointment.data.CarRouteRequest
+import com.example.appointment.data.ChatRoomData
+import com.example.appointment.data.EmailNicknameData
+import com.example.appointment.data.ProfileDataModel
+import com.example.appointment.data.ScheduleSet
+import com.example.appointment.data.ScheduleTime
+import com.example.appointment.data.TransitRouteRequest
+import com.example.appointment.data.WalkRouteRequest
 import com.example.appointment.repository.ChatFragmentRepository
 import com.example.appointment.repository.FriendFragmnetRepository
 import com.example.appointment.repository.FriendProfileFagmentRepository
@@ -410,7 +410,8 @@ class MainViewModel @Inject constructor(
                 startY,
                 endX,
                 endY,
-                scheduleSetFragmentRepository.dttmSet(scheduleAmPmSet.value,ScheduleTime(scheduleHH.value!!,scheduleMM.value!!),scheduleYYYYMMDD))
+                scheduleSetFragmentRepository.dttmSet(scheduleAmPmSet.value,
+                    ScheduleTime(scheduleHH.value!!,scheduleMM.value!!),scheduleYYYYMMDD))
 
             val call = TMapTransitApiService.getPublicTransportRoute(APIData.TMAP_API_KEY,startEndPoint)
 

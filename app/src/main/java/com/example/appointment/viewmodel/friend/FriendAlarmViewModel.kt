@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.example.appointment.data.Utils.Companion.auth
 import com.example.appointment.data.Utils.Companion.database
-import com.example.appointment.model.FriendRequestAlarmData
+import com.example.appointment.data.FriendRequestAlarmData
 import com.example.appointment.repository.FriendAlarmRepository
 import com.example.appointment.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

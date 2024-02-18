@@ -1,17 +1,16 @@
 package com.example.appointment.ui.fragment.schedule
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode.Companion.MAP_REQUEST_CODE
-import com.example.appointment.data.ToastMessage
+import com.example.appointment.`object`.ToastMessage
 import com.example.appointment.ui.activity.schedule.ScheduleMapActivity
 import com.example.appointment.databinding.FragmentScheduleSetBinding
-import com.example.appointment.model.AlarmData
-import com.example.appointment.model.SelectTransport
-import com.example.appointment.model.StartCheckAlarmData
+import com.example.appointment.data.AlarmData
+import com.example.appointment.data.SelectTransport
+import com.example.appointment.data.StartCheckAlarmData
 import com.example.appointment.viewmodel.MainViewModel
 
 
