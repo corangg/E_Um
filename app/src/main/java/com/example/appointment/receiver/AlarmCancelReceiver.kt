@@ -14,8 +14,8 @@ class AlarmCancelReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             ACTION_DISMISS_ALARM -> {
-                stopAlarmSound(context)
-                stopVibration(context)
+                stopAlarmSound()
+                stopVibration()
                 val manager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel(1234)
             }
@@ -24,7 +24,7 @@ class AlarmCancelReceiver : BroadcastReceiver() {
     }
 
 
-    private fun stopAlarmSound(context: Context){
+    private fun stopAlarmSound(){
         try {
             if(AlarmReceiver.mediaPlayer != null){
                 AlarmReceiver.mediaPlayer?.isLooping = false
@@ -38,10 +38,10 @@ class AlarmCancelReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun stopVibration(context: Context) {
+    private fun stopVibration() {
         try {
             if (AlarmReceiver.vibrator != null) {
-                AlarmReceiver.vibrator?.cancel()
+                AlarmReceiver.vibrator.cancel()
             }
         } catch (e: Exception) {
             e.printStackTrace()

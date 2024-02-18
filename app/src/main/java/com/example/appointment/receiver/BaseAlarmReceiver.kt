@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
+import com.example.appointment.ui.activity.AlarmActivity
 import com.example.appointment.ui.activity.MainActivity
 
 abstract class BaseAlarmReceiver : BroadcastReceiver() {
@@ -66,10 +67,9 @@ abstract class BaseAlarmReceiver : BroadcastReceiver() {
     fun notification(context: Context,title: String,text:String){
         val manager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         val builder: NotificationCompat.Builder
-        val intent = Intent(context, MainActivity::class.java)
-        intent.putExtra("path","openNotification")
-        val pendingIntent = PendingIntent.getActivity(context,
-            RequestCode.OPEN_APP_REQUEST_CODE,intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent = Intent(context, AlarmActivity::class.java)
+        //intent.putExtra("path","openNotification")
+        val pendingIntent = PendingIntent.getActivity(context, RequestCode.OPEN_APP_REQUEST_CODE,intent, PendingIntent.FLAG_IMMUTABLE)
 
         val dismissIntent = Intent(context, AlarmCancelReceiver::class.java)
         dismissIntent.action = AlarmCancelReceiver.ACTION_DISMISS_ALARM

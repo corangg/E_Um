@@ -545,6 +545,7 @@ class MainViewModel @Inject constructor(
                             StartEvent(alarmSet)
                         }
                         StartEvent(appointmentRequestSuccess)
+                        scheduleSetDataReset()
                     }
                 }
             }

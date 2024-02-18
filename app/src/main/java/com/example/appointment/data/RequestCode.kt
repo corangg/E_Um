@@ -10,7 +10,6 @@ class RequestCode {
         const val MAP_REQUEST_CODE =2916
         const val LOCATION_PERMISSION_REQUEST_CODE = 2917
         const val SET_ALARM_REQUEST_CODE = 2918
-        const val SET_START_CHECK_ALARM_REQUEST_CODE = 2919
         const val SET_START_ALARM_REQUEST_CODE = 2920
         const val OPEN_APP_REQUEST_CODE = 2921
         const val ALARM_CANCEL_REQUEST_CODE = 2921
