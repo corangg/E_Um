@@ -10,6 +10,7 @@ import androidx.databinding.ViewDataBinding
 import com.example.appointment.AlarmUtil
 import com.example.appointment.R
 import com.example.appointment.data.RequestCode
+import com.example.appointment.model.AlarmData
 import com.example.appointment.model.YYYYMMDDhhmm
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
@@ -80,9 +81,12 @@ abstract class BaseSceduleSet_Fragment<B:ViewDataBinding>:BaseFragment<B>() {
         }
     }
 
-    fun setAlarm(intentData: String, alarmTime: YYYYMMDDhhmm){
+    fun setAlarm(alarmData: AlarmData, alarmTime: YYYYMMDDhhmm){
         val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra("nickname",intentData)
+        intent.putExtra("address", alarmData.address)
+        intent.putExtra("nickname", alarmData.nickname)
+        intent.putExtra("startTime", alarmData.startTime)
+
         AlarmUtil.settingAlarm(requireContext(),intent, RequestCode.SET_ALARM_REQUEST_CODE, alarmTime,0)
     }
 

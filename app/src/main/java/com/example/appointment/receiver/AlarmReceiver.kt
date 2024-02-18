@@ -29,7 +29,7 @@ class AlarmReceiver : BaseAlarmReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val text = intent!!.getStringExtra("nickname") + "님과의 약속을 준비할 시간입니다."
         val title = "이제 준비하실 시간입니다."
-        notification(context!!, title, text)
+        notification(intent, context!!, title, text)
         super.onReceive(context, intent)
     }
 }

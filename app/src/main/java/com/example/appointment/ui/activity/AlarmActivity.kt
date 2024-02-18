@@ -4,45 +4,32 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil.setContentView
 import com.example.appointment.R
+import com.example.appointment.databinding.ActivityAlarmBinding
 import com.example.appointment.receiver.AlarmReceiver
+import com.example.appointment.viewmodel.AlarmViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class AlarmActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alarm)
+@AndroidEntryPoint
+class AlarmActivity : BaseActivity<ActivityAlarmBinding>() {
+    val viewmodel : AlarmViewModel by viewModels()
 
-        tea()
+    override fun layoutResId(): Int {
+        return R.layout.activity_alarm
     }
 
-    fun tea(){
-        val manager = this.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        manager.cancel(1234)
-        stopAlarmSound()
-        stopVibration()
+    override fun initializeUI() {
+        binding.viewmodel = viewmodel
+        viewmodel.dataSet(intent,this)
     }
 
-    fun stopAlarmSound(){
-        try {
-            if(AlarmReceiver.mediaPlayer != null){
-                AlarmReceiver.mediaPlayer?.isLooping = false
-                AlarmReceiver.mediaPlayer?.stop()
-                AlarmReceiver.mediaPlayer?.release()
-                AlarmReceiver.mediaPlayer = null
-
+    override fun setObserve() {
+        viewmodel.alarmStop.observe(this){
+            if(it){
+                finish()
             }
-        }catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun stopVibration() {
-        try {
-            if (AlarmReceiver.vibrator != null) {
-                AlarmReceiver.vibrator.cancel()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.appointment.R
 import com.example.appointment.data.ToastMessage
 import com.example.appointment.databinding.FragmentScheduleEditBinding
+import com.example.appointment.model.AlarmData
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
 import com.example.appointment.viewmodel.MainViewModel
@@ -53,18 +54,22 @@ class ScheduleEdit_Fragment : BaseSceduleSet_Fragment<FragmentScheduleEditBindin
 
         mainViewmodel.alarmSet.observe(viewLifecycleOwner){
             if (it){
-                val startCheckData = StartCheckAlarmData(
-                    mainViewmodel.startX,
-                    mainViewmodel.startY,
-                    mainViewmodel.scheduleEmailPath)
-                setStartAlarm(startCheckData, mainViewmodel.scheduleStartAlarmTime)
+                val alarmData = AlarmData(
+                    mainViewmodel.selectFriendProfile.nickname,
+                    mainViewmodel.meetingPlaceAddress.value!!,
+                    mainViewmodel.startTime)
+                setAlarm(alarmData,mainViewmodel.scheduleAlarmTime)
             }
         }
 
         mainViewmodel.scheduleEditSuccess.observe(viewLifecycleOwner){
             if (it){
-                setAlarm(mainViewmodel.selectScheduleNickname,mainViewmodel.scheduleAlarmTime)
-
+                val startCheckData = StartCheckAlarmData(
+                    mainViewmodel.startX,
+                    mainViewmodel.startY,
+                    mainViewmodel.scheduleEmailPath)
+                setStartAlarm(startCheckData, mainViewmodel.scheduleStartAlarmTime)
+                toast("수정 완료")
                 val fragmentManager = requireActivity().supportFragmentManager
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }

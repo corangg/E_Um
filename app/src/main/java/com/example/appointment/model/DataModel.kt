@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName
 data class SignUpDataModel(
     val privacy : PrivacyDataModel,
     val profile : ProfileDataModel
-
 )
 
 data class PrivacyDataModel(
@@ -121,6 +120,12 @@ data class StartCheckAlarmData(
 data class FriendRequestAlarmData(
     val email: String,
     val nickname: String,
+)
+
+data class AlarmData(
+    val nickname : String,
+    val address : String,
+    val startTime : String,
 )
 
 //NaverKeWord

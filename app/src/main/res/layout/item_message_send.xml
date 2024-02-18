@@ -5,7 +5,6 @@
         <variable
             name="senddata"
             type="com.example.appointment.model.ChatDataModel" />
-
     </data>
 
     <RelativeLayout

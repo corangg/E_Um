@@ -2,10 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <!--<variable
-            name="viewmodel"
-            type="com.example.appointment.viewmodel.MainViewmodel" />-->
-
     </data>
 
     <LinearLayout

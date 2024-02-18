@@ -64,12 +64,15 @@ abstract class BaseAlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    fun notification(context: Context,title: String,text:String){
+    fun notification(intent: Intent, context: Context,title: String,text:String){
         val manager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         val builder: NotificationCompat.Builder
-        val intent = Intent(context, AlarmActivity::class.java)
+        val activityIntent = Intent(context, AlarmActivity::class.java)
         //intent.putExtra("path","openNotification")
-        val pendingIntent = PendingIntent.getActivity(context, RequestCode.OPEN_APP_REQUEST_CODE,intent, PendingIntent.FLAG_IMMUTABLE)
+        activityIntent.putExtra("address", intent.getStringExtra("address"))
+        activityIntent.putExtra("nickname", intent.getStringExtra("nickname"))
+        activityIntent.putExtra("startTime", intent.getStringExtra("startTime"))
+        val pendingIntent = PendingIntent.getActivity(context, RequestCode.OPEN_APP_REQUEST_CODE,activityIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val dismissIntent = Intent(context, AlarmCancelReceiver::class.java)
         dismissIntent.action = AlarmCancelReceiver.ACTION_DISMISS_ALARM

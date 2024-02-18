@@ -9,6 +9,7 @@ import com.example.appointment.data.RequestCode.Companion.MAP_REQUEST_CODE
 import com.example.appointment.data.ToastMessage
 import com.example.appointment.ui.activity.schedule.ScheduleMapActivity
 import com.example.appointment.databinding.FragmentScheduleSetBinding
+import com.example.appointment.model.AlarmData
 import com.example.appointment.model.SelectTransport
 import com.example.appointment.model.StartCheckAlarmData
 import com.example.appointment.viewmodel.MainViewModel
@@ -83,18 +84,22 @@ class ScheduleSet_Fragment : BaseSceduleSet_Fragment<FragmentScheduleSetBinding>
         }
         mainViewmodel.alarmSet.observe(viewLifecycleOwner){
             if (it){
-                val startCheckData = StartCheckAlarmData(
-                    mainViewmodel.startX,
-                    mainViewmodel.startY,
-                    mainViewmodel.scheduleEmailPath)
-                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)
+                val alarmData = AlarmData(
+                    mainViewmodel.selectFriendProfile.nickname,
+                    mainViewmodel.meetingPlaceAddress.value!!,
+                    mainViewmodel.startTime)
+                setAlarm(alarmData,mainViewmodel.scheduleAlarmTime)
             }
         }
 
         mainViewmodel.appointmentRequestSuccess.observe(viewLifecycleOwner){
             if(it){
+                val startCheckData = StartCheckAlarmData(
+                    mainViewmodel.startX,
+                    mainViewmodel.startY,
+                    mainViewmodel.scheduleEmailPath)
+                setStartAlarm(startCheckData,mainViewmodel.scheduleStartAlarmTime)
                 fragmentClose()
-                setAlarm(mainViewmodel.selectFriendProfile.nickname,mainViewmodel.scheduleAlarmTime)
                 toast("${mainViewmodel.selectFriendProfile.nickname}님에게 약속 요청을 보냈습니다.")
             }
         }

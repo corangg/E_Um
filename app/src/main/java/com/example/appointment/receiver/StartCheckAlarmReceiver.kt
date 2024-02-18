@@ -24,7 +24,7 @@ class StartCheckAlarmReceiver : BaseAlarmReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val text = intent!!.getStringExtra("message")!!
         val title = "이제 출발하실 시간입니다."
-        notification(context!!,title,text)
+        notification(intent, context!!, title, text)
         super.onReceive(context, intent)
     }
 }

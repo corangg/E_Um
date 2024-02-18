@@ -7,7 +7,6 @@
         <variable
             name="viewmodel"
             type="com.example.appointment.viewmodel.MainViewModel" />
-
     </data>
     <ScrollView
         android:layout_width="match_parent"

@@ -490,6 +490,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    var startTime : String = ""
+
     fun setScheduleRequestData(){
         if(selectTransport.value == 0){
             transportCheck.value = 6
@@ -506,6 +508,7 @@ class MainViewModel @Inject constructor(
 
             scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime, scheduleYYYYMMDD)
             scheduleAlarmTime = alarmTimeSet
+            startTime = utils.fnAlarmYYYYMMDDhhmm(scheduleStartAlarmTime)
 
             if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
                 StartEvent(meetingTimeOver)
@@ -570,6 +573,7 @@ class MainViewModel @Inject constructor(
         carTime.value = ""
         walkTime.value = ""
         transportCheck.value = 0
+        startTime = ""
     }
 
     //scheduleFragment
@@ -655,6 +659,7 @@ class MainViewModel @Inject constructor(
         val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
         scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime, scheduleYYYYMMDD)
         scheduleAlarmTime = alarmTimeSet
+        startTime = utils.fnAlarmYYYYMMDDhhmm(scheduleStartAlarmTime)
 
         if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
             StartEvent(meetingTimeOver)
@@ -722,6 +727,7 @@ class MainViewModel @Inject constructor(
         val alarmYYYYMMDDhhmm = utils.fnAlarmYYYYMMDDhhmm(alarmTimeSet)
         scheduleAlarmTime = alarmTimeSet
         scheduleStartAlarmTime = scheduleSetFragmentRepository.alarmTimeSet(scheduleAmPmSet.value!!, scheduleTimeData, ScheduleTime("00","00"), transportTime, scheduleYYYYMMDD)
+        startTime = utils.fnAlarmYYYYMMDDhhmm(scheduleStartAlarmTime)
 
         if(currentTime.toLong() > alarmYYYYMMDDhhmm.toLong()){
             meetingTimeOver.value = true

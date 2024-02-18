@@ -22,7 +22,6 @@ import retrofit2.Response
 import java.util.Date
 import java.util.Locale
 
-//@Inject constructor()
 class Utils {
 
     companion object{
@@ -67,7 +66,7 @@ class Utils {
         return  HM
     }//이동시간 초를 시간 분 텍스트로
 
-    fun fnTimeSet(/*hh:String,mm:String*/scheduleTime: ScheduleTime):String{
+    fun fnTimeSet(scheduleTime: ScheduleTime):String{
         var hour : String = ""
         var min : String = ""
         var time : String = ""
@@ -103,7 +102,7 @@ class Utils {
 
         time = hour + min
         return time
-    }//시간하고 분 스트링으로 붙이기
+    }
 
     fun fnAlarmYYYYMMDDhhmm(alarmTime: YYYYMMDDhhmm):String{
         var alarmYYYYMMDDhhmm : String = ""
@@ -132,24 +131,6 @@ class Utils {
         return alarmYYYYMMDDhhmm
     }
 
-
-
-
-    /*  interface DataMapCallback {
-        fun onDataMapReceived(dataMap: Map<String, Any>?)
-    }
-
-    fun readDataFirebase(docRef: DocumentReference, callback: DataMapCallback) {
-
-        docRef.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists()) {
-                val dataMap = documentSnapshot.data
-                callback.onDataMapReceived(dataMap as? Map<String, Any>)
-            } else {
-                callback.onDataMapReceived(null)
-            }
-        }
-    }*///코루틴 안사용한 버전인데 흠... 일단 혹시 모르니 두자
     suspend fun readDataFirebase(docRef: DocumentReference): Map<String, Any>? {
         return withContext(Dispatchers.IO) {
             try {
@@ -184,24 +165,4 @@ class Utils {
     fun updataDataFireBase(docRef: DocumentReference, field: String, data: String?){
         docRef.update(field,data)
     }
-
-    /*fun readDataFRDaddListenerForSingleValueEvent(reference: DatabaseReference, onChildAddedAction: (DataSnapshot) -> Unit){
-        reference.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                *//*if(snapshot.exists()){
-
-                }else{
-
-                }*//*
-                onChildAddedAction(snapshot)
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
-
-    }*///계속 오류나서 일단 지워둠
-
 }

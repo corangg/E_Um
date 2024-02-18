@@ -8,7 +8,6 @@
         <variable
             name="viewmodel"
             type="com.example.appointment.viewmodel.MainViewModel" />
-
     </data>
 
     <LinearLayout
